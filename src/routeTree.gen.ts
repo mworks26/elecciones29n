@@ -10,33 +10,102 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CompararRouteImport } from './routes/comparar'
+import { Route as FuentesRouteImport } from './routes/fuentes'
+import { Route as ProgramasRouteImport } from './routes/programas'
+import { Route as PartidosIndexRouteImport } from './routes/partidos.index'
+import { Route as PartidosIdRouteImport } from './routes/partidos.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompararRoute = CompararRouteImport.update({
+  id: '/comparar',
+  path: '/comparar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FuentesRoute = FuentesRouteImport.update({
+  id: '/fuentes',
+  path: '/fuentes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramasRoute = ProgramasRouteImport.update({
+  id: '/programas',
+  path: '/programas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartidosIndexRoute = PartidosIndexRouteImport.update({
+  id: '/partidos/',
+  path: '/partidos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartidosIdRoute = PartidosIdRouteImport.update({
+  id: '/partidos/$id',
+  path: '/partidos/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/comparar': typeof CompararRoute
+  '/fuentes': typeof FuentesRoute
+  '/programas': typeof ProgramasRoute
+  '/partidos/$id': typeof PartidosIdRoute
+  '/partidos/': typeof PartidosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/comparar': typeof CompararRoute
+  '/fuentes': typeof FuentesRoute
+  '/programas': typeof ProgramasRoute
+  '/partidos/$id': typeof PartidosIdRoute
+  '/partidos': typeof PartidosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/comparar': typeof CompararRoute
+  '/fuentes': typeof FuentesRoute
+  '/programas': typeof ProgramasRoute
+  '/partidos/$id': typeof PartidosIdRoute
+  '/partidos/': typeof PartidosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/comparar'
+    | '/fuentes'
+    | '/programas'
+    | '/partidos/$id'
+    | '/partidos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/comparar'
+    | '/fuentes'
+    | '/programas'
+    | '/partidos/$id'
+    | '/partidos'
+  id:
+    | '__root__'
+    | '/'
+    | '/comparar'
+    | '/fuentes'
+    | '/programas'
+    | '/partidos/$id'
+    | '/partidos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CompararRoute: typeof CompararRoute
+  FuentesRoute: typeof FuentesRoute
+  ProgramasRoute: typeof ProgramasRoute
+  PartidosIdRoute: typeof PartidosIdRoute
+  PartidosIndexRoute: typeof PartidosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +117,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/comparar': {
+      id: '/comparar'
+      path: '/comparar'
+      fullPath: '/comparar'
+      preLoaderRoute: typeof CompararRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fuentes': {
+      id: '/fuentes'
+      path: '/fuentes'
+      fullPath: '/fuentes'
+      preLoaderRoute: typeof FuentesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programas': {
+      id: '/programas'
+      path: '/programas'
+      fullPath: '/programas'
+      preLoaderRoute: typeof ProgramasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partidos/': {
+      id: '/partidos/'
+      path: '/partidos'
+      fullPath: '/partidos/'
+      preLoaderRoute: typeof PartidosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partidos/$id': {
+      id: '/partidos/$id'
+      path: '/partidos/$id'
+      fullPath: '/partidos/$id'
+      preLoaderRoute: typeof PartidosIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CompararRoute: CompararRoute,
+  FuentesRoute: FuentesRoute,
+  ProgramasRoute: ProgramasRoute,
+  PartidosIdRoute: PartidosIdRoute,
+  PartidosIndexRoute: PartidosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
