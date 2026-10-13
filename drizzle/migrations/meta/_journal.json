@@ -8,6 +8,13 @@
       "when": 1791915564252,
       "tag": "0000_elecciones_schema_seed",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791926617629,
+      "tag": "0001_user_accounts_data",
+      "breakpoints": true
     }
   ]
 }

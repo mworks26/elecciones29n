@@ -12,10 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AsistenteRouteImport } from './routes/asistente'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CompararRouteImport } from './routes/comparar'
+import { Route as CuentaRouteImport } from './routes/cuenta'
 import { Route as FuentesRouteImport } from './routes/fuentes'
 import { Route as JuegaRouteImport } from './routes/juega'
 import { Route as ProgramasRouteImport } from './routes/programas'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as PartidosIndexRouteImport } from './routes/partidos.index'
 import { Route as PartidosIdRouteImport } from './routes/partidos.$id'
@@ -35,9 +38,19 @@ const AsistenteRoute = AsistenteRouteImport.update({
   path: '/asistente',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompararRoute = CompararRouteImport.update({
   id: '/comparar',
   path: '/comparar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CuentaRoute = CuentaRouteImport.update({
+  id: '/cuenta',
+  path: '/cuenta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FuentesRoute = FuentesRouteImport.update({
@@ -53,6 +66,11 @@ const JuegaRoute = JuegaRouteImport.update({
 const ProgramasRoute = ProgramasRouteImport.update({
   id: '/programas',
   path: '/programas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
@@ -75,10 +93,13 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/asistente': typeof AsistenteRoute
+  '/auth': typeof AuthRoute
   '/comparar': typeof CompararRoute
+  '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
   '/programas': typeof ProgramasRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/api/chat': typeof ApiChatRoute
   '/partidos/$id': typeof PartidosIdRoute
   '/partidos/': typeof PartidosIndexRoute
@@ -87,10 +108,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/asistente': typeof AsistenteRoute
+  '/auth': typeof AuthRoute
   '/comparar': typeof CompararRoute
+  '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
   '/programas': typeof ProgramasRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/api/chat': typeof ApiChatRoute
   '/partidos/$id': typeof PartidosIdRoute
   '/partidos': typeof PartidosIndexRoute
@@ -100,10 +124,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/asistente': typeof AsistenteRoute
+  '/auth': typeof AuthRoute
   '/comparar': typeof CompararRoute
+  '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
   '/programas': typeof ProgramasRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/api/chat': typeof ApiChatRoute
   '/partidos/$id': typeof PartidosIdRoute
   '/partidos/': typeof PartidosIndexRoute
@@ -114,10 +141,13 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/asistente'
+    | '/auth'
     | '/comparar'
+    | '/cuenta'
     | '/fuentes'
     | '/juega'
     | '/programas'
+    | '/reset-password'
     | '/api/chat'
     | '/partidos/$id'
     | '/partidos/'
@@ -126,10 +156,13 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/asistente'
+    | '/auth'
     | '/comparar'
+    | '/cuenta'
     | '/fuentes'
     | '/juega'
     | '/programas'
+    | '/reset-password'
     | '/api/chat'
     | '/partidos/$id'
     | '/partidos'
@@ -138,10 +171,13 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/asistente'
+    | '/auth'
     | '/comparar'
+    | '/cuenta'
     | '/fuentes'
     | '/juega'
     | '/programas'
+    | '/reset-password'
     | '/api/chat'
     | '/partidos/$id'
     | '/partidos/'
@@ -151,10 +187,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   AsistenteRoute: typeof AsistenteRoute
+  AuthRoute: typeof AuthRoute
   CompararRoute: typeof CompararRoute
+  CuentaRoute: typeof CuentaRoute
   FuentesRoute: typeof FuentesRoute
   JuegaRoute: typeof JuegaRoute
   ProgramasRoute: typeof ProgramasRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ApiChatRoute: typeof ApiChatRoute
   PartidosIdRoute: typeof PartidosIdRoute
   PartidosIndexRoute: typeof PartidosIndexRoute
@@ -183,11 +222,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AsistenteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/comparar': {
       id: '/comparar'
       path: '/comparar'
       fullPath: '/comparar'
       preLoaderRoute: typeof CompararRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cuenta': {
+      id: '/cuenta'
+      path: '/cuenta'
+      fullPath: '/cuenta'
+      preLoaderRoute: typeof CuentaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/fuentes': {
@@ -209,6 +262,13 @@ declare module '@tanstack/react-router' {
       path: '/programas'
       fullPath: '/programas'
       preLoaderRoute: typeof ProgramasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/chat': {
@@ -239,10 +299,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   AsistenteRoute: AsistenteRoute,
+  AuthRoute: AuthRoute,
   CompararRoute: CompararRoute,
+  CuentaRoute: CuentaRoute,
   FuentesRoute: FuentesRoute,
   JuegaRoute: JuegaRoute,
   ProgramasRoute: ProgramasRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ApiChatRoute: ApiChatRoute,
   PartidosIdRoute: PartidosIdRoute,
   PartidosIndexRoute: PartidosIndexRoute,

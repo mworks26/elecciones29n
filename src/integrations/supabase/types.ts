@@ -278,6 +278,59 @@ export type Database = {
         }
         Relationships: []
       }
+      user_data: {
+        Row: {
+          chat: Json | null
+          consented_at: string | null
+          game: Json | null
+          sync_enabled: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chat?: Json | null
+          consented_at?: string | null
+          game?: Json | null
+          sync_enabled?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chat?: Json | null
+          consented_at?: string | null
+          game?: Json | null
+          sync_enabled?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_favorites: {
+        Row: {
+          claim_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          claim_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          claim_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_favorites_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
