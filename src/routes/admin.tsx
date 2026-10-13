@@ -64,7 +64,7 @@ function AuthForm() {
     const { error } = mode === "in"
       ? await supabase.auth.signInWithPassword({ email, password })
       : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/admin` } });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message);
     if (mode === "up") toast.success("Revisa tu correo para confirmar la cuenta.");
   };
   return (
@@ -105,16 +105,16 @@ function Editor({ userId }: { userId: string }) {
   const sourceOpts = { "": "—", ...Object.fromEntries(sources.map((s) => [s.id, s.title])) };
 
   async function save(entity: string, entityId: string, action: string, reason: string, op: () => PromiseLike<{ error: { message: string } | null }>, changes: unknown) {
-    if (!reason.trim()) return toast.error("Indica el motivo del cambio.");
+    if (!reason.trim()) { toast.error("Indica el motivo del cambio."); return; }
     const { error } = await op();
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message);
     const { error: logErr } = await supabase.from("change_log").insert({ entity, entity_id: entityId, action, reason, changed_by: userId, changes: changes as never });
     if (logErr) toast.error(`Guardado, pero no se registró el historial: ${logErr.message}`);
     else toast.success("Guardado y registrado en el historial.");
     qc.invalidateQueries();
   }
-  const fd = (e: FormEvent<HTMLFormElement>) => Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
-  const nul = (v?: string) => (v && v.trim() ? v.trim() : null);
+  const fd = (e: FormEvent<HTMLFormElement>) => { const f = new FormData(e.currentTarget); return (k: string) => String(f.get(k) ?? ""); };
+  const nul = (v?: string) => (v && v("trim")() ? v("trim")() : null);
 
   return (
     <div className="mt-6">
@@ -129,11 +129,11 @@ function Editor({ userId }: { userId: string }) {
           {parties.map((p) => (
             <Card key={p.id} className="p-5">
               <form className="grid gap-3 md:grid-cols-2" onSubmit={(e) => { e.preventDefault(); const v = fd(e);
-                const changes = { programme_2026_status: v.programme_2026_status, candidate_status: v.candidate_status, candidacy_source_id: nul(v.candidacy_source_id), notes: nul(v.notes), last_checked: today() };
-                if (v.candidate_status === "confirmed_official_candidacy" && !changes.candidacy_source_id) return toast.error("Una candidatura confirmada necesita fuente oficial (BOE o boletín).");
-                save("party", p.id, "update", v.reason, () => supabase.from("parties").update(changes).eq("id", p.id), changes); }}>
+                const changes = { programme_2026_status: v("programme_2026_status"), candidate_status: v("candidate_status"), candidacy_source_id: nul(v("candidacy_source_id")), notes: nul(v("notes")), last_checked: today() };
+                if (v("candidate_status") === "confirmed_official_candidacy" && !changes.candidacy_source_id) { toast.error("Una candidatura confirmada necesita fuente oficial (BOE o boletín).");
+                save("party", p.id, "update", v("reason"), () => supabase.from("parties").update(changes).eq("id", p.id), changes); }}>
                 <p className="font-serif text-xl font-semibold md:col-span-2">{p.name}</p>
-                <L label="Programa 2026"><Sel name="programme_2026_status" value={p.programme_2026_status} options={Object.fromEntries(Object.entries(PROGRAMME_STATUS).map(([k, v]) => [k, v.label]))} /></L>
+                <L label="Programa 2026"><Sel name="programme_2026_status" value={p.programme_2026_status} options={Object.fromEntries(Object.entries(PROGRAMME_STATUS).map(([k, v]) => [k, v("label")]))} /></L>
                 <L label="Candidatura"><Sel name="candidate_status" value={p.candidate_status} options={CANDIDATE_STATUS} /></L>
                 <L label="Fuente de candidatura"><Sel name="candidacy_source_id" value={p.candidacy_source_id ?? ""} options={sourceOpts} /></L>
                 <L label="Notas"><input name="notes" defaultValue={p.notes ?? ""} className={field} /></L>
@@ -150,8 +150,8 @@ function Editor({ userId }: { userId: string }) {
           <h2 className="text-xl font-semibold">Añadir documento</h2>
           <p className="text-sm text-muted-foreground">{docs.length} documentos registrados.</p>
           <form className="mt-4 grid gap-3 md:grid-cols-2" onSubmit={(e) => { e.preventDefault(); const v = fd(e); const form = e.currentTarget;
-            const row = { party_id: v.party_id, title: v.title, election: v.election, kind: v.kind, url: v.url, source_id: nul(v.source_id), language: v.language || "es", published_at: nul(v.published_at), checked_at: today() };
-            save("document", v.title, "create", v.reason, () => supabase.from("programme_documents").insert(row), row).then(() => form.reset()); }}>
+            const row = { party_id: v("party_id"), title: v("title"), election: v("election"), kind: v("kind"), url: v("url"), source_id: nul(v("source_id")), language: v("language") || "es", published_at: nul(v("published_at")), checked_at: today() };
+            save("document", v("title"), "create", v("reason"), () => supabase.from("programme_documents").insert(row), row).then(() => form.reset()); }}>
             <L label="Partido"><Sel name="party_id" value={parties[0]?.id ?? ""} options={partyOpts} /></L>
             <L label="Tipo"><Sel name="kind" value="full_2026" options={DOC_KIND} /></L>
             <L label="Título"><input name="title" required className={field} /></L>
@@ -171,8 +171,8 @@ function Editor({ userId }: { userId: string }) {
           <Card>
             <h2 className="text-xl font-semibold">Añadir propuesta con evidencia</h2>
             <form className="mt-4 grid gap-3 md:grid-cols-2" onSubmit={(e) => { e.preventDefault(); const v = fd(e); const form = e.currentTarget;
-              const row = { party_id: v.party_id, topic_id: v.topic_id, title: v.title, claim_text: v.claim_text, position: v.position, evidence_type: v.evidence_type, source_id: nul(v.source_id), source_url: v.source_url, page_or_section: v.page_or_section, quote_or_paraphrase: v.quote_or_paraphrase, review_status: v.review_status, checked_at: today() };
-              save("claim", v.title, "create", v.reason, () => supabase.from("claims").insert(row), row).then(() => form.reset()); }}>
+              const row = { party_id: v("party_id"), topic_id: v("topic_id"), title: v("title"), claim_text: v("claim_text"), position: v("position"), evidence_type: v("evidence_type"), source_id: nul(v("source_id")), source_url: v("source_url"), page_or_section: v("page_or_section"), quote_or_paraphrase: v("quote_or_paraphrase"), review_status: v("review_status"), checked_at: today() };
+              save("claim", v("title"), "create", v("reason"), () => supabase.from("claims").insert(row), row).then(() => form.reset()); }}>
               <L label="Partido"><Sel name="party_id" value={parties[0]?.id ?? ""} options={partyOpts} /></L>
               <L label="Tema"><Sel name="topic_id" value={topics[0]?.id ?? ""} options={topicOpts} /></L>
               <L label="Título de la propuesta"><input name="title" required className={field} /></L>
@@ -191,8 +191,8 @@ function Editor({ userId }: { userId: string }) {
           {claims.map((c) => (
             <Card key={c.id} className="p-4">
               <form className="flex flex-wrap items-end gap-3" onSubmit={(e) => { e.preventDefault(); const v = fd(e);
-                const changes = { review_status: v.review_status, position: v.position, checked_at: today() };
-                save("claim", c.id, "update", v.reason, () => supabase.from("claims").update(changes).eq("id", c.id), changes); }}>
+                const changes = { review_status: v("review_status"), position: v("position"), checked_at: today() };
+                save("claim", c.id, "update", v("reason"), () => supabase.from("claims").update(changes).eq("id", c.id), changes); }}>
                 <p className="w-full font-medium">{partyOpts[c.party_id]} · {c.title}</p>
                 <div className="min-w-40 flex-1"><L label="Revisión"><Sel name="review_status" value={c.review_status} options={REVIEW_STATUS} /></L></div>
                 <div className="min-w-40 flex-1"><L label="Posición"><Sel name="position" value={c.position} options={POSITION} /></L></div>
@@ -208,8 +208,8 @@ function Editor({ userId }: { userId: string }) {
         <Card className="mt-6">
           <h2 className="text-xl font-semibold">Registrar fuente</h2>
           <form className="mt-4 grid gap-3 md:grid-cols-2" onSubmit={(e) => { e.preventDefault(); const v = fd(e); const form = e.currentTarget;
-            const row = { id: v.id, title: v.title, url: v.url, publisher: nul(v.publisher), source_type: v.source_type, reliability: v.reliability, last_checked: today() };
-            save("source", v.id, "create", v.reason, () => supabase.from("sources").insert(row), row).then(() => form.reset()); }}>
+            const row = { id: v("id"), title: v("title"), url: v("url"), publisher: nul(v("publisher")), source_type: v("source_type"), reliability: v("reliability"), last_checked: today() };
+            save("source", v("id"), "create", v("reason"), () => supabase.from("sources").insert(row), row).then(() => form.reset()); }}>
             <L label="Identificador (sin espacios)"><input name="id" required pattern="[a-z0-9_]+" className={field} /></L>
             <L label="Título"><input name="title" required className={field} /></L>
             <L label="URL"><input name="url" type="url" required className={field} /></L>
