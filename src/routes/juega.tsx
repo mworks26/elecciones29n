@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, Minus, Plus, RotateCcw } from "lucide-react";
 import { Card, Notice, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
 import { Switch } from "@/components/ui/switch";
 import { claimsQuery, partiesQuery, topicsQuery } from "@/lib/data";
 import { computeAffinity, type Answer } from "@/lib/affinity";
 import { cn } from "@/lib/utils";
+import { saveUserField, useSession, useUserData } from "@/lib/session";
+
 
 export const Route = createFileRoute("/juega")({
   head: () => ({
@@ -54,7 +56,23 @@ function Juega() {
     } catch { /* ignore corrupt storage */ }
     setLoaded(true);
   }, [topics]);
-  useEffect(() => { if (loaded) localStorage.setItem(KEY, JSON.stringify(s)); }, [s, loaded]);
+  const { session } = useSession();
+  const { data: ud } = useUserData();
+  const syncOn = !!session && !!ud?.sync_enabled;
+  const pulled = useRef(false);
+  useEffect(() => {
+    if (!loaded || pulled.current || !syncOn || !ud?.game) return;
+    pulled.current = true;
+    const g = ud.game as Saved;
+    if (Array.isArray(g.order)) setS(g);
+  }, [loaded, syncOn, ud]);
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem(KEY, JSON.stringify(s));
+    if (!syncOn || !session) return;
+    const t = setTimeout(() => saveUserField(session.user.id, "game", s), 1000);
+    return () => clearTimeout(t);
+  }, [s, loaded, syncOn, session]);
 
   const label = (id: string) => topics.find((t) => t.id === id)?.label ?? id;
   const usedChips = Object.values(s.chips).reduce((a, b) => a + b, 0);
@@ -85,7 +103,7 @@ function Juega() {
   return (
     <>
       <PageIntro eyebrow="Juega" title="Descubre qué te importa.">
-        Tres juegos cortos. Tus respuestas se guardan solo en este dispositivo y puedes borrarlas cuando quieras.
+        Tres juegos cortos. {syncOn ? "Tus respuestas se guardan también en tu cuenta, con tu permiso." : "Tus respuestas se guardan solo en este dispositivo y puedes borrarlas cuando quieras."}
       </PageIntro>
       <div className="mx-auto max-w-4xl px-4">
         <div className="flex flex-wrap gap-2" role="tablist">

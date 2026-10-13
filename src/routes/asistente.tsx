@@ -8,6 +8,7 @@ import { Conversation, ConversationContent, ConversationEmptyState, Conversation
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
 import { PromptInput, PromptInputFooter, PromptInputSubmit, PromptInputTextarea } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { saveUserField, useSession, useUserData } from "@/lib/session";
 import brujula from "@/assets/brujula.png";
 
 export const Route = createFileRoute("/asistente")({
@@ -33,14 +34,19 @@ const SUGGESTIONS = [
 function Asistente() {
   const [initial, setInitial] = useState<UIMessage[] | null>(null);
   const [chatKey, setChatKey] = useState(0);
+  const { session, ready } = useSession();
+  const { data: ud, isLoading } = useUserData();
+  const syncOn = !!session && !!ud?.sync_enabled;
   useEffect(() => {
+    if (initial || !ready || (session && isLoading)) return;
+    if (syncOn && Array.isArray(ud?.chat)) { setInitial(ud.chat as UIMessage[]); return; }
     try { setInitial(JSON.parse(localStorage.getItem(KEY) ?? "[]")); } catch { setInitial([]); }
-  }, []);
+  }, [initial, ready, session, isLoading, syncOn, ud]);
   if (!initial) return <div className="mx-auto max-w-3xl px-4 py-20 text-muted-foreground">Cargando…</div>;
-  return <ChatWindow key={chatKey} initial={initial} onReset={() => { localStorage.removeItem(KEY); setInitial([]); setChatKey((k) => k + 1); }} />;
+  return <ChatWindow key={chatKey} initial={initial} onSave={(m) => { if (syncOn && session) saveUserField(session.user.id, "chat", m); }} onReset={() => { localStorage.removeItem(KEY); if (syncOn && session) saveUserField(session.user.id, "chat", []); setInitial([]); setChatKey((k) => k + 1); }} />;
 }
 
-function ChatWindow({ initial, onReset }: { initial: UIMessage[]; onReset: () => void }) {
+function ChatWindow({ initial, onReset, onSave }: { initial: UIMessage[]; onReset: () => void; onSave: (m: UIMessage[]) => void }) {
   const [text, setText] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
   const { messages, sendMessage, status, stop, error } = useChat({
@@ -51,7 +57,7 @@ function ChatWindow({ initial, onReset }: { initial: UIMessage[]; onReset: () =>
   });
   const busy = status === "submitted" || status === "streaming";
 
-  useEffect(() => { if (status === "ready" || status === "error") localStorage.setItem(KEY, JSON.stringify(messages)); }, [messages, status]);
+  useEffect(() => { if (status === "ready" || status === "error") { localStorage.setItem(KEY, JSON.stringify(messages)); if (messages.length) onSave(messages); } }, [messages, status, onSave]);
   useEffect(() => { if (!busy) ref.current?.focus(); }, [busy]);
 
   const send = (t: string) => { if (!t.trim() || busy) return; sendMessage({ text: t }); setText(""); };
@@ -99,7 +105,7 @@ function ChatWindow({ initial, onReset }: { initial: UIMessage[]; onReset: () =>
             <PromptInputSubmit status={status} onStop={stop} disabled={!busy && !text.trim()} />
           </PromptInputFooter>
         </PromptInput>
-        <p className="mt-2 text-center text-xs text-muted-foreground">La conversación se guarda solo en este navegador. Comprueba siempre las fuentes enlazadas.</p>
+        <p className="mt-2 text-center text-xs text-muted-foreground">La conversación se guarda en este navegador (y en tu cuenta si lo has activado). Comprueba siempre las fuentes enlazadas.</p>
       </div>
     </div>
   );
