@@ -66,11 +66,11 @@ const TONES = {
   none: "bg-card text-muted-foreground border border-border",
 } as const;
 
-export function Tag({ tone = "none", children }: { tone?: keyof typeof TONES; children: ReactNode }) {
+export function Tag({ tone = "none", children }: { tone?: keyof typeof TONES | undefined; children: ReactNode }) {
   return <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium", TONES[tone])}>{children}</span>;
 }
 
-export function SourceLink({ href, children, meta }: { href: string; children: ReactNode; meta?: string }) {
+export function SourceLink({ href, children, meta }: { href: string; children: ReactNode; meta?: string | undefined }) {
   return (
     <a href={href} target="_blank" rel="noreferrer noopener" className="group inline-flex items-start gap-1.5 text-sm font-medium text-foreground underline decoration-accent decoration-2 underline-offset-4">
       <ExternalLink className="mt-0.5 size-3.5 shrink-0" aria-hidden />

@@ -73,7 +73,7 @@ function Juega() {
 
   const move = (i: number, d: number) => setS((p) => {
     const o = [...p.order]; const j = i + d; if (j < 0 || j >= o.length) return p;
-    [o[i], o[j]] = [o[j], o[i]]; return { ...p, order: o };
+    const tmp = o[i]!; o[i] = o[j]!; o[j] = tmp; return { ...p, order: o };
   });
   const chip = (id: string, d: number) => setS((p) => {
     const cur = p.chips[id] ?? 0; const next = Math.max(0, cur + d);
@@ -161,7 +161,7 @@ function Juega() {
                   {deck.map((c) => (
                     <li key={c.id} className="flex flex-wrap items-center gap-2">
                       <span className="font-medium">«{c.title}»</span> → <Tag tone="partial">{parties.find((p) => p.id === c.party_id)?.short_name}</Tag>
-                      <span className="text-muted-foreground">tu respuesta: {({ agree: "de acuerdo", partial: "en parte", disagree: "en desacuerdo", skip: "paso" } as const)[s.answers[c.id]]}</span>
+                      <span className="text-muted-foreground">tu respuesta: {({ agree: "de acuerdo", partial: "en parte", disagree: "en desacuerdo", skip: "paso" } as const)[s.answers[c.id] ?? "skip"]}</span>
                       {c.source_url && <SourceLink href={c.source_url}>fuente</SourceLink>}
                     </li>
                   ))}
