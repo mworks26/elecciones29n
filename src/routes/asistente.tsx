@@ -59,7 +59,7 @@ function ChatWindow({ initial, onReset }: { initial: UIMessage[]; onReset: () =>
   return (
     <div className="mx-auto flex h-[calc(100dvh-4rem)] max-w-3xl flex-col px-4 pt-6">
       <div className="flex items-center gap-3">
-        <img src={brujula} alt="" width={48} height={48} className="size-12" />
+        <img src={brujula} alt="" width={48} height={48} className="size-12 rounded-full mix-blend-multiply" />
         <div className="flex-1">
           <h1 className="text-2xl font-semibold">Brújula</h1>
           <p className="text-sm text-muted-foreground">Responde solo con datos verificados, cita fuentes y nunca te dirá a quién votar.</p>
@@ -71,9 +71,9 @@ function ChatWindow({ initial, onReset }: { initial: UIMessage[]; onReset: () =>
       <Conversation className="mt-4 flex-1">
         <ConversationContent>
           {messages.length === 0 ? (
-            <ConversationEmptyState icon={<img src={brujula} alt="" className="size-20" />} title="¿Qué quieres saber?" description="Pregunta por partidos, programas, fechas o cómo funciona el voto.">
+            <ConversationEmptyState icon={<img src={brujula} alt="" className="size-20 mix-blend-multiply" />} title="¿Qué quieres saber?" description="Pregunta por partidos, programas, fechas o cómo funciona el voto.">
               <div className="mt-4 flex flex-col items-center gap-3">
-                <img src={brujula} alt="" className="size-20" />
+                <img src={brujula} alt="" className="size-20 mix-blend-multiply" />
                 <p className="font-serif text-xl font-semibold">¿Qué quieres saber?</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {SUGGESTIONS.map((s) => <button key={s} onClick={() => send(s)} className="rounded-full border border-input bg-card px-3 py-1.5 text-sm hover:bg-secondary">{s}</button>)}
