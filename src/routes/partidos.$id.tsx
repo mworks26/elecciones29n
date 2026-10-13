@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { FavoriteButton } from "@/components/favorite-button";
 import { Card, Notice, RouteError, SourceLink, Tag } from "@/components/site";
 import { claimsQuery, documentsQuery, partiesQuery, topicsQuery } from "@/lib/data";
 import { CANDIDATE_STATUS, DOC_KIND, EVIDENCE_TYPE, PROGRAMME_STATUS, REVIEW_STATUS, formatDate } from "@/lib/labels";
@@ -85,7 +86,8 @@ function Party() {
               <h3 className="mt-1 text-lg font-semibold">{c.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{c.claim_text}</p>
               <div className="mt-3 flex flex-wrap gap-2"><Tag tone="partial">{EVIDENCE_TYPE[c.evidence_type]}</Tag><Tag>{REVIEW_STATUS[c.review_status]}</Tag></div>
-              {c.source_url && <div className="mt-3"><SourceLink href={c.source_url} meta={`${c.page_or_section ?? ""} · ${c.quote_or_paraphrase === "paraphrase" ? "paráfrasis" : "cita"} · ${formatDate(c.checked_at)}`}>Fuente</SourceLink></div>}
+              <div className="mt-2"><FavoriteButton claimId={c.id} /></div>
+                          {c.source_url && <div className="mt-3"><SourceLink href={c.source_url} meta={`${c.page_or_section ?? ""} · ${c.quote_or_paraphrase === "paraphrase" ? "paráfrasis" : "cita"} · ${formatDate(c.checked_at)}`}>Fuente</SourceLink></div>}
             </Card></li>
           ))}
         </ul>

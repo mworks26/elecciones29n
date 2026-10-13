@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ExternalLink } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { useSession } from "@/lib/session";
 
 const NAV = [
   { to: "/", label: "Inicio" },
@@ -33,8 +34,19 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
+        <AccountLink />
       </div>
     </header>
+  );
+}
+
+function AccountLink() {
+  const { session, ready } = useSession();
+  if (!ready) return null;
+  return session ? (
+    <Link to="/cuenta" className="ml-auto rounded-full border border-input bg-card px-4 py-1.5 text-sm font-medium">Mi cuenta</Link>
+  ) : (
+    <Link to="/auth" className="ml-auto rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Entrar</Link>
   );
 }
 

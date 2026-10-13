@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { FavoriteButton } from "@/components/favorite-button";
 import { Card, Notice, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
 import { claimsQuery, partiesQuery, topicsQuery } from "@/lib/data";
 import { POSITION, REVIEW_STATUS, formatDate } from "@/lib/labels";
@@ -64,6 +65,7 @@ function Comparar() {
                           <p className="font-medium">{c.title}</p>
                           <p className="text-sm text-muted-foreground">{c.claim_text}</p>
                           <div className="mt-2 flex flex-wrap gap-2"><Tag tone="partial">{POSITION[c.position]}</Tag><Tag>{REVIEW_STATUS[c.review_status]}</Tag></div>
+                          <div className="mt-2"><FavoriteButton claimId={c.id} /></div>
                           {c.source_url && <div className="mt-2"><SourceLink href={c.source_url} meta={`${c.page_or_section ?? ""} · ${formatDate(c.checked_at)}`}>Fuente</SourceLink></div>}
                         </li>
                       ))}
