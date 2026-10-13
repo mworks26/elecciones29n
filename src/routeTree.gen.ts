@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompararRouteImport } from './routes/comparar'
 import { Route as FuentesRouteImport } from './routes/fuentes'
+import { Route as JuegaRouteImport } from './routes/juega'
 import { Route as ProgramasRouteImport } from './routes/programas'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as PartidosIndexRouteImport } from './routes/partidos.index'
 import { Route as PartidosIdRouteImport } from './routes/partidos.$id'
 
@@ -31,9 +33,19 @@ const FuentesRoute = FuentesRouteImport.update({
   path: '/fuentes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JuegaRoute = JuegaRouteImport.update({
+  id: '/juega',
+  path: '/juega',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgramasRoute = ProgramasRouteImport.update({
   id: '/programas',
   path: '/programas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartidosIndexRoute = PartidosIndexRouteImport.update({
@@ -51,7 +63,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/comparar': typeof CompararRoute
   '/fuentes': typeof FuentesRoute
+  '/juega': typeof JuegaRoute
   '/programas': typeof ProgramasRoute
+  '/api/chat': typeof ApiChatRoute
   '/partidos/$id': typeof PartidosIdRoute
   '/partidos/': typeof PartidosIndexRoute
 }
@@ -59,7 +73,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/comparar': typeof CompararRoute
   '/fuentes': typeof FuentesRoute
+  '/juega': typeof JuegaRoute
   '/programas': typeof ProgramasRoute
+  '/api/chat': typeof ApiChatRoute
   '/partidos/$id': typeof PartidosIdRoute
   '/partidos': typeof PartidosIndexRoute
 }
@@ -68,7 +84,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/comparar': typeof CompararRoute
   '/fuentes': typeof FuentesRoute
+  '/juega': typeof JuegaRoute
   '/programas': typeof ProgramasRoute
+  '/api/chat': typeof ApiChatRoute
   '/partidos/$id': typeof PartidosIdRoute
   '/partidos/': typeof PartidosIndexRoute
 }
@@ -78,7 +96,9 @@ export interface FileRouteTypes {
     | '/'
     | '/comparar'
     | '/fuentes'
+    | '/juega'
     | '/programas'
+    | '/api/chat'
     | '/partidos/$id'
     | '/partidos/'
   fileRoutesByTo: FileRoutesByTo
@@ -86,7 +106,9 @@ export interface FileRouteTypes {
     | '/'
     | '/comparar'
     | '/fuentes'
+    | '/juega'
     | '/programas'
+    | '/api/chat'
     | '/partidos/$id'
     | '/partidos'
   id:
@@ -94,7 +116,9 @@ export interface FileRouteTypes {
     | '/'
     | '/comparar'
     | '/fuentes'
+    | '/juega'
     | '/programas'
+    | '/api/chat'
     | '/partidos/$id'
     | '/partidos/'
   fileRoutesById: FileRoutesById
@@ -103,7 +127,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CompararRoute: typeof CompararRoute
   FuentesRoute: typeof FuentesRoute
+  JuegaRoute: typeof JuegaRoute
   ProgramasRoute: typeof ProgramasRoute
+  ApiChatRoute: typeof ApiChatRoute
   PartidosIdRoute: typeof PartidosIdRoute
   PartidosIndexRoute: typeof PartidosIndexRoute
 }
@@ -131,11 +157,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FuentesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/juega': {
+      id: '/juega'
+      path: '/juega'
+      fullPath: '/juega'
+      preLoaderRoute: typeof JuegaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/programas': {
       id: '/programas'
       path: '/programas'
       fullPath: '/programas'
       preLoaderRoute: typeof ProgramasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partidos/': {
@@ -159,7 +199,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CompararRoute: CompararRoute,
   FuentesRoute: FuentesRoute,
+  JuegaRoute: JuegaRoute,
   ProgramasRoute: ProgramasRoute,
+  ApiChatRoute: ApiChatRoute,
   PartidosIdRoute: PartidosIdRoute,
   PartidosIndexRoute: PartidosIndexRoute,
 }
