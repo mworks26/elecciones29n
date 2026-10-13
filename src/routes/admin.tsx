@@ -1,8 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import { toast } from "sonner";
-import type { Session } from "@supabase/supabase-js";
+import { useSession } from "@/lib/session";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, PageIntro } from "@/components/site";
 import { claimsQuery, documentsQuery, partiesQuery, sourcesQuery, topicsQuery } from "@/lib/data";
@@ -27,12 +27,7 @@ const field = "w-full rounded-xl border border-input bg-background px-3 py-2 tex
 const today = () => new Date().toISOString().slice(0, 10);
 
 function Admin() {
-  const [session, setSession] = useState<Session | null | undefined>(undefined);
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSession(data.session));
-    const { data } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
-    return () => data.subscription.unsubscribe();
-  }, []);
+  const { session, ready } = useSession();
   const { data: isAdmin } = useQuery({
     queryKey: ["is_admin", session?.user.id],
     enabled: !!session,
@@ -42,7 +37,7 @@ function Admin() {
     },
   });
 
-  if (session === undefined) return null;
+  if (!ready) return null;
   if (!session) return <AuthForm />;
   return (
     <>
@@ -56,28 +51,12 @@ function Admin() {
 }
 
 function AuthForm() {
-  const [mode, setMode] = useState<"in" | "up">("in");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    const { error } = mode === "in"
-      ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/admin` } });
-    if (error) { toast.error(error.message); return; }
-    if (mode === "up") toast.success("Revisa tu correo para confirmar la cuenta.");
-  };
   return (
-    <div className="mx-auto max-w-md px-4 py-16">
+    <div className="mx-auto max-w-md px-4 py-16 text-center">
       <Card>
         <h1 className="text-3xl font-semibold">Panel editorial</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Acceso solo para el equipo que verifica fuentes.</p>
-        <form onSubmit={submit} className="mt-6 space-y-3">
-          <label className="block text-sm">Correo<input type="email" required className={field} value={email} onChange={(e) => setEmail(e.target.value)} /></label>
-          <label className="block text-sm">Contraseña<input type="password" required minLength={8} className={field} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
-          <button className="w-full rounded-full bg-primary py-2.5 font-semibold text-primary-foreground">{mode === "in" ? "Entrar" : "Crear cuenta"}</button>
-        </form>
-        <button className="mt-3 text-sm underline" onClick={() => setMode(mode === "in" ? "up" : "in")}>{mode === "in" ? "Crear una cuenta" : "Ya tengo cuenta"}</button>
+        <p className="mt-2 text-sm text-muted-foreground">Entra con la cuenta del equipo editorial.</p>
+        <Link to="/auth" className="mt-4 inline-block rounded-full bg-primary px-6 py-2.5 font-semibold text-primary-foreground">Entrar</Link>
       </Card>
     </div>
   );

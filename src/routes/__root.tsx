@@ -11,6 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { SiteHeader, SiteFooter } from "@/components/site";
+import { SessionProvider } from "@/lib/session";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -122,6 +123,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SessionProvider>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <a href="#main" className="sr-only focus:not-sr-only">Saltar al contenido</a>
       <SiteHeader />
@@ -130,6 +132,7 @@ function RootComponent() {
       </main>
       <SiteFooter />
       <Toaster />
+      </SessionProvider>
     </QueryClientProvider>
   );
 }

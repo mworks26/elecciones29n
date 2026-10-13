@@ -40,7 +40,7 @@ export function useUserData() {
 }
 
 export async function saveUserField(userId: string, field: "game" | "chat", value: unknown) {
-  const { error } = await supabase.from("user_data").update({ [field]: value as never, updated_at: new Date().toISOString() }).eq("user_id", userId).eq("sync_enabled", true);
+  const { error } = await supabase.from("user_data").update((field === "game" ? { game: value as never } : { chat: value as never })).eq("user_id", userId).eq("sync_enabled", true);
   if (error) console.error("No se pudo guardar en tu cuenta:", error.message);
 }
 
