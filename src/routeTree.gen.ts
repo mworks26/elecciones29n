@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AsistenteRouteImport } from './routes/asistente'
 import { Route as CompararRouteImport } from './routes/comparar'
 import { Route as FuentesRouteImport } from './routes/fuentes'
@@ -22,6 +23,11 @@ import { Route as PartidosIdRouteImport } from './routes/partidos.$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AsistenteRoute = AsistenteRouteImport.update({
@@ -67,6 +73,7 @@ const PartidosIdRoute = PartidosIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/asistente': typeof AsistenteRoute
   '/comparar': typeof CompararRoute
   '/fuentes': typeof FuentesRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/asistente': typeof AsistenteRoute
   '/comparar': typeof CompararRoute
   '/fuentes': typeof FuentesRoute
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/asistente': typeof AsistenteRoute
   '/comparar': typeof CompararRoute
   '/fuentes': typeof FuentesRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/asistente'
     | '/comparar'
     | '/fuentes'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/asistente'
     | '/comparar'
     | '/fuentes'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/asistente'
     | '/comparar'
     | '/fuentes'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AsistenteRoute: typeof AsistenteRoute
   CompararRoute: typeof CompararRoute
   FuentesRoute: typeof FuentesRoute
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/asistente': {
@@ -217,6 +237,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AsistenteRoute: AsistenteRoute,
   CompararRoute: CompararRoute,
   FuentesRoute: FuentesRoute,
