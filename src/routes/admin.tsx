@@ -64,7 +64,7 @@ function AuthForm() {
     const { error } = mode === "in"
       ? await supabase.auth.signInWithPassword({ email, password })
       : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/admin` } });
-    if (error) { toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     if (mode === "up") toast.success("Revisa tu correo para confirmar la cuenta.");
   };
   return (
@@ -107,7 +107,7 @@ function Editor({ userId }: { userId: string }) {
   async function save(entity: string, entityId: string, action: string, reason: string, op: () => PromiseLike<{ error: { message: string } | null }>, changes: unknown) {
     if (!reason.trim()) { toast.error("Indica el motivo del cambio."); return; }
     const { error } = await op();
-    if (error) { toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     const { error: logErr } = await supabase.from("change_log").insert({ entity, entity_id: entityId, action, reason, changed_by: userId, changes: changes as never });
     if (logErr) toast.error(`Guardado, pero no se registró el historial: ${logErr.message}`);
     else toast.success("Guardado y registrado en el historial.");
@@ -130,7 +130,7 @@ function Editor({ userId }: { userId: string }) {
             <Card key={p.id} className="p-5">
               <form className="grid gap-3 md:grid-cols-2" onSubmit={(e) => { e.preventDefault(); const v = fd(e);
                 const changes = { programme_2026_status: v("programme_2026_status"), candidate_status: v("candidate_status"), candidacy_source_id: nul(v("candidacy_source_id")), notes: nul(v("notes")), last_checked: today() };
-                if (v("candidate_status") === "confirmed_official_candidacy" && !changes.candidacy_source_id) { toast.error("Una candidatura confirmada necesita fuente oficial (BOE o boletín).");
+                if (v("candidate_status") === "confirmed_official_candidacy" && !changes.candidacy_source_id) { toast.error("Una candidatura confirmada necesita fuente oficial (BOE o boletín)."); return; }
                 save("party", p.id, "update", v("reason"), () => supabase.from("parties").update(changes).eq("id", p.id), changes); }}>
                 <p className="font-serif text-xl font-semibold md:col-span-2">{p.name}</p>
                 <L label="Programa 2026"><Sel name="programme_2026_status" value={p.programme_2026_status} options={Object.fromEntries(Object.entries(PROGRAMME_STATUS).map(([k, v]) => [k, v("label")]))} /></L>

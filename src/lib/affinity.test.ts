@@ -34,6 +34,6 @@ describe("affinity", () => {
   it("claims pending second review are excluded unless explicitly included", () => {
     const claims = [c("a1", "A", "vivienda", "supports", "needs_second_review")];
     expect(computeAffinity(claims, { a1: "agree" }, {})).toHaveLength(0);
-    expect(computeAffinity(claims, { a1: "agree" }, {}, { includePending: true })[0].score).toBe(1);
+    expect(computeAffinity(claims, { a1: "agree" }, {}, { includePending: true })[0]?.score).toBe(1);
   });
 });
