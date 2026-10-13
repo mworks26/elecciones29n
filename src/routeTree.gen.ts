@@ -10,33 +10,154 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AsistenteRouteImport } from './routes/asistente'
+import { Route as CompararRouteImport } from './routes/comparar'
+import { Route as FuentesRouteImport } from './routes/fuentes'
+import { Route as JuegaRouteImport } from './routes/juega'
+import { Route as ProgramasRouteImport } from './routes/programas'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as PartidosIndexRouteImport } from './routes/partidos.index'
+import { Route as PartidosIdRouteImport } from './routes/partidos.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AsistenteRoute = AsistenteRouteImport.update({
+  id: '/asistente',
+  path: '/asistente',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompararRoute = CompararRouteImport.update({
+  id: '/comparar',
+  path: '/comparar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FuentesRoute = FuentesRouteImport.update({
+  id: '/fuentes',
+  path: '/fuentes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JuegaRoute = JuegaRouteImport.update({
+  id: '/juega',
+  path: '/juega',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramasRoute = ProgramasRouteImport.update({
+  id: '/programas',
+  path: '/programas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartidosIndexRoute = PartidosIndexRouteImport.update({
+  id: '/partidos/',
+  path: '/partidos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartidosIdRoute = PartidosIdRouteImport.update({
+  id: '/partidos/$id',
+  path: '/partidos/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/asistente': typeof AsistenteRoute
+  '/comparar': typeof CompararRoute
+  '/fuentes': typeof FuentesRoute
+  '/juega': typeof JuegaRoute
+  '/programas': typeof ProgramasRoute
+  '/api/chat': typeof ApiChatRoute
+  '/partidos/$id': typeof PartidosIdRoute
+  '/partidos/': typeof PartidosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/asistente': typeof AsistenteRoute
+  '/comparar': typeof CompararRoute
+  '/fuentes': typeof FuentesRoute
+  '/juega': typeof JuegaRoute
+  '/programas': typeof ProgramasRoute
+  '/api/chat': typeof ApiChatRoute
+  '/partidos/$id': typeof PartidosIdRoute
+  '/partidos': typeof PartidosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/asistente': typeof AsistenteRoute
+  '/comparar': typeof CompararRoute
+  '/fuentes': typeof FuentesRoute
+  '/juega': typeof JuegaRoute
+  '/programas': typeof ProgramasRoute
+  '/api/chat': typeof ApiChatRoute
+  '/partidos/$id': typeof PartidosIdRoute
+  '/partidos/': typeof PartidosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/asistente'
+    | '/comparar'
+    | '/fuentes'
+    | '/juega'
+    | '/programas'
+    | '/api/chat'
+    | '/partidos/$id'
+    | '/partidos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin'
+    | '/asistente'
+    | '/comparar'
+    | '/fuentes'
+    | '/juega'
+    | '/programas'
+    | '/api/chat'
+    | '/partidos/$id'
+    | '/partidos'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/asistente'
+    | '/comparar'
+    | '/fuentes'
+    | '/juega'
+    | '/programas'
+    | '/api/chat'
+    | '/partidos/$id'
+    | '/partidos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  AsistenteRoute: typeof AsistenteRoute
+  CompararRoute: typeof CompararRoute
+  FuentesRoute: typeof FuentesRoute
+  JuegaRoute: typeof JuegaRoute
+  ProgramasRoute: typeof ProgramasRoute
+  ApiChatRoute: typeof ApiChatRoute
+  PartidosIdRoute: typeof PartidosIdRoute
+  PartidosIndexRoute: typeof PartidosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +169,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/asistente': {
+      id: '/asistente'
+      path: '/asistente'
+      fullPath: '/asistente'
+      preLoaderRoute: typeof AsistenteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comparar': {
+      id: '/comparar'
+      path: '/comparar'
+      fullPath: '/comparar'
+      preLoaderRoute: typeof CompararRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fuentes': {
+      id: '/fuentes'
+      path: '/fuentes'
+      fullPath: '/fuentes'
+      preLoaderRoute: typeof FuentesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/juega': {
+      id: '/juega'
+      path: '/juega'
+      fullPath: '/juega'
+      preLoaderRoute: typeof JuegaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programas': {
+      id: '/programas'
+      path: '/programas'
+      fullPath: '/programas'
+      preLoaderRoute: typeof ProgramasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partidos/': {
+      id: '/partidos/'
+      path: '/partidos'
+      fullPath: '/partidos/'
+      preLoaderRoute: typeof PartidosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partidos/$id': {
+      id: '/partidos/$id'
+      path: '/partidos/$id'
+      fullPath: '/partidos/$id'
+      preLoaderRoute: typeof PartidosIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  AsistenteRoute: AsistenteRoute,
+  CompararRoute: CompararRoute,
+  FuentesRoute: FuentesRoute,
+  JuegaRoute: JuegaRoute,
+  ProgramasRoute: ProgramasRoute,
+  ApiChatRoute: ApiChatRoute,
+  PartidosIdRoute: PartidosIdRoute,
+  PartidosIndexRoute: PartidosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
