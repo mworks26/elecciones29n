@@ -114,7 +114,7 @@ function Editor({ userId }: { userId: string }) {
     qc.invalidateQueries();
   }
   const fd = (e: FormEvent<HTMLFormElement>) => { const f = new FormData(e.currentTarget); return (k: string) => String(f.get(k) ?? ""); };
-  const nul = (v?: string) => (v && v("trim")() ? v("trim")() : null);
+  const nul = (v?: string) => (v && v.trim() ? v.trim() : null);
 
   return (
     <div className="mt-6">
@@ -133,7 +133,7 @@ function Editor({ userId }: { userId: string }) {
                 if (v("candidate_status") === "confirmed_official_candidacy" && !changes.candidacy_source_id) { toast.error("Una candidatura confirmada necesita fuente oficial (BOE o boletín)."); return; }
                 save("party", p.id, "update", v("reason"), () => supabase.from("parties").update(changes).eq("id", p.id), changes); }}>
                 <p className="font-serif text-xl font-semibold md:col-span-2">{p.name}</p>
-                <L label="Programa 2026"><Sel name="programme_2026_status" value={p.programme_2026_status} options={Object.fromEntries(Object.entries(PROGRAMME_STATUS).map(([k, v]) => [k, v("label")]))} /></L>
+                <L label="Programa 2026"><Sel name="programme_2026_status" value={p.programme_2026_status} options={Object.fromEntries(Object.entries(PROGRAMME_STATUS).map(([k, v]) => [k, v.label]))} /></L>
                 <L label="Candidatura"><Sel name="candidate_status" value={p.candidate_status} options={CANDIDATE_STATUS} /></L>
                 <L label="Fuente de candidatura"><Sel name="candidacy_source_id" value={p.candidacy_source_id ?? ""} options={sourceOpts} /></L>
                 <L label="Notas"><input name="notes" defaultValue={p.notes ?? ""} className={field} /></L>

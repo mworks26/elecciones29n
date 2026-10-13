@@ -73,7 +73,7 @@ function Juega() {
 
   const move = (i: number, d: number) => setS((p) => {
     const o = [...p.order]; const j = i + d; if (j < 0 || j >= o.length) return p;
-    [o[i], o[j]] = [o[j], o[i]]; return { ...p, order: o };
+    const tmp = o[i]!; o[i] = o[j]!; o[j] = tmp; return { ...p, order: o };
   });
   const chip = (id: string, d: number) => setS((p) => {
     const cur = p.chips[id] ?? 0; const next = Math.max(0, cur + d);
