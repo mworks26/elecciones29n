@@ -119,7 +119,7 @@ function Editor({ userId }: { userId: string }) {
   return (
     <div className="mt-6">
       <div className="flex flex-wrap gap-2">
-        {[["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"]].map(([id, l]) => (
+        {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"]] as const).map(([id, l]) => (
           <button key={id} onClick={() => setTab(id)} className={cn("rounded-full border px-4 py-1.5 text-sm", tab === id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>{l}</button>
         ))}
       </div>
