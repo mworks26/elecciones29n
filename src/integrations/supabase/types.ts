@@ -14,16 +14,303 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      change_log: {
+        Row: {
+          action: string
+          changed_by: string | null
+          changes: Json | null
+          created_at: string
+          entity: string
+          entity_id: string
+          id: string
+          reason: string | null
+        }
+        Insert: {
+          action: string
+          changed_by?: string | null
+          changes?: Json | null
+          created_at?: string
+          entity: string
+          entity_id: string
+          id?: string
+          reason?: string | null
+        }
+        Update: {
+          action?: string
+          changed_by?: string | null
+          changes?: Json | null
+          created_at?: string
+          entity?: string
+          entity_id?: string
+          id?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      claims: {
+        Row: {
+          checked_at: string | null
+          claim_text: string
+          evidence_type: string
+          id: string
+          page_or_section: string | null
+          party_id: string
+          position: string
+          published_topic: string | null
+          quote_or_paraphrase: string | null
+          review_status: string
+          source_id: string | null
+          source_url: string | null
+          title: string
+          topic_id: string
+          updated_at: string
+        }
+        Insert: {
+          checked_at?: string | null
+          claim_text: string
+          evidence_type: string
+          id?: string
+          page_or_section?: string | null
+          party_id: string
+          position?: string
+          published_topic?: string | null
+          quote_or_paraphrase?: string | null
+          review_status?: string
+          source_id?: string | null
+          source_url?: string | null
+          title: string
+          topic_id: string
+          updated_at?: string
+        }
+        Update: {
+          checked_at?: string | null
+          claim_text?: string
+          evidence_type?: string
+          id?: string
+          page_or_section?: string | null
+          party_id?: string
+          position?: string
+          published_topic?: string | null
+          quote_or_paraphrase?: string | null
+          review_status?: string
+          source_id?: string | null
+          source_url?: string | null
+          title?: string
+          topic_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claims_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "claims_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "sources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "claims_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parties: {
+        Row: {
+          candidacy_source_id: string | null
+          candidate_status: string
+          id: string
+          last_checked: string | null
+          name: string
+          notes: string | null
+          official_site: string | null
+          programme_2026_status: string
+          programme_archive: string | null
+          short_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          candidacy_source_id?: string | null
+          candidate_status?: string
+          id: string
+          last_checked?: string | null
+          name: string
+          notes?: string | null
+          official_site?: string | null
+          programme_2026_status?: string
+          programme_archive?: string | null
+          short_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          candidacy_source_id?: string | null
+          candidate_status?: string
+          id?: string
+          last_checked?: string | null
+          name?: string
+          notes?: string | null
+          official_site?: string | null
+          programme_2026_status?: string
+          programme_archive?: string | null
+          short_name?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parties_candidacy_source_id_fkey"
+            columns: ["candidacy_source_id"]
+            isOneToOne: false
+            referencedRelation: "sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      programme_documents: {
+        Row: {
+          checked_at: string | null
+          created_at: string
+          election: string
+          id: string
+          kind: string
+          language: string | null
+          party_id: string
+          published_at: string | null
+          source_id: string | null
+          title: string
+          url: string
+        }
+        Insert: {
+          checked_at?: string | null
+          created_at?: string
+          election: string
+          id?: string
+          kind: string
+          language?: string | null
+          party_id: string
+          published_at?: string | null
+          source_id?: string | null
+          title: string
+          url: string
+        }
+        Update: {
+          checked_at?: string | null
+          created_at?: string
+          election?: string
+          id?: string
+          kind?: string
+          language?: string | null
+          party_id?: string
+          published_at?: string | null
+          source_id?: string | null
+          title?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "programme_documents_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "programme_documents_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sources: {
+        Row: {
+          id: string
+          last_checked: string | null
+          publisher: string | null
+          reliability: string | null
+          source_type: string
+          title: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          id: string
+          last_checked?: string | null
+          publisher?: string | null
+          reliability?: string | null
+          source_type: string
+          title: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          id?: string
+          last_checked?: string | null
+          publisher?: string | null
+          reliability?: string | null
+          source_type?: string
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      topics: {
+        Row: {
+          id: string
+          label: string
+        }
+        Insert: {
+          id: string
+          label: string
+        }
+        Update: {
+          id?: string
+          label?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +437,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
