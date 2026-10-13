@@ -15,6 +15,13 @@
       "when": 1791926617629,
       "tag": "0001_user_accounts_data",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791927442184,
+      "tag": "0002_admin_by_confirmed_email",
+      "breakpoints": true
     }
   ]
 }
