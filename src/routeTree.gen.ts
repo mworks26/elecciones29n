@@ -22,6 +22,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as PartidosIndexRouteImport } from './routes/partidos.index'
 import { Route as PartidosIdRouteImport } from './routes/partidos.$id'
+import { Route as ApiPublicHooksSyncProgrammesRouteImport } from './routes/api/public/hooks/sync-programmes'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 
@@ -90,6 +91,12 @@ const PartidosIdRoute = PartidosIdRouteImport.update({
   path: '/partidos/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksSyncProgrammesRoute =
+  ApiPublicHooksSyncProgrammesRouteImport.update({
+    id: '/api/public/hooks/sync-programmes',
+    path: '/api/public/hooks/sync-programmes',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/lovable/email/auth/preview',
   path: '/lovable/email/auth/preview',
@@ -115,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/partidos/$id': typeof PartidosIdRoute
   '/partidos/': typeof PartidosIndexRoute
+  '/api/public/hooks/sync-programmes': typeof ApiPublicHooksSyncProgrammesRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
@@ -132,6 +140,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/partidos/$id': typeof PartidosIdRoute
   '/partidos': typeof PartidosIndexRoute
+  '/api/public/hooks/sync-programmes': typeof ApiPublicHooksSyncProgrammesRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
@@ -150,6 +159,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/partidos/$id': typeof PartidosIdRoute
   '/partidos/': typeof PartidosIndexRoute
+  '/api/public/hooks/sync-programmes': typeof ApiPublicHooksSyncProgrammesRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/partidos/$id'
     | '/partidos/'
+    | '/api/public/hooks/sync-programmes'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/partidos/$id'
     | '/partidos'
+    | '/api/public/hooks/sync-programmes'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
   id:
@@ -203,6 +215,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/partidos/$id'
     | '/partidos/'
+    | '/api/public/hooks/sync-programmes'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
   fileRoutesById: FileRoutesById
@@ -221,6 +234,7 @@ export interface RootRouteChildren {
   ApiChatRoute: typeof ApiChatRoute
   PartidosIdRoute: typeof PartidosIdRoute
   PartidosIndexRoute: typeof PartidosIndexRoute
+  ApiPublicHooksSyncProgrammesRoute: typeof ApiPublicHooksSyncProgrammesRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
 }
@@ -318,6 +332,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartidosIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/sync-programmes': {
+      id: '/api/public/hooks/sync-programmes'
+      path: '/api/public/hooks/sync-programmes'
+      fullPath: '/api/public/hooks/sync-programmes'
+      preLoaderRoute: typeof ApiPublicHooksSyncProgrammesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/auth/preview': {
       id: '/lovable/email/auth/preview'
       path: '/lovable/email/auth/preview'
@@ -349,6 +370,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRoute: ApiChatRoute,
   PartidosIdRoute: PartidosIdRoute,
   PartidosIndexRoute: PartidosIndexRoute,
+  ApiPublicHooksSyncProgrammesRoute: ApiPublicHooksSyncProgrammesRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
 }
