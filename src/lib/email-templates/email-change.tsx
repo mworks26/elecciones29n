@@ -68,10 +68,10 @@ export default EmailChangeEmail
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
 const container = { padding: '20px 25px' }
-const h1 = {
+const h1 = { fontFamily: 'Georgia, serif',
   fontSize: '22px',
   fontWeight: 'bold' as const,
-  color: '#000000',
+  color: '#2f2540',
   margin: '0 0 20px',
 }
 const text = {
@@ -82,11 +82,11 @@ const text = {
 }
 const link = { color: 'inherit', textDecoration: 'underline' }
 const button = {
-  backgroundColor: '#000000',
+  backgroundColor: '#2f2540',
   color: '#ffffff',
   fontSize: '14px',
   border: '1px solid #000000',
-  borderRadius: '8px',
+  borderRadius: '999px',
   padding: '12px 20px',
   textDecoration: 'none',
 }
