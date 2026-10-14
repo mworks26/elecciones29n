@@ -16,6 +16,7 @@ export const DOC_KIND: Record<string, string> = {
   full_2026: "Programa oficial 2026",
   partial_2026: "Manifiesto/propuestas parciales 2026",
   historical_2023: "Documento histórico 2023",
+  official_statement_2026: "Comunicado oficial · no es un programa",
 };
 
 export const REVIEW_STATUS: Record<string, string> = {

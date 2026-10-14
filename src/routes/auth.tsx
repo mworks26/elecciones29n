@@ -14,6 +14,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Crea una cuenta para guardar tus resultados, propuestas favoritas y conversaciones." },
       { property: "og:title", content: "Entrar o registrarse — Elecciones 2026" },
       { property: "og:description", content: "Guarda tus preferencias en cualquier dispositivo." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AuthPage,

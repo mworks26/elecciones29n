@@ -13,6 +13,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Partidos, programas y propuestas de las generales del 29-N con fuentes oficiales, juegos de afinidad y un asistente neutral." },
       { property: "og:title", content: "Elecciones 2026 — Tu voto empieza con una pregunta" },
       { property: "og:description", content: "Explora y compara propuestas con fuentes verificables. Sin inventar nada." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(partiesQuery),

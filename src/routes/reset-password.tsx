@@ -13,6 +13,8 @@ export const Route = createFileRoute("/reset-password")({
       { name: "robots", content: "noindex" },
       { property: "og:title", content: "Nueva contraseña — Elecciones 2026" },
       { property: "og:description", content: "Cambia la contraseña de tu cuenta." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Reset,

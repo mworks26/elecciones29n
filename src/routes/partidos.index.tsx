@@ -11,6 +11,8 @@ export const Route = createFileRoute("/partidos/")({
       { name: "description", content: "Formaciones en seguimiento para las generales 2026, con estado de candidatura y de programa." },
       { property: "og:title", content: "Partidos en seguimiento — Elecciones 2026" },
       { property: "og:description", content: "Estado de candidatura y programa de cada formación, con fecha de comprobación." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(partiesQuery),

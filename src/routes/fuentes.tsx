@@ -12,6 +12,8 @@ export const Route = createFileRoute("/fuentes")({
       { name: "description", content: "Registro de fuentes, fórmula de afinidad, límites conocidos e historial de cambios." },
       { property: "og:title", content: "Fuentes y metodología — Elecciones 2026" },
       { property: "og:description", content: "Todo dato necesita un origen. Aquí están todos." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(sourcesQuery), context.queryClient.ensureQueryData(changeLogQuery)]),

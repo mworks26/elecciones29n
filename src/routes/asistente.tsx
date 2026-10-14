@@ -18,6 +18,8 @@ export const Route = createFileRoute("/asistente")({
       { name: "description", content: "Pregunta tus dudas sobre las elecciones. Respuestas con fuente, sin recomendaciones de voto." },
       { property: "og:title", content: "Asistente neutral — Elecciones 2026" },
       { property: "og:description", content: "Un asistente que cita sus fuentes y no te dice a quién votar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Asistente,

@@ -13,6 +13,8 @@ export const Route = createFileRoute("/programas")({
       { name: "description", content: "Programas y manifiestos con enlace a la fuente oficial, separando 2026 de documentos históricos." },
       { property: "og:title", content: "Biblioteca de programas — Elecciones 2026" },
       { property: "og:description", content: "Cada documento con su fuente, fecha y tipo." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(documentsQuery), context.queryClient.ensureQueryData(partiesQuery)]),
@@ -25,6 +27,7 @@ const FILTERS = [
   { id: "full_2026", label: "Programa íntegro 2026" },
   { id: "partial_2026", label: "Manifiesto/propuestas 2026" },
   { id: "historical_2023", label: "Histórico 2023" },
+  { id: "official_statement_2026", label: "Comunicados oficiales 2026" },
   { id: "missing", label: "No localizado" },
 ];
 

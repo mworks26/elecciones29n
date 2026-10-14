@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowDown, ArrowUp, Minus, Plus, RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
+import { PriorityNotes, BudgetNotes, ProposalNote } from "@/components/game-notes";
+import { Button } from "@/components/ui/button";
 import { Card, Notice, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
 import { Switch } from "@/components/ui/switch";
 import { claimsQuery, partiesQuery, topicsQuery } from "@/lib/data";
@@ -17,6 +19,8 @@ export const Route = createFileRoute("/juega")({
       { name: "description", content: "Ordena tus prioridades, reparte fichas y elige cartas de propuestas reales para descubrir tu afinidad." },
       { property: "og:title", content: "Juegos de afinidad — Elecciones 2026" },
       { property: "og:description", content: "Descubre qué te importa. Tus respuestas se quedan en tu dispositivo." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   loader: ({ context }) => Promise.all([
@@ -89,15 +93,6 @@ function Juega() {
   const nextCard = deck.find((c) => !s.answers[c.id]);
   const results = computeAffinity(claims, s.answers, weights, { includePending: s.includePending });
 
-  const move = (i: number, d: number) => setS((p) => {
-    const o = [...p.order]; const j = i + d; if (j < 0 || j >= o.length) return p;
-    const tmp = o[i]!; o[i] = o[j]!; o[j] = tmp; return { ...p, order: o };
-  });
-  const chip = (id: string, d: number) => setS((p) => {
-    const cur = p.chips[id] ?? 0; const next = Math.max(0, cur + d);
-    if (d > 0 && usedChips + d > 100) return p;
-    return { ...p, chips: { ...p.chips, [id]: next } };
-  });
   const answer = (id: string, a: Answer) => setS((p) => ({ ...p, answers: { ...p.answers, [id]: a } }));
 
   return (
@@ -118,18 +113,8 @@ function Juega() {
         {game === "ordena" && (
           <Card className="mt-6">
             <h2 className="text-2xl font-semibold">¿Qué asuntos tienes más presentes?</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Sube y baja los temas hasta que el primero sea el que más te importa.</p>
-            <ol className="mt-4 space-y-2">
-              {s.order.map((id, i) => (
-                <li key={id} className="flex items-center gap-3 rounded-2xl border border-border bg-background px-4 py-2.5">
-                  <span className="w-6 font-serif text-lg font-semibold text-accent">{i + 1}</span>
-                  <span className="flex-1">{label(id)}</span>
-                  <button aria-label={`Subir ${label(id)}`} onClick={() => move(i, -1)} disabled={i === 0} className="rounded-full p-1.5 hover:bg-secondary disabled:opacity-30"><ArrowUp className="size-4" /></button>
-                  <button aria-label={`Bajar ${label(id)}`} onClick={() => move(i, 1)} disabled={i === s.order.length - 1} className="rounded-full p-1.5 hover:bg-secondary disabled:opacity-30"><ArrowDown className="size-4" /></button>
-                </li>
-              ))}
-            </ol>
-            <button onClick={() => setGame("reparte")} className="mt-6 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground">Siguiente juego</button>
+            <PriorityNotes order={s.order} label={label} onChange={(order) => setS((p) => ({ ...p, order }))} />
+            <Button onClick={() => setGame("reparte")} className="mt-6 rounded-full" size="lg">Siguiente juego</Button>
           </Card>
         )}
 
@@ -138,17 +123,8 @@ function Juega() {
             <h2 className="text-2xl font-semibold">Tienes 100 fichas. ¿Dónde las pones?</h2>
             <p className="mt-1 text-sm text-muted-foreground">Imagina que repartes el esfuerzo del próximo Gobierno. Quedan <strong className="text-foreground">{100 - usedChips}</strong> fichas.</p>
             <div className="mt-3 h-3 overflow-hidden rounded-full bg-muted"><div className="h-full bg-accent transition-all" style={{ width: `${usedChips}%` }} /></div>
-            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-              {s.order.map((id) => (
-                <li key={id} className="flex items-center gap-2 rounded-2xl border border-border bg-background px-3 py-2">
-                  <span className="flex-1 text-sm">{label(id)}</span>
-                  <button aria-label={`Quitar 5 fichas de ${label(id)}`} onClick={() => chip(id, -5)} className="rounded-full p-1.5 hover:bg-secondary"><Minus className="size-4" /></button>
-                  <span className="w-8 text-center font-semibold tabular-nums">{s.chips[id] ?? 0}</span>
-                  <button aria-label={`Añadir 5 fichas a ${label(id)}`} onClick={() => chip(id, 5)} disabled={usedChips >= 100} className="rounded-full p-1.5 hover:bg-secondary disabled:opacity-30"><Plus className="size-4" /></button>
-                </li>
-              ))}
-            </ul>
-            <button onClick={() => setGame("cartas")} className="mt-6 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground">Siguiente juego</button>
+            <BudgetNotes order={s.order} chips={s.chips} label={label} onChange={(chips) => setS((p) => ({ ...p, chips }))} />
+            <Button onClick={() => setGame("cartas")} className="mt-6 rounded-full" size="lg">Siguiente juego</Button>
           </Card>
         )}
 
@@ -161,17 +137,12 @@ function Juega() {
             {deck.length === 0 ? (
               <Notice>Aún no hay propuestas 2026 verificadas por revisión humana para jugar. Puedes activar las pendientes de segunda revisión (proceden de webs oficiales, pero falta una segunda comprobación) o volver cuando se publiquen los programas.</Notice>
             ) : nextCard ? (
-              <Card className="relative overflow-hidden border-2 border-lilac bg-secondary p-8">
+              <ProposalNote key={nextCard.id} onAnswer={(a) => answer(nextCard.id, a)}>
                 <p className="text-xs font-semibold uppercase tracking-widest text-accent">{label(nextCard.topic_id)} · carta {Object.keys(s.answers).filter((k) => deck.some((d) => d.id === k)).length + 1} de {deck.length}</p>
                 <h2 className="mt-3 text-3xl font-semibold">«{nextCard.title}»</h2>
                 <p className="mt-2 text-muted-foreground">{nextCard.claim_text}</p>
                 <p className="mt-2 text-xs text-muted-foreground">El partido se revela al final para que valores la idea, no las siglas.</p>
-                <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  {([["agree", "De acuerdo"], ["partial", "En parte"], ["disagree", "En desacuerdo"], ["skip", "Paso"]] as const).map(([a, l]) => (
-                    <button key={a} onClick={() => answer(nextCard.id, a)} className={cn("rounded-2xl px-4 py-3 font-semibold", a === "skip" ? "border border-input bg-card" : "bg-primary text-primary-foreground")}>{l}</button>
-                  ))}
-                </div>
-              </Card>
+              </ProposalNote>
             ) : (
               <Card>
                 <h2 className="text-2xl font-semibold">¡Has jugado todas las cartas!</h2>
