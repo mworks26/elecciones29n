@@ -278,6 +278,57 @@ export type Database = {
         }
         Relationships: []
       }
+      update_candidates: {
+        Row: {
+          detected_at: string
+          document_url: string | null
+          election: string | null
+          external_id: string
+          fingerprint: string
+          id: string
+          official_source: boolean
+          origin: string
+          party_id: string | null
+          party_name: string | null
+          review_status: string
+          sha256: string | null
+          status_label: string | null
+          title: string
+        }
+        Insert: {
+          detected_at?: string
+          document_url?: string | null
+          election?: string | null
+          external_id: string
+          fingerprint: string
+          id?: string
+          official_source?: boolean
+          origin: string
+          party_id?: string | null
+          party_name?: string | null
+          review_status?: string
+          sha256?: string | null
+          status_label?: string | null
+          title: string
+        }
+        Update: {
+          detected_at?: string
+          document_url?: string | null
+          election?: string | null
+          external_id?: string
+          fingerprint?: string
+          id?: string
+          official_source?: boolean
+          origin?: string
+          party_id?: string | null
+          party_name?: string | null
+          review_status?: string
+          sha256?: string | null
+          status_label?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       user_data: {
         Row: {
           chat: Json | null
