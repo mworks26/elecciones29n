@@ -24,6 +24,7 @@ export const Route = createFileRoute("/partidos/$id")({
       { property: "og:title", content: loaderData ? `${loaderData.name} — Elecciones 2026` : "Partido" },
       { property: "og:description", content: "Estado del programa, documentos y propuestas con fuente." },
       { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: `/partidos/${params.id}` },
     ],
   }),

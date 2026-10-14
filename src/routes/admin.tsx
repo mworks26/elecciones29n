@@ -18,6 +18,8 @@ export const Route = createFileRoute("/admin")({
       { name: "robots", content: "noindex" },
       { property: "og:title", content: "Panel editorial — Elecciones 2026" },
       { property: "og:description", content: "Área privada del equipo editorial." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Admin,

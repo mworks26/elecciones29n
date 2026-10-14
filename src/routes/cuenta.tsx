@@ -16,6 +16,8 @@ export const Route = createFileRoute("/cuenta")({
       { name: "robots", content: "noindex" },
       { property: "og:title", content: "Mi cuenta — Elecciones 2026" },
       { property: "og:description", content: "Tus datos, bajo tu control." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Cuenta,

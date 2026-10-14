@@ -14,6 +14,8 @@ export const Route = createFileRoute("/comparar")({
       { name: "description", content: "Compara partidos tema a tema, solo con posiciones respaldadas por una fuente." },
       { property: "og:title", content: "Comparador por temas — Elecciones 2026" },
       { property: "og:description", content: "Si no hay evidencia, lo decimos. Nunca rellenamos huecos." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   loader: ({ context }) => Promise.all([

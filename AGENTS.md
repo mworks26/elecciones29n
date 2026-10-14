@@ -17,3 +17,5 @@
 - Game answers and chat history live in localStorage; they sync to the user's account (user_data) only after explicit opt-in consent on /cuenta, and opting out wipes them. Why: ideology is sensitive data.
 - Admin role is granted by a DB trigger only to an allow-listed email once confirmed; admin edits write a change_log row. Why: public signup is open, so first-signup admin would be unsafe.
 - Code uses only the standard Supabase client and SQL migrations in drizzle/migrations, so the app can be moved to a self-hosted Supabase by replaying migrations and swapping env keys. Why: user plans external hosting.
+- Game drag interactions use dnd-kit in a shared game-notes module, preserving the existing saved order and chip allocation shape. Why: mouse, touch and keyboard interaction must not alter affinity rules or consent.
+- Data-only editorial updates are replayable SQL in sql/data, applied after schema migrations on export. Why: the managed schema migrator excludes data-only operations while official-source updates must remain portable.
