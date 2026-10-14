@@ -100,7 +100,7 @@ function Editor({ userId }: { userId: string }) {
   return (
     <div className="mt-6">
       <div className="flex flex-wrap gap-2">
-        {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"]] as const).map(([id, l]) => (
+        {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"], ["avisos", "Avisos automáticos"]] as const).map(([id, l]) => (
           <button key={id} onClick={() => setTab(id)} className={cn("rounded-full border px-4 py-1.5 text-sm", tab === id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>{l}</button>
         ))}
       </div>
@@ -202,6 +202,39 @@ function Editor({ userId }: { userId: string }) {
           </form>
         </Card>
       )}
+
+      {tab === "avisos" && <Candidates userId={userId} />}
+    </div>
+  );
+}
+
+function Candidates({ userId }: { userId: string }) {
+  const qc = useQueryClient();
+  const { data = [] } = useQuery({
+    queryKey: ["update_candidates"],
+    queryFn: async () => (await supabase.from("update_candidates").select("*").eq("review_status", "pending").order("detected_at", { ascending: false })).data ?? [],
+  });
+  async function mark(id: string, review_status: string) {
+    const { error } = await supabase.from("update_candidates").update({ review_status }).eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    await supabase.from("change_log").insert({ entity: "update_candidate", entity_id: id, action: review_status, reason: "Revisión de aviso automático", changed_by: userId });
+    qc.invalidateQueries({ queryKey: ["update_candidates"] });
+  }
+  return (
+    <div className="mt-6 space-y-3">
+      <p className="text-sm text-muted-foreground">Cada día a las 08:00 se revisan las fuentes. Los cambios detectados aparecen aquí y no se publican hasta que los añadas en «Documentos».</p>
+      {data.length === 0 && <Card>No hay avisos pendientes.</Card>}
+      {data.map((c) => (
+        <Card key={c.id} className="p-4">
+          <p className="font-medium">{c.party_name ?? c.party_id} · {c.title} · {c.election}</p>
+          <p className="text-sm text-muted-foreground">Estado: {c.status_label ?? "—"} · Detectado: {new Date(c.detected_at).toLocaleDateString("es-ES")}</p>
+          {c.document_url && <a href={c.document_url} target="_blank" rel="noreferrer" className="text-sm underline">Ver documento</a>}
+          <div className="mt-3 flex gap-2">
+            <button onClick={() => mark(c.id, "reviewed")} className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Revisado</button>
+            <button onClick={() => mark(c.id, "dismissed")} className="rounded-full border border-input px-4 py-1.5 text-sm">Descartar</button>
+          </div>
+        </Card>
+      ))}
     </div>
   );
 }

@@ -1,0 +1,1 @@
+SELECT cron.schedule('sync-programmes-daily','0 6 * * *', $$ select net.http_post(url:='https://project--aca6b1ce-c187-49aa-a390-a3646c05df87.lovable.app/api/public/hooks/sync-programmes', headers:='{"Content-Type":"application/json","Authorization":"Bearer sb_publishable_uw1BBN7Nwq6SzjLd_6CoCg_htu1-6e6"}'::jsonb, body:='{}'::jsonb); $$);
