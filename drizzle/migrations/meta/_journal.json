@@ -29,6 +29,13 @@
       "when": 1791983533005,
       "tag": "0003_update_watch",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791983583706,
+      "tag": "0004_schedule_sync_programmes",
+      "breakpoints": true
     }
   ]
 }
