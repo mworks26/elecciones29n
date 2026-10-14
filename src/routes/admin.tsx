@@ -216,7 +216,7 @@ function Candidates({ userId }: { userId: string }) {
   });
   async function mark(id: string, review_status: string) {
     const { error } = await supabase.from("update_candidates").update({ review_status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await supabase.from("change_log").insert({ entity: "update_candidate", entity_id: id, action: review_status, reason: "Revisión de aviso automático", changed_by: userId });
     qc.invalidateQueries({ queryKey: ["update_candidates"] });
   }

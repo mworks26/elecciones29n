@@ -19,3 +19,4 @@
 - Code uses only the standard Supabase client and SQL migrations in drizzle/migrations, so the app can be moved to a self-hosted Supabase by replaying migrations and swapping env keys. Why: user plans external hosting.
 - Game drag interactions use dnd-kit in a shared game-notes module, preserving the existing saved order and chip allocation shape. Why: mouse, touch and keyboard interaction must not alter affinity rules or consent.
 - Data-only editorial updates are replayable SQL in sql/data, applied after schema migrations on export. Why: the managed schema migrator excludes data-only operations while official-source updates must remain portable.
+- A daily scheduled job calls /api/public/hooks/sync-programmes, which only records detected programme changes in update_candidates for admin review. Why: the public callback token is not authentication, so it must never publish data.
