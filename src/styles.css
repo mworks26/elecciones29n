@@ -62,6 +62,9 @@
   --color-highlight: var(--highlight);
   --color-highlight-foreground: var(--highlight-foreground);
   --color-lilac: var(--lilac);
+  --color-go: oklch(0.72 0.17 145);
+  --color-wait: oklch(0.83 0.16 80);
+  --color-stop: oklch(0.63 0.21 27);
   --font-serif: var(--font-serif-stack);
   --font-sans: var(--font-sans-stack);
   --shadow-soft: var(--shadow-soft);
