@@ -5,7 +5,7 @@ import { RotateCcw, Save, History, ArrowRight } from "lucide-react";
 import { GameMascot } from "@/components/game-art";
 import { GameHistoryList } from "@/components/game-history-list";
 import { GAME_KEY, localGameEnvelope, hasLocalGameConsent, setLocalGameConsent, appendGameHistory, readGameEnvelope, type GameEntry, type GameState } from "@/lib/game-history";
-import { PriorityNotes, BudgetNotes, ProposalNote } from "@/components/game-notes";
+import { PriorityNotes, BudgetNotes } from "@/components/game-notes";
 import { BallGame } from "@/components/ball-game";
 import { Button } from "@/components/ui/button";
 import { Card, Notice, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
@@ -179,7 +179,7 @@ function Juega() {
                 <p className="mt-2 text-muted-foreground">{nextCard.claim_text}</p>
                 <div className="mt-4 border-t border-border pt-3">{nextCard.source_url ? <SourceLink href={nextCard.source_url}>Fuente original · {nextCard.page_or_section ?? "Documento del partido"}</SourceLink> : <p className="text-sm text-muted-foreground">Fuente directa no disponible</p>}<p className="mt-1 text-xs text-muted-foreground">{nextCard.review_status === "verified_by_human" ? "Revisión humana verificada" : "Pendiente de segunda revisión"}</p></div>
                 <p className="mt-2 text-xs text-muted-foreground">Las siglas se muestran al final. La fuente permite comprobar la autoría antes.</p>
-              </ProposalNote>
+              </BasketGame>
             ) : (
               <Card>
                 <h2 className="text-2xl font-semibold">¡Has jugado todas las cartas!</h2>
