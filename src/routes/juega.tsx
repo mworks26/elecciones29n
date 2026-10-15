@@ -41,7 +41,7 @@ type Saved = GameState;
 const GAMES = [
   { id: "ordena", n: 1, label: "Ordena tus prioridades" },
   { id: "reparte", n: 2, label: "Reparte 100 fichas" },
-  { id: "cartas", n: 3, label: "Elige la carta" },
+  { id: "cartas", n: 3, label: "Pelota y cartas" },
   { id: "resultado", n: 4, label: "Tu resultado" },
 ] as const;
 
