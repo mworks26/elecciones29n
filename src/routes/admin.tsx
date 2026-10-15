@@ -241,7 +241,7 @@ function Candidates({ userId }: { userId: string }) {
           {c.document_url && <a href={c.document_url} target="_blank" rel="noreferrer" className="text-sm underline">Ver documento</a>}
           {c.party_id && c.document_url ? (
             <form className="mt-3 grid gap-2 md:grid-cols-3" onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); void publish(c, String(f.get("kind")), String(f.get("reason") ?? "")); }}>
-              <Sel name="kind" value="historical_2023_reference" options={DOC_KIND} />
+              <Sel name="kind" value="historical_2023" options={DOC_KIND} />
               <input name="reason" required placeholder="Cómo lo has comprobado" className={field} />
               <button className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Verificar y publicar</button>
             </form>
