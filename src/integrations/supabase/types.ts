@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      banners: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          media_type: string
+          media_url: string
+          sort_order: number
+          target_url: string
+          title: string
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_type?: string
+          media_url: string
+          sort_order?: number
+          target_url: string
+          title: string
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_type?: string
+          media_url?: string
+          sort_order?: number
+          target_url?: string
+          title?: string
+        }
+        Relationships: []
+      }
       change_log: {
         Row: {
           action: string
