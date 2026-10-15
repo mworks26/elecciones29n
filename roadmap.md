@@ -1,4 +1,6 @@
 # Tasks
+- [ ] Replace the confusing basket interaction with clear illustrated opinion choices and verify answers reach affinity results.
+- [ ] Inspect Cloud Jobs delivery evidence and report failures or gaps in official-source coverage.
 - [x] Add the attached cover drawing, brand tagline and playful navigation; make games prominent on home.
 - [x] Add cartoon game visuals and consent-based local result history plus free-registration invitation and account history.
 - [x] Check current official programmes/manifestos and preserve citations and document distinctions.
