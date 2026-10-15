@@ -11,3 +11,6 @@
 - [x] Nubion chat window anchored bottom-right.
 - [x] Distinct pastel colors for each menu button.
 - [x] Campaign advisor mascot holds a white ballot.
+- [x] Replace the campaign advisor with a polished female cartoon holding a clearly visible ballot with both hands.
+- [x] Inspect the daily schedule, source coverage and duplicate candidates; correct the panel's timing and coverage description.
+- [ ] Confirm a successful real daily execution. Blocker: legacy schedule execution logs are unavailable through the supported tools; needs Cloud Jobs delivery history.
