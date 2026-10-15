@@ -126,6 +126,12 @@ function Juega() {
       <PageIntro eyebrow="Juega" title="Descubre qué te importa.">
         Tus prioridades, unas fichas y tus propias ideas. Sin recomendaciones de voto.
       </PageIntro>
+      <div className="mx-auto max-w-6xl px-4 pb-6">
+        <Link to="/politico" className="flex items-center justify-between gap-4 rounded-3xl bg-highlight p-5 text-highlight-foreground shadow-soft transition-transform hover:-translate-y-0.5">
+          <span><span className="block font-serif text-2xl font-semibold">🗳️ Conviértete en político/a por un día</span><span className="text-sm">Crea tu programa con una asesora y descubre a qué partido se parece.</span></span>
+          <ArrowRight aria-hidden />
+        </Link>
+      </div>
       <div className="mx-auto max-w-4xl px-4">
         <div className="flex flex-wrap gap-2" role="tablist">
           {GAMES.map((g) => (
