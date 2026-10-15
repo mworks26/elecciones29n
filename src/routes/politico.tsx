@@ -6,7 +6,8 @@ import { ClientOnly } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card, Notice, PageIntro, RouteError, SourceLink } from "@/components/site";
-import { GameMascot, TopicDrawing } from "@/components/game-art";
+import { TopicDrawing } from "@/components/game-art";
+import { AdvisorMascot } from "@/components/advisor-art";
 import { claimsQuery, partiesQuery, topicsQuery } from "@/lib/data";
 import { computeAffinity, type Answer } from "@/lib/affinity";
 import { cn } from "@/lib/utils";
@@ -97,7 +98,7 @@ function Politico() {
               <Suspense fallback={<div className="aspect-square w-full" />}><UrnaAnimation className="w-full rounded-3xl bg-background" /></Suspense>
             </ClientOnly>
             <div className="mt-2 flex items-start gap-2 rounded-2xl bg-secondary p-3 text-left text-sm text-secondary-foreground" role="status">
-              <GameMascot kind={1} className="size-12 shrink-0" />
+              <AdvisorMascot className="size-14 shrink-0" />
               <p>{TIPS[step]}</p>
             </div>
           </Card>
