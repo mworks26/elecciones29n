@@ -29,7 +29,7 @@ export function BannerRow() {
     return () => clearInterval(t);
   }, [data.length]);
   if (!data.length) return null;
-  const b = data[i % data.length];
+  const b = data[i % data.length]!;
   return (
     <aside aria-label="Publicidad" className="border-b border-border bg-secondary/40">
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-1.5">
@@ -64,20 +64,20 @@ export function BannerAdmin({ userId }: { userId: string }) {
     };
     if (!/^https?:\/\//.test(row.media_url) || !/^https?:\/\//.test(row.target_url)) { toast.error("Los enlaces deben empezar por http:// o https://"); return; }
     const { data: ins, error } = await supabase.from("banners").insert(row).select("id").single();
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await log(ins.id, "create", row);
     toast.success("Banner añadido.");
     form.reset(); refresh();
   }
   async function toggle(b: Banner) {
     const { error } = await supabase.from("banners").update({ is_active: !b.is_active }).eq("id", b.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await log(b.id, b.is_active ? "pause" : "activate", { is_active: !b.is_active }); refresh();
   }
   async function remove(b: Banner) {
     if (!confirm(`¿Eliminar el banner «${b.title}»?`)) return;
     const { error } = await supabase.from("banners").delete().eq("id", b.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await log(b.id, "delete", b); refresh();
   }
 
