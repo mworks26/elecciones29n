@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Home, Users, BookOpen, Scale, Gamepad2, MessageCircleQuestion, ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/lib/session";
@@ -13,26 +14,29 @@ const NAV = [
   { to: "/asistente", label: "Asistente" },
   { to: "/fuentes", label: "Fuentes" },
 ] as const;
+const NAV_ICONS = [Home, Users, BookOpen, Scale, Gamepad2, MessageCircleQuestion, ShieldCheck];
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
-        <Link to="/" className="font-serif text-xl font-semibold">
+      <div className="site-nav mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
+        <Link to="/" className="shrink-0 font-serif text-xl font-semibold">
           Elecciones <span className="text-accent">2026</span>
+          <span className="mt-1 block font-sans text-xs font-medium text-muted-foreground">Entiende. Compara. Decide por ti.</span>
         </Link>
         <nav aria-label="Principal" className="flex flex-wrap gap-1 text-sm">
-          {NAV.map((n) => (
-            <Link
+          {NAV.map((n, index) => {
+            const Icon = NAV_ICONS[index] ?? Home;
+            return <Button asChild variant="ghost" key={n.to} className="h-auto rounded-full p-0"><Link
               key={n.to}
               to={n.to}
               activeOptions={{ exact: n.to === "/" }}
-              className="rounded-full px-3 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground", n.to === "/juega" && "bg-highlight font-semibold text-highlight-foreground")}
               activeProps={{ className: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" }}
             >
-              {n.label}
-            </Link>
-          ))}
+              <Icon className="size-4" aria-hidden />{n.label}
+            </Link></Button>;
+          })}
         </nav>
         <AccountLink />
       </div>

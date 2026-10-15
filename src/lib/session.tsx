@@ -32,7 +32,8 @@ export function useUserData() {
     queryKey: ["me", "user_data", uid],
     enabled: !!uid,
     queryFn: async () => {
-      const { data, error } = await supabase.from("user_data").select("sync_enabled, game, chat").eq("user_id", uid!).maybeSingle();
+      if (!uid) return null;
+      const { data, error } = await supabase.from("user_data").select("sync_enabled, game, chat").eq("user_id", uid).maybeSingle();
       if (error) throw new Error(error.message);
       return (data as UserData | null) ?? null;
     },
@@ -41,7 +42,7 @@ export function useUserData() {
 
 export async function saveUserField(userId: string, field: "game" | "chat", value: unknown) {
   const { error } = await supabase.from("user_data").update((field === "game" ? { game: value as never } : { chat: value as never })).eq("user_id", userId).eq("sync_enabled", true);
-  if (error) console.error("No se pudo guardar en tu cuenta:", error.message);
+  if (error) throw new Error(error.message);
 }
 
 export function useFavorites() {
@@ -51,7 +52,8 @@ export function useFavorites() {
     queryKey: ["me", "favorites", uid],
     enabled: !!uid,
     queryFn: async () => {
-      const { data, error } = await supabase.from("user_favorites").select("claim_id").eq("user_id", uid!);
+      if (!uid) return new Set<string>();
+      const { data, error } = await supabase.from("user_favorites").select("claim_id").eq("user_id", uid);
       if (error) throw new Error(error.message);
       return new Set((data ?? []).map((r) => r.claim_id));
     },

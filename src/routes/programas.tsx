@@ -5,6 +5,7 @@ import { Card, PageIntro, RouteError, SourceLink, Tag } from "@/components/site"
 import { documentsQuery, partiesQuery } from "@/lib/data";
 import { DOC_KIND, formatDate } from "@/lib/labels";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/programas")({
   head: () => ({
@@ -47,10 +48,10 @@ function Programas() {
       <div className="mx-auto max-w-6xl px-4">
         <div role="group" aria-label="Filtrar documentos" className="flex flex-wrap gap-2">
           {FILTERS.map((x) => (
-            <button key={x.id} onClick={() => setF(x.id)} aria-pressed={f === x.id}
+            <Button variant="ghost" key={x.id} onClick={() => setF(x.id)} aria-pressed={f === x.id}
               className={cn("rounded-full border px-4 py-1.5 text-sm", f === x.id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>
               {x.label}
-            </button>
+            </Button>
           ))}
         </div>
         {f === "missing" ? (
@@ -67,7 +68,8 @@ function Programas() {
               <li key={d.id}><Card className={cn("h-full p-5", d.kind === "historical_2023" && "border-dashed bg-muted shadow-none")}>
                 <p className="font-serif text-xl font-semibold">{name(d.party_id)}</p>
                 <div className="mt-2 flex flex-wrap gap-2"><Tag tone={d.kind === "historical_2023" ? "history" : "partial"}>{DOC_KIND[d.kind] ?? d.kind}</Tag><Tag>{d.election}</Tag></div>
-                <div className="mt-3"><SourceLink href={d.url} meta={`revisado ${formatDate(d.checked_at)}`}>{d.title}</SourceLink></div>
+                <h2 className="mt-3 font-sans text-base font-semibold">{d.title}</h2>
+                <div className="mt-4 border-t border-border pt-3"><SourceLink href={d.url}>Fuente original · consultar documento</SourceLink><p className="mt-2 text-xs text-muted-foreground">Enlace consultado: {formatDate(d.checked_at)}. {d.kind === "historical_2023" ? "Contexto histórico: no es un programa de 2026." : d.kind === "official_statement_2026" ? "Comunicado: no acredita un programa íntegro ni candidatura oficialmente proclamada." : d.kind === "partial_2026" ? "Manifiesto o propuestas parciales: no es un programa íntegro." : "La consulta del documento no implica verificar todas sus propuestas."}</p></div>
               </Card></li>
             ))}
           </ul>

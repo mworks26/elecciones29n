@@ -122,8 +122,29 @@
 
 @layer base {
   body { font-family: var(--font-sans-stack); }
-  h1, h2, h3 { font-family: var(--font-serif-stack); letter-spacing: -0.02em; }
+  h1, h2, h3 { font-family: var(--font-serif-stack); letter-spacing: 0; }
   :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+}
+.game-mascot { display: inline-block; width: 110px; height: 110px; overflow: hidden; flex-shrink: 0; }
+.game-mascot img { width: 330px; height: 110px; max-width: none; object-fit: contain; }
+.game-mascot .mascot-1 { transform: translateX(-110px); }
+.game-mascot .mascot-2 { transform: translateX(-220px); }
+.cover-scene { position: relative; min-height: 330px; }
+.cover-scene img { width: 100%; height: 100%; object-fit: contain; }
+.cover-scene .cover-sticker { position: absolute; top: 10%; left: 0; transform: rotate(-6deg); }
+.cover-scene .cover-voice { position: absolute; right: 0; top: 12%; transform: rotate(6deg); }
+.cartoon-note { border-bottom-width: 5px; transition: box-shadow .2s; }
+@media (max-width: 767px) {
+  .site-nav { display: grid; grid-template-columns: 1fr auto; gap: 12px; }
+  .site-nav > nav { grid-column: 1 / -1; grid-row: 2; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
+  .site-nav > nav > * { flex-shrink: 0; }
+  .site-nav > a:last-child { grid-column: 2; grid-row: 1; }
+  .home-cover { padding-top: 24px; padding-bottom: 24px; gap: 12px; }
+  .home-cover h1 { font-size: 36px; line-height: 1.1; }
+  .home-cover p { font-size: 15px; }
+  .home-cover .cover-scene { min-height: 180px; height: 180px; }
+  .home-cover .cover-scene img { height: 180px; }
+  .home-cover .mt-8 { margin-top: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }

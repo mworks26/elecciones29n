@@ -45,7 +45,7 @@ function Asistente() {
     try { setInitial(JSON.parse(localStorage.getItem(KEY) ?? "[]")); } catch { setInitial([]); }
   }, [initial, ready, session, isLoading, syncOn, ud]);
   if (!initial) return <div className="mx-auto max-w-3xl px-4 py-20 text-muted-foreground">Cargando…</div>;
-  return <ChatWindow key={chatKey} initial={initial} onSave={(m) => { if (syncOn && session) saveUserField(session.user.id, "chat", m); }} onReset={() => { localStorage.removeItem(KEY); if (syncOn && session) saveUserField(session.user.id, "chat", []); setInitial([]); setChatKey((k) => k + 1); }} />;
+  return <ChatWindow key={chatKey} initial={initial} onSave={(m) => { if (syncOn && session) void saveUserField(session.user.id, "chat", m).catch(() => toast.error("No se pudo guardar la conversación en tu cuenta.")); }} onReset={() => { localStorage.removeItem(KEY); if (syncOn && session) void saveUserField(session.user.id, "chat", []).catch(() => toast.error("No se pudo borrar la conversación de tu cuenta.")); setInitial([]); setChatKey((k) => k + 1); }} />;
 }
 
 function ChatWindow({ initial, onReset, onSave }: { initial: UIMessage[]; onReset: () => void; onSave: (m: UIMessage[]) => void }) {
