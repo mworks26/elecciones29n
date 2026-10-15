@@ -38,7 +38,7 @@ function Index() {
   const with2026 = parties.filter((p) => p.programme_2026_status.endsWith("2026")).length;
   return (
     <>
-      <section className="mx-auto grid max-w-6xl gap-10 px-4 pb-12 pt-14 md:grid-cols-[1.4fr_1fr] md:items-center">
+      <section className="home-cover mx-auto grid max-w-6xl gap-10 px-4 pb-12 pt-14 md:grid-cols-[1.4fr_1fr] md:items-center">
         <div>
           <p className="text-sm font-semibold uppercase tracking-widest text-accent">Generales · 29 de noviembre de 2026</p>
           <h1 className="mt-3 text-5xl font-semibold leading-[1.05] md:text-7xl">

@@ -129,8 +129,8 @@ function Juega() {
       <div className="mx-auto max-w-4xl px-4">
         <div className="flex flex-wrap gap-2" role="tablist">
           {GAMES.map((g) => (
-            <Button key={g.id} role="tab" aria-selected={game === g.id} onClick={() => { setGame(g.id); setSavedMessage(""); }}
-              className={cn("rounded-full border px-4 py-2 text-sm font-medium", game === g.id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>
+            <Button variant="ghost" key={g.id} role="tab" aria-selected={game === g.id} onClick={() => { setGame(g.id); setSavedMessage(""); }}
+              className={cn("rounded-full border px-4 py-2 text-sm font-medium", game === g.id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card text-foreground")}>
               <span className="mr-1.5 opacity-60">{g.n}</span>{g.label}
             </Button>
           ))}

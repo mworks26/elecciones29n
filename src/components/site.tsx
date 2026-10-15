@@ -19,7 +19,7 @@ const NAV_ICONS = [Home, Users, BookOpen, Scale, Gamepad2, MessageCircleQuestion
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
+      <div className="site-nav mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
         <Link to="/" className="shrink-0 font-serif text-xl font-semibold">
           Elecciones <span className="text-accent">2026</span>
           <span className="mt-1 block font-sans text-xs font-medium text-muted-foreground">Entiende. Compara. Decide por ti.</span>

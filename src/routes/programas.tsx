@@ -48,7 +48,7 @@ function Programas() {
       <div className="mx-auto max-w-6xl px-4">
         <div role="group" aria-label="Filtrar documentos" className="flex flex-wrap gap-2">
           {FILTERS.map((x) => (
-            <Button key={x.id} onClick={() => setF(x.id)} aria-pressed={f === x.id}
+            <Button variant="ghost" key={x.id} onClick={() => setF(x.id)} aria-pressed={f === x.id}
               className={cn("rounded-full border px-4 py-1.5 text-sm", f === x.id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>
               {x.label}
             </Button>
