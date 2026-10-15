@@ -17,6 +17,7 @@ import { Route as CompararRouteImport } from './routes/comparar'
 import { Route as CuentaRouteImport } from './routes/cuenta'
 import { Route as FuentesRouteImport } from './routes/fuentes'
 import { Route as JuegaRouteImport } from './routes/juega'
+import { Route as PoliticoRouteImport } from './routes/politico'
 import { Route as ProgramasRouteImport } from './routes/programas'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
@@ -64,6 +65,11 @@ const FuentesRoute = FuentesRouteImport.update({
 const JuegaRoute = JuegaRouteImport.update({
   id: '/juega',
   path: '/juega',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliticoRoute = PoliticoRouteImport.update({
+  id: '/politico',
+  path: '/politico',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProgramasRoute = ProgramasRouteImport.update({
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
+  '/politico': typeof PoliticoRoute
   '/programas': typeof ProgramasRoute
   '/reset-password': typeof ResetPasswordRoute
   '/api/chat': typeof ApiChatRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByTo {
   '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
+  '/politico': typeof PoliticoRoute
   '/programas': typeof ProgramasRoute
   '/reset-password': typeof ResetPasswordRoute
   '/api/chat': typeof ApiChatRoute
@@ -154,6 +162,7 @@ export interface FileRoutesById {
   '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
+  '/politico': typeof PoliticoRoute
   '/programas': typeof ProgramasRoute
   '/reset-password': typeof ResetPasswordRoute
   '/api/chat': typeof ApiChatRoute
@@ -174,6 +183,7 @@ export interface FileRouteTypes {
     | '/cuenta'
     | '/fuentes'
     | '/juega'
+    | '/politico'
     | '/programas'
     | '/reset-password'
     | '/api/chat'
@@ -192,6 +202,7 @@ export interface FileRouteTypes {
     | '/cuenta'
     | '/fuentes'
     | '/juega'
+    | '/politico'
     | '/programas'
     | '/reset-password'
     | '/api/chat'
@@ -210,6 +221,7 @@ export interface FileRouteTypes {
     | '/cuenta'
     | '/fuentes'
     | '/juega'
+    | '/politico'
     | '/programas'
     | '/reset-password'
     | '/api/chat'
@@ -229,6 +241,7 @@ export interface RootRouteChildren {
   CuentaRoute: typeof CuentaRoute
   FuentesRoute: typeof FuentesRoute
   JuegaRoute: typeof JuegaRoute
+  PoliticoRoute: typeof PoliticoRoute
   ProgramasRoute: typeof ProgramasRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -295,6 +308,13 @@ declare module '@tanstack/react-router' {
       path: '/juega'
       fullPath: '/juega'
       preLoaderRoute: typeof JuegaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/politico': {
+      id: '/politico'
+      path: '/politico'
+      fullPath: '/politico'
+      preLoaderRoute: typeof PoliticoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/programas': {
@@ -365,6 +385,7 @@ const rootRouteChildren: RootRouteChildren = {
   CuentaRoute: CuentaRoute,
   FuentesRoute: FuentesRoute,
   JuegaRoute: JuegaRoute,
+  PoliticoRoute: PoliticoRoute,
   ProgramasRoute: ProgramasRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiChatRoute: ApiChatRoute,
