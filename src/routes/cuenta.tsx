@@ -6,6 +6,9 @@ import { Card, Notice, PageIntro, SourceLink } from "@/components/site";
 import { FavoriteButton } from "@/components/favorite-button";
 import { claimsQuery, partiesQuery } from "@/lib/data";
 import { useFavorites, useSession, useUserData } from "@/lib/session";
+import { GameHistoryList } from "@/components/game-history-list";
+import { readGameEnvelope, localGameEnvelope, hasLocalGameConsent, setLocalGameConsent } from "@/lib/game-history";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/cuenta")({
   ssr: false,
@@ -41,16 +44,19 @@ function Cuenta() {
 
   const setSync = async (on: boolean) => {
     const { error } = on
-      ? await supabase.from("user_data").upsert({ user_id: uid, sync_enabled: true, consented_at: new Date().toISOString() })
+      ? await supabase.from("user_data").upsert({ user_id: uid, sync_enabled: true, consented_at: new Date().toISOString(), ...(hasLocalGameConsent() && localGameEnvelope() ? { game: localGameEnvelope() as never } : {}) })
       : await supabase.from("user_data").update({ sync_enabled: false, game: null, chat: null }).eq("user_id", uid);
     if (error) { toast.error(error.message); return; }
+    if (!on) setLocalGameConsent(false);
     toast.success(on ? "Guardado en tu cuenta activado." : "Guardado desactivado y datos borrados de tu cuenta.");
     qc.invalidateQueries({ queryKey: ["me"] });
   };
   const deleteAll = async () => {
     const a = await supabase.from("user_favorites").delete().eq("user_id", uid);
     const b = await supabase.from("user_data").delete().eq("user_id", uid);
-    if (a.error || b.error) { toast.error((a.error ?? b.error)!.message); return; }
+    const error = a.error ?? b.error;
+    if (error) { toast.error(error.message); return; }
+    setLocalGameConsent(false);
     toast.success("Todos tus datos guardados se han borrado.");
     qc.invalidateQueries({ queryKey: ["me"] });
   };
@@ -85,6 +91,11 @@ function Cuenta() {
           <h2 className="text-2xl font-semibold">Borrar todo</h2>
           <p className="mt-2 text-sm text-muted-foreground">Elimina tus favoritas, resultados y conversaciones guardadas en tu cuenta.</p>
           <button onClick={deleteAll} className="mt-4 rounded-full border border-destructive px-5 py-2.5 text-sm font-semibold text-destructive">Borrar mis datos</button>
+        </Card>
+        <Card className="md:col-span-2">
+          <h2 className="text-2xl font-semibold">Mi historial de juegos y elecciones</h2>
+          <GameHistoryList history={readGameEnvelope(ud?.game)?.history ?? []} />
+          <Button asChild variant="outline" className="mt-4 rounded-full"><Link to="/juega">Volver a los juegos</Link></Button>
         </Card>
         <Card className="md:col-span-2">
           <h2 className="text-2xl font-semibold">Propuestas favoritas</h2>

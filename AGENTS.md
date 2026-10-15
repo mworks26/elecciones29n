@@ -14,7 +14,9 @@
 - Claims with review_status `auto_extracted_unverified`/`rejected` are hidden by RLS; affinity scoring uses only `verified_by_human` unless the user opts in. Why: never publish unverified positions.
 - Affinity formula lives in src/lib/affinity.ts with tests; missing data never adds or subtracts. Why: neutrality.
 - The chat (/api/chat) answers only from database content injected into its system prompt. Why: no invented information.
-- Game answers and chat history live in localStorage; they sync to the user's account (user_data) only after explicit opt-in consent on /cuenta, and opting out wipes them. Why: ideology is sensitive data.
+- Game answers/history use consent-gated localStorage and a cookie containing only saving consent, never political answers; cloud game data uses a backward-compatible versioned current/history envelope and syncs only after explicit opt-in on /cuenta. Revocation wipes saved data. Why: political preferences are sensitive and cookies are transmitted to servers.
+- The election countdown uses the current Europe/Madrid calendar date, independently of documentary last-checked dates. Why: daily changes and daylight saving must not miscount days or imply a new source review.
+- The original uploaded cover is extracted as a source-controlled SVG and game artwork is shared by visual game components without changing scoring. Why: preserve the provided drawing and keep game behavior independent of illustrations.
 - Admin role is granted by a DB trigger only to an allow-listed email once confirmed; admin edits write a change_log row. Why: public signup is open, so first-signup admin would be unsafe.
 - Code uses only the standard Supabase client and SQL migrations in drizzle/migrations, so the app can be moved to a self-hosted Supabase by replaying migrations and swapping env keys. Why: user plans external hosting.
 - Game drag interactions use dnd-kit in a shared game-notes module, preserving the existing saved order and chip allocation shape. Why: mouse, touch and keyboard interaction must not alter affinity rules or consent.
