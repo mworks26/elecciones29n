@@ -6,6 +6,7 @@ import { GameMascot } from "@/components/game-art";
 import { GameHistoryList } from "@/components/game-history-list";
 import { GAME_KEY, localGameEnvelope, hasLocalGameConsent, setLocalGameConsent, appendGameHistory, readGameEnvelope, type GameEntry, type GameState } from "@/lib/game-history";
 import { PriorityNotes, BudgetNotes, ProposalNote } from "@/components/game-notes";
+import { BallGame } from "@/components/ball-game";
 import { Button } from "@/components/ui/button";
 import { Card, Notice, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
 import { Switch } from "@/components/ui/switch";
@@ -162,6 +163,11 @@ function Juega() {
 
         {game === "cartas" && (
           <div className="mt-6 space-y-4">
+            <Card>
+              <div className="flex items-center gap-4"><GameMascot kind={2} /><div><h2 className="text-2xl font-semibold">¡Pelota de temas!</h2><p className="text-sm text-muted-foreground">Mueve la raqueta con el ratón, el dedo o las flechas y golpea los temas. Es solo diversión: no cuenta para tu afinidad.</p></div></div>
+              <div className="mt-4"><BallGame topics={s.order.map((id) => ({ id, label: label(id) }))} /></div>
+            </Card>
+            <h2 className="pt-4 text-2xl font-semibold">¿Quieres valorar propuestas reales?</h2>
             <label className="flex items-center gap-3 text-sm">
               <Switch checked={s.includePending} onCheckedChange={(v) => setS((p) => ({ ...p, includePending: v }))} />
               Incluir propuestas pendientes de segunda revisión

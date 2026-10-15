@@ -129,6 +129,16 @@
 .game-mascot img { width: 330px; height: 110px; max-width: none; object-fit: contain; }
 .game-mascot .mascot-1 { transform: translateX(-110px); }
 .game-mascot .mascot-2 { transform: translateX(-220px); }
+.game-mascot .mascot-ballot { position: absolute; right: 2%; bottom: 8%; width: 30%; height: auto; color: var(--primary); }
+.nav-pill-0 { background: oklch(0.94 0.035 295); }
+.nav-pill-1 { background: oklch(0.93 0.035 245); }
+.nav-pill-2 { background: oklch(0.94 0.045 150); }
+.nav-pill-3 { background: oklch(0.93 0.04 350); }
+.nav-pill-4 { background: var(--highlight); }
+.nav-pill-5 { background: oklch(0.93 0.045 55); }
+.nav-pill-6 { background: oklch(0.94 0.04 185); }
+.nav-pill-active { background: var(--primary) !important; color: var(--primary-foreground) !important; }
+#nubion-widget { right: 12px !important; left: auto !important; bottom: 12px !important; top: auto !important; max-height: calc(100dvh - 24px) !important; max-width: calc(100vw - 24px) !important; }
 .cover-scene { position: relative; min-height: 330px; }
 .cover-scene img { width: 100%; height: 100%; object-fit: contain; }
 .cover-scene .cover-sticker { position: absolute; top: 10%; left: 0; transform: rotate(-6deg); }
