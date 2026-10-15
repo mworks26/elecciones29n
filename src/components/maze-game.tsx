@@ -13,10 +13,10 @@ const GOALS: Record<string, { a: Answer; label: string; tone: string }> = {
   R: { a: "disagree", label: "En contra", tone: "bg-stop" },
 };
 type P = [number, number];
-const ROWS = MAP.length, COLS = MAP[0].length;
+const ROWS = MAP.length, COLS = MAP[0]!.length;
 const cell = ([x, y]: P) => MAP[y]?.[x];
 const open = (p: P) => { const c = cell(p); return c !== undefined && c !== "#"; };
-const START: P = [MAP[ROWS - 1].indexOf("S"), ROWS - 1];
+const START: P = [MAP[ROWS - 1]!.indexOf("S"), ROWS - 1];
 
 function path(from: P, to: P): P[] {
   const key = (p: P) => `${p[0]},${p[1]}`;
@@ -25,7 +25,7 @@ function path(from: P, to: P): P[] {
   while (q.length) {
     const cur = q.shift()!;
     if (cur[0] === to[0] && cur[1] === to[1]) break;
-    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]] as const) {
       const n: P = [cur[0] + dx, cur[1] + dy];
       if (open(n) && !prev.has(key(n))) { prev.set(key(n), cur); q.push(n); }
     }
