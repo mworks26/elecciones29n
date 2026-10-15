@@ -38,8 +38,8 @@ export function SiteHeader() {
               key={n.to}
               to={n.to}
               activeOptions={{ exact: n.to === "/" }}
-              className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground", n.to === "/juega" && "bg-highlight font-semibold text-highlight-foreground")}
-              activeProps={{ className: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" }}
+              className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-2 font-medium text-foreground transition-transform hover:-translate-y-0.5", `nav-pill-${index % 7}`)}
+              activeProps={{ className: "nav-pill-active" }}
             >
               <Icon className="size-4" aria-hidden />{n.label}
             </Link></Button>;

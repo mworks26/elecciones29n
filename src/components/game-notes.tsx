@@ -14,9 +14,9 @@ const tones = ["bg-highlight text-highlight-foreground", "bg-secondary text-seco
 function PriorityNote({ id, label, index }: { id: string; label: string; index: number }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   return <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={cn("min-w-0", isDragging && "opacity-30")}>
-    <Button {...attributes} {...listeners} variant="ghost" aria-label={`Mover ${label}`} className={cn("h-48 w-full touch-none flex-col items-start justify-between whitespace-normal cartoon-note rounded-lg border border-border p-4 text-left shadow-soft hover:ring-2 hover:ring-ring", tones[index % tones.length])}>
-      <span className="flex w-full items-center justify-between"><span className="font-serif text-2xl">{index + 1}</span><Grip aria-hidden className="opacity-50" /></span>
-      <TopicDrawing label={label} /><span className="w-full break-words text-base font-semibold">{label}</span>
+    <Button {...attributes} {...listeners} variant="ghost" aria-label={`Mover ${label}`} className={cn("h-16 w-full touch-none items-center justify-start gap-2 whitespace-normal cartoon-note rounded-lg border border-border px-3 py-2 text-left shadow-soft hover:ring-2 hover:ring-ring", tones[index % tones.length])}>
+      <span className="font-serif text-lg tabular-nums">{index + 1}</span>
+      <TopicDrawing label={label} /><span className="min-w-0 flex-1 break-words text-sm font-semibold leading-tight">{label}</span><Grip aria-hidden className="size-4 shrink-0 opacity-50" />
     </Button>
   </li>;
 }
@@ -33,9 +33,9 @@ export function PriorityNotes({ order, label, onChange }: { order: string[]; lab
   }
   return <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={({ active: item }) => setActive(String(item.id))} onDragEnd={finish} onDragCancel={() => setActive(null)}>
     <SortableContext items={order} strategy={rectSortingStrategy}>
-      <ol aria-label="Notas de prioridades" className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">{order.map((id, index) => <PriorityNote key={id} id={id} label={label(id)} index={index} />)}</ol>
+      <ol aria-label="Notas de prioridades" className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">{order.map((id, index) => <PriorityNote key={id} id={id} label={label(id)} index={index} />)}</ol>
     </SortableContext>
-    <DragOverlay>{active ? <div className="flex h-40 items-end rounded-lg border border-ring bg-highlight p-4 font-semibold text-highlight-foreground shadow-soft">{label(active)}</div> : null}</DragOverlay>
+    <DragOverlay>{active ? <div className="flex h-16 items-center gap-2 rounded-lg border border-ring bg-highlight px-3 text-sm font-semibold text-highlight-foreground shadow-soft"><TopicDrawing label={label(active)} />{label(active)}</div> : null}</DragOverlay>
   </DndContext>;
 }
 
