@@ -13,7 +13,7 @@
 - Political content lives in the database (parties, sources, programme_documents, claims, change_log); the UI never hardcodes party positions. Why: every claim must stay traceable to a source.
 - Claims with review_status `auto_extracted_unverified`/`rejected` are hidden by RLS; affinity scoring uses only `verified_by_human` unless the user opts in. Why: never publish unverified positions.
 - Affinity formula lives in src/lib/affinity.ts with tests; missing data never adds or subtracts. Why: neutrality.
-- The chat (/api/chat) answers only from database content injected into its system prompt. Why: no invented information.
+- Site search (/buscar) is a plain client-side text filter over database content; the AI chat is retired and /asistente redirects there. Why: no invented information and no AI credit usage.
 - Game answers/history use consent-gated localStorage and a cookie containing only saving consent, never political answers; cloud game data uses a backward-compatible versioned current/history envelope and syncs only after explicit opt-in on /cuenta. Revocation wipes saved data. Why: political preferences are sensitive and cookies are transmitted to servers.
 - The election countdown uses the current Europe/Madrid calendar date, independently of documentary last-checked dates. Why: daily changes and daylight saving must not miscount days or imply a new source review.
 - The original uploaded cover is extracted as a source-controlled SVG and game artwork is shared by visual game components without changing scoring. Why: preserve the provided drawing and keep game behavior independent of illustrations.

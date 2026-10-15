@@ -127,8 +127,10 @@ function RootComponent() {
       <SessionProvider>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <a href="#main" className="sr-only focus:not-sr-only">Saltar al contenido</a>
-      <SiteHeader />
-      <BannerRow />
+      <div className="sticky top-0 z-30">
+        <SiteHeader />
+        <BannerRow />
+      </div>
       <main id="main">
         <Outlet />
       </main>

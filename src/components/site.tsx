@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ExternalLink, Home, Users, BookOpen, Scale, Gamepad2, MessageCircleQuestion, ShieldCheck } from "lucide-react";
+import { ExternalLink, Home, Users, BookOpen, Scale, Gamepad2, Search, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -11,14 +11,14 @@ const NAV = [
   { to: "/programas", label: "Programas" },
   { to: "/comparar", label: "Comparar" },
   { to: "/juega", label: "Juega" },
-  { to: "/asistente", label: "Asistente" },
   { to: "/fuentes", label: "Fuentes" },
+  { to: "/buscar", label: "Buscador" },
 ] as const;
-const NAV_ICONS = [Home, Users, BookOpen, Scale, Gamepad2, MessageCircleQuestion, ShieldCheck];
+const NAV_ICONS = [Home, Users, BookOpen, Scale, Gamepad2, ShieldCheck, Search];
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
+    <header className="border-b border-border bg-background/90 backdrop-blur">
       <div className="site-nav mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
         <Link to="/" className="shrink-0 font-serif text-xl font-semibold">
           Elecciones <span className="text-accent">2026</span>
