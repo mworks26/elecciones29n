@@ -56,7 +56,7 @@ function AccountLink() {
   return session ? (
     <Link to="/cuenta" className="ml-auto rounded-full border border-input bg-card px-4 py-1.5 text-sm font-medium">Mi cuenta</Link>
   ) : (
-    <Link to="/auth" className="ml-auto rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Entrar</Link>
+    <Link to="/auth" className="ml-auto rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Inicio/Registro</Link>
   );
 }
 

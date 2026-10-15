@@ -164,10 +164,8 @@ function Juega() {
         {game === "cartas" && (
           <div className="mt-6 space-y-4">
             <Card>
-              <div className="flex items-center gap-4"><GameMascot kind={2} /><div><h2 className="text-2xl font-semibold">¡Pelota de temas!</h2><p className="text-sm text-muted-foreground">Mueve la raqueta con el ratón, el dedo o las flechas y golpea los temas. Es solo diversión: no cuenta para tu afinidad.</p></div></div>
-              <div className="mt-4"><BallGame topics={s.order.map((id) => ({ id, label: label(id) }))} /></div>
+              <div className="flex items-center gap-4"><GameMascot kind={2} /><div><h2 className="text-2xl font-semibold">¡Tiro a canasta!</h2><p className="text-sm text-muted-foreground">Lee la propuesta y lanza la pelota a la canasta que elijas. Cada tiro cuenta para tu afinidad.</p></div></div>
             </Card>
-            <h2 className="pt-4 text-2xl font-semibold">¿Quieres valorar propuestas reales?</h2>
             <label className="flex items-center gap-3 text-sm">
               <Switch checked={s.includePending} onCheckedChange={(v) => setS((p) => ({ ...p, includePending: v }))} />
               Incluir propuestas pendientes de segunda revisión
@@ -175,7 +173,7 @@ function Juega() {
             {deck.length === 0 ? (
               <Notice>Aún no hay propuestas 2026 verificadas por revisión humana para jugar. Puedes activar las pendientes de segunda revisión (proceden de webs oficiales, pero falta una segunda comprobación) o volver cuando se publiquen los programas.</Notice>
             ) : nextCard ? (
-              <ProposalNote key={nextCard.id} onAnswer={(a) => answer(nextCard.id, a)}>
+              <BasketGame key={nextCard.id} onAnswer={(a) => answer(nextCard.id, a)}>
                 <p className="text-xs font-semibold uppercase tracking-widest text-accent">{label(nextCard.topic_id)} · carta {Object.keys(s.answers).filter((k) => deck.some((d) => d.id === k)).length + 1} de {deck.length}</p>
                 <h2 className="mt-3 text-3xl font-semibold">«{nextCard.title}»</h2>
                 <p className="mt-2 text-muted-foreground">{nextCard.claim_text}</p>
