@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { DndContext, DragOverlay, KeyboardSensor, PointerSensor, TouchSensor, closestCenter, useDraggable, useDroppable, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { GameMascot, TopicDrawing } from "@/components/game-art";
 import { Grip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,9 +14,9 @@ const tones = ["bg-highlight text-highlight-foreground", "bg-secondary text-seco
 function PriorityNote({ id, label, index }: { id: string; label: string; index: number }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   return <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={cn("min-w-0", isDragging && "opacity-30")}>
-    <Button {...attributes} {...listeners} variant="ghost" aria-label={`Mover ${label}`} className={cn("h-40 w-full touch-none flex-col items-start justify-between whitespace-normal rounded-lg border border-border p-4 text-left shadow-soft hover:ring-2 hover:ring-ring", tones[index % tones.length])}>
+    <Button {...attributes} {...listeners} variant="ghost" aria-label={`Mover ${label}`} className={cn("h-48 w-full touch-none flex-col items-start justify-between whitespace-normal cartoon-note rounded-lg border border-border p-4 text-left shadow-soft hover:ring-2 hover:ring-ring", tones[index % tones.length])}>
       <span className="flex w-full items-center justify-between"><span className="font-serif text-2xl">{index + 1}</span><Grip aria-hidden className="opacity-50" /></span>
-      <span className="w-full break-words text-base font-semibold">{label}</span>
+      <TopicDrawing label={label} /><span className="w-full break-words text-base font-semibold">{label}</span>
     </Button>
   </li>;
 }
@@ -46,7 +47,7 @@ function ChipNote({ id, origin }: { id: string; origin: string }) {
 function ChipZone({ id, title, count, pool = false, index = 0 }: { id: string; title: string; count: number; pool?: boolean; index?: number }) {
   const { setNodeRef, isOver } = useDroppable({ id });
   return <div ref={setNodeRef} aria-label={title} className={cn("min-w-0 rounded-lg border-2 border-dashed border-border p-4", pool ? "bg-muted" : tones[index % tones.length], isOver && "border-ring ring-2 ring-ring")}>
-    <div className="flex items-start justify-between gap-3"><h3 className="text-base font-semibold">{title}</h3><span className="font-semibold tabular-nums">{count * 5}</span></div>
+    <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-2">{!pool && <TopicDrawing label={title} />}<h3 className="text-base font-semibold">{title}</h3></div><span className="font-semibold tabular-nums">{count * 5}</span></div>
     <div className="mt-3 flex min-h-10 flex-wrap gap-2">{Array.from({ length: count }, (_, n) => <ChipNote key={`${id}-${n}`} id={`${id}-${n}`} origin={id} />)}</div>
   </div>;
 }
@@ -75,6 +76,7 @@ function MovableProposal({ children }: { children: ReactNode }) {
   const { setNodeRef, attributes, listeners, transform } = useDraggable({ id: "proposal" });
   return <div ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className="relative z-10 rounded-lg border-2 border-lilac bg-secondary p-6 shadow-soft">
     <Button {...attributes} {...listeners} variant="ghost" aria-label="Mover viñeta de propuesta" className="mb-4 h-8 w-full touch-none justify-end text-secondary-foreground"><Grip /></Button>
+    <GameMascot kind={2} />
     {children}
   </div>;
 }
