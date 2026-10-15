@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { SiteHeader, SiteFooter } from "@/components/site";
 import { BannerRow } from "@/components/banners";
+import { TranslationNotice } from "@/components/language-switcher";
 import { SessionProvider } from "@/lib/session";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
@@ -134,6 +135,7 @@ function RootComponent() {
       <a href="#main" className="sr-only focus:not-sr-only">Saltar al contenido</a>
       <div className="sticky top-0 z-30">
         <SiteHeader />
+        <TranslationNotice />
         <BannerRow />
       </div>
       <main id="main">
