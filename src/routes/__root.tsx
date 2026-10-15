@@ -114,6 +114,11 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         {children}
         <Scripts />
+        <script
+          src="https://centeia-sass-gsxz.onrender.com/static/embed.min.js"
+          data-public-bot-id="26ae6085-882e-4e47-9e1b-6055fd089220"
+          defer
+        ></script>
       </body>
     </html>
   );
