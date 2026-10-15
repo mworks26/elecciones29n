@@ -66,7 +66,10 @@ function Index() {
       <section className="bg-secondary">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-4 py-7">
           <div className="flex items-center gap-4"><GameMascot /><div><p className="text-xs font-semibold uppercase text-accent">El corazón de Elecciones 2026</p><h2 className="mt-1 text-3xl font-semibold">Pequeños juegos. Grandes preguntas.</h2><p className="mt-1 text-muted-foreground">Tus prioridades, tus ideas, tu propia decisión.</p></div></div>
-          <Button asChild size="lg" className="h-12 rounded-full"><Link to="/juega"><Gamepad2 /> Entrar a los juegos <ArrowRight /></Link></Button>
+          <div className="flex flex-wrap gap-3">
+            <Button asChild size="lg" className="h-12 rounded-full"><Link to="/juega"><Gamepad2 /> Entrar a los juegos <ArrowRight /></Link></Button>
+            <Button asChild size="lg" variant="outline" className="h-12 rounded-full"><Link to="/politico">🗳️ Político/a por un día</Link></Button>
+          </div>
         </div>
       </section>
       <section className="mx-auto mt-8 max-w-6xl px-4">
