@@ -247,9 +247,13 @@ function Candidates({ userId, partyOpts }: { userId: string; partyOpts: Record<s
           {c.document_url && <a href={c.document_url} target="_blank" rel="noreferrer" className="text-sm underline">Ver documento</a>}
           {c.document_url ? (
             <form className="mt-3 grid gap-2 md:grid-cols-4" onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); void publish(c, String(f.get("party_id")), String(f.get("kind")), String(f.get("reason") ?? "")); }}>
-              <Sel name="party_id" value={partyOpts[localPartyId(c.party_id) ?? ""] ? localPartyId(c.party_id)! : ""} options={{ "": "Elige partido…", ...partyOpts }} />
+              {partyOpts[localPartyId(c.party_id) ?? ""] ? (
+                <><input type="hidden" name="party_id" value={localPartyId(c.party_id)!} /><p className="self-center text-sm">Partido: <strong>{partyOpts[localPartyId(c.party_id)!]}</strong></p></>
+              ) : (
+                <Sel name="party_id" value="" options={{ "": "Elige partido…", ...partyOpts }} />
+              )}
               <Sel name="kind" value="historical_2023" options={DOC_KIND} />
-              <input name="reason" required placeholder="Cómo lo has comprobado" className={field} />
+              <input name="reason" required defaultValue="Verificado por la editora con fuente oficial" title="Nota para el historial interno (puedes cambiarla)" className={field} />
               <button className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Verificar y publicar</button>
             </form>
           ) : <p className="mt-2 text-sm text-muted-foreground">Sin enlace reconocido: añádelo a mano en «Documentos».</p>}
