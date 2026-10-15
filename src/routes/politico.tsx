@@ -60,6 +60,10 @@ function Politico() {
   const [slogan, setSlogan] = useState(SLOGANS[0]!);
 
   const usable = useMemo(() => claims.filter((c) => c.review_status === "verified_by_human" || (includePending && c.review_status === "needs_second_review")), [claims, includePending]);
+  const verifiedCount = claims.filter((c) => c.review_status === "verified_by_human").length;
+  const pendingClaims = claims.filter((c) => c.review_status === "needs_second_review");
+  const pendingCount = pendingClaims.length;
+  const pendingParties = [...new Set(pendingClaims.map((c) => parties.find((p) => p.id === c.party_id)?.short_name ?? parties.find((p) => p.id === c.party_id)?.name).filter(Boolean))].sort().join(", ");
   const topicsWithClaims = topics.filter((t) => usable.some((c) => c.topic_id === t.id));
   const deck = useMemo(() => {
     const chosen = usable.filter((c) => picked.includes(c.topic_id));
@@ -89,8 +93,8 @@ function Politico() {
       <div className="mx-auto grid max-w-6xl gap-6 px-4 md:grid-cols-[280px_1fr]">
         <aside className="space-y-4">
           <Card className="flex flex-col items-center text-center">
-            <ClientOnly fallback={<div className="aspect-square w-full" />}>
-              <Suspense fallback={<div className="aspect-square w-full" />}><UrnaAnimation className="w-full" /></Suspense>
+            <ClientOnly fallback={<div className="aspect-square w-full rounded-3xl bg-background" />}>
+              <Suspense fallback={<div className="aspect-square w-full" />}><UrnaAnimation className="w-full rounded-3xl bg-background" /></Suspense>
             </ClientOnly>
             <div className="mt-2 flex items-start gap-2 rounded-2xl bg-secondary p-3 text-left text-sm text-secondary-foreground" role="status">
               <GameMascot kind={1} className="size-12 shrink-0" />
@@ -108,13 +112,24 @@ function Politico() {
           {step === 0 && (
             <Card>
               <h2 className="text-2xl font-semibold">¿Qué temas te importan más?</h2>
-              <p className="mt-1 text-muted-foreground">Toca hasta 3. Contarán el doble.</p>
-              <label className="mt-4 flex items-center gap-2 text-sm">
-                <Switch checked={includePending} onCheckedChange={(v) => { setIncludePending(v); setPicked([]); }} />
-                Incluir propuestas pendientes de segunda revisión
-              </label>
+              <p className="mt-1 text-muted-foreground">Toca hasta 3 dibujos. Esos temas contarán el doble. Si no eliges ninguno, también puedes jugar.</p>
+              {!includePending && verifiedCount === 0 ? (
+                <div className="mt-4 rounded-3xl border-2 border-dashed border-accent bg-highlight p-5 text-highlight-foreground">
+                  <p className="font-semibold">Aviso antes de jugar</p>
+                  <p className="mt-1 text-sm">Todavía no hay propuestas revisadas dos veces por el equipo editorial. Sí hay {pendingCount} propuestas sacadas de documentos oficiales{pendingParties ? ` (${pendingParties})` : ""} que están esperando esa segunda revisión.</p>
+                  <p className="mt-1 text-sm">Puedes jugar con ellas: verás la fuente debajo de cada una y el resultado será solo orientativo.</p>
+                  <Button className="mt-3 rounded-full" onClick={() => setIncludePending(true)}>Sí, jugar con estas propuestas <ArrowRight /></Button>
+                </div>
+              ) : includePending && verifiedCount === 0 ? (
+                <p className="mt-3 text-sm text-muted-foreground">Jugando con propuestas pendientes de segunda revisión. <button className="underline" onClick={() => { setIncludePending(false); setPicked([]); }}>Cancelar</button></p>
+              ) : (
+                <label className="mt-4 flex items-center gap-2 text-sm">
+                  <Switch checked={includePending} onCheckedChange={(v) => { setIncludePending(v); setPicked([]); }} />
+                  Añadir también propuestas pendientes de segunda revisión
+                </label>
+              )}
               {topicsWithClaims.length === 0 ? (
-                <div className="mt-4"><Notice>Todavía no hay propuestas verificadas para jugar. Activa el interruptor para usar las que están pendientes de segunda revisión.</Notice></div>
+                null
               ) : (
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {topicsWithClaims.map((t) => {
@@ -138,6 +153,7 @@ function Politico() {
           {step === 1 && card && (
             <Card>
               <p className="text-sm text-muted-foreground">Propuesta {idx + 1} de {deck.length} · {topicLabel(card.topic_id)}</p>
+              <p className="mt-1 text-sm">Lee la idea y pulsa un botón: ¿la meterías en tu programa?</p>
               <div className="mt-3 rounded-3xl border-2 border-dashed border-accent bg-highlight p-5 text-highlight-foreground">
                 <h2 className="font-serif text-2xl font-semibold">{card.title}</h2>
                 <p className="mt-2">{card.claim_text}</p>
@@ -201,6 +217,7 @@ function Politico() {
                     })}
                   </ul>
                 )}
+                {new Set(usable.map((c) => c.party_id)).size === 1 && <div className="mt-3"><Notice>Por ahora solo un partido tiene propuestas cargadas en el juego, así que siempre aparecerá el mismo. Saldrán más cuando se verifiquen nuevas propuestas.</Notice></div>}
                 <div className="mt-4 space-y-1">
                   {deck.filter((c) => answers[c.id] && c.source_url).map((c) => (
                     <div key={c.id}><SourceLink href={c.source_url!} meta={parties.find((p) => p.id === c.party_id)?.name}>{c.title}</SourceLink></div>

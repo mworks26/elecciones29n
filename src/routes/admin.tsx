@@ -100,7 +100,7 @@ function Editor({ userId }: { userId: string }) {
   return (
     <div className="mt-6">
       <div className="flex flex-wrap gap-2">
-        {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"], ["avisos", "Avisos automáticos"]] as const).map(([id, l]) => (
+        {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"], ["avisos", "Programas por verificar"]] as const).map(([id, l]) => (
           <button key={id} onClick={() => setTab(id)} className={cn("rounded-full border px-4 py-1.5 text-sm", tab === id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>{l}</button>
         ))}
       </div>
@@ -220,15 +220,32 @@ function Candidates({ userId }: { userId: string }) {
     await supabase.from("change_log").insert({ entity: "update_candidate", entity_id: id, action: review_status, reason: "Revisión de aviso automático", changed_by: userId });
     qc.invalidateQueries({ queryKey: ["update_candidates"] });
   }
+  async function publish(c: (typeof data)[number], kind: string, reason: string) {
+    if (!reason.trim()) { toast.error("Indica cómo lo has comprobado."); return; }
+    const row = { party_id: c.party_id!, title: c.title, election: c.election ?? "Generales 2026", kind, url: c.document_url!, language: "es", checked_at: today() };
+    const { error } = await supabase.from("programme_documents").insert(row);
+    if (error) { toast.error(error.message); return; }
+    await supabase.from("update_candidates").update({ review_status: "reviewed" }).eq("id", c.id);
+    await supabase.from("change_log").insert({ entity: "document", entity_id: c.title, action: "verify_candidate", reason, changed_by: userId, changes: row as never });
+    toast.success("Programa verificado y publicado.");
+    qc.invalidateQueries();
+  }
   return (
     <div className="mt-6 space-y-3">
-      <p className="text-sm text-muted-foreground">Cada día a las 08:00 se revisan las fuentes. Los cambios detectados aparecen aquí y no se publican hasta que los añadas en «Documentos».</p>
+      <p className="text-sm text-muted-foreground">Cada día a las 08:00 se buscan programas nuevos. Abre el documento, comprueba que es oficial, elige el tipo y pulsa «Verificar y publicar». Nada se publica sin tu confirmación.</p>
       {data.length === 0 && <Card>No hay avisos pendientes.</Card>}
       {data.map((c) => (
         <Card key={c.id} className="p-4">
           <p className="font-medium">{c.party_name ?? c.party_id} · {c.title} · {c.election}</p>
           <p className="text-sm text-muted-foreground">Estado: {c.status_label ?? "—"} · Detectado: {new Date(c.detected_at).toLocaleDateString("es-ES")}</p>
           {c.document_url && <a href={c.document_url} target="_blank" rel="noreferrer" className="text-sm underline">Ver documento</a>}
+          {c.party_id && c.document_url ? (
+            <form className="mt-3 grid gap-2 md:grid-cols-3" onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); void publish(c, String(f.get("kind")), String(f.get("reason") ?? "")); }}>
+              <Sel name="kind" value="historical_2023" options={DOC_KIND} />
+              <input name="reason" required placeholder="Cómo lo has comprobado" className={field} />
+              <button className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Verificar y publicar</button>
+            </form>
+          ) : <p className="mt-2 text-sm text-muted-foreground">Sin partido o enlace reconocido: añádelo a mano en «Documentos».</p>}
           <div className="mt-3 flex gap-2">
             <button onClick={() => mark(c.id, "reviewed")} className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Revisado</button>
             <button onClick={() => mark(c.id, "dismissed")} className="rounded-full border border-input px-4 py-1.5 text-sm">Descartar</button>
