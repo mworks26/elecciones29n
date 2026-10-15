@@ -90,7 +90,7 @@ function Juega() {
       try { localStorage.setItem(KEY, JSON.stringify(envelope)); } catch { setSavedMessage("El navegador no permite guardar más partidas. Puedes borrar el historial o guardarlo en tu cuenta."); }
     }
     if (!syncOn || !session) return;
-    const t = setTimeout(() => saveUserField(session.user.id, "game", envelope), 1000);
+    const t = setTimeout(() => { void saveUserField(session.user.id, "game", envelope).catch(() => setSavedMessage("No se pudo sincronizar la partida. Inténtalo de nuevo.")); }, 1000);
     return () => clearTimeout(t);
   }, [s, history, localConsent, loaded, syncOn, session]);
 
@@ -213,7 +213,7 @@ function Juega() {
               )}
             </Card>
             <div className="flex flex-wrap gap-3"><Button onClick={saveResult} className="rounded-full"><Save /> Guardar esta partida</Button><Button variant="outline" onClick={() => { setS({ order: topics.map((t) => t.id), chips: {}, answers: {}, includePending: false }); setGame("ordena"); setSavedMessage(""); }} className="rounded-full"><RotateCcw /> Nueva partida</Button></div>
-            <Button variant="outline" onClick={() => { setLocalGameConsent(false); setLocalConsent(false); setHistory([]); setS({ order: topics.map((t) => t.id), chips: {}, answers: {}, includePending: false }); if (syncOn && session) void saveUserField(session.user.id, "game", null); setGame("ordena"); }}
+            <Button variant="outline" onClick={() => { setLocalGameConsent(false); setLocalConsent(false); setHistory([]); setS({ order: topics.map((t) => t.id), chips: {}, answers: {}, includePending: false }); if (syncOn && session) void saveUserField(session.user.id, "game", null).catch(() => setSavedMessage("No se pudo borrar en tu cuenta. Inténtalo de nuevo.")); setGame("ordena"); }}
               className="inline-flex items-center gap-2 rounded-full border border-input bg-card px-5 py-2.5 text-sm font-medium">
               <RotateCcw className="size-4" /> Borrar mis respuestas e historial
             </Button>

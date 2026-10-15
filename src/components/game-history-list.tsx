@@ -1,4 +1,3 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { topicsQuery } from "@/lib/data";
 import type { GameEntry } from "@/lib/game-history";
