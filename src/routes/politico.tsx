@@ -97,8 +97,8 @@ function Politico() {
             <ClientOnly fallback={<div className="aspect-square w-full rounded-3xl bg-background" />}>
               <Suspense fallback={<div className="aspect-square w-full" />}><UrnaAnimation className="w-full rounded-3xl bg-background" /></Suspense>
             </ClientOnly>
-            <div className="mt-2 flex items-start gap-2 rounded-2xl bg-secondary p-3 text-left text-sm text-secondary-foreground" role="status">
-              <AdvisorMascot className="size-14 shrink-0" />
+            <div className="mt-2 flex w-full flex-col items-center gap-2 rounded-2xl bg-secondary p-3 text-left text-sm text-secondary-foreground" role="status">
+              <AdvisorMascot className="size-32 shrink-0 object-contain" />
               <p>{TIPS[step]}</p>
             </div>
           </Card>

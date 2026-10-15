@@ -236,7 +236,7 @@ function Candidates({ userId }: { userId: string }) {
   }
   return (
     <div className="mt-6 space-y-3">
-      <p className="text-sm text-muted-foreground">Cada día a las 08:00 se buscan programas nuevos. Abre el documento, comprueba que es oficial, elige el tipo y pulsa «Verificar y publicar». Nada se publica sin tu confirmación.</p>
+      <p className="text-sm text-muted-foreground">La revisión está programada cada día a las 06:00 UTC (08:00 en Madrid en verano; 07:00 en invierno) y consulta Programas en Claro. Su catálogo puede incluir referencias históricas y no garantiza recoger todos los programas o manifiestos de 2026. Abre el documento, comprueba la fuente y el año, elige el tipo y pulsa «Verificar y publicar». Nada se publica sin tu confirmación.</p>
       {data.length === 0 && <Card>No hay avisos pendientes.</Card>}
       {data.map((c) => (
         <Card key={c.id} className="p-4">
