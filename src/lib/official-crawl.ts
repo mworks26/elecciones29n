@@ -18,9 +18,9 @@ export function extractCandidateLinks(html: string, baseUrl: string): FoundLink[
   let m: RegExpExecArray | null;
   while ((m = re.exec(html))) {
     let url: string;
-    try { url = new URL(m[1], baseUrl).toString(); } catch { continue; }
+    try { url = new URL(m[1] ?? "", baseUrl).toString(); } catch { continue; }
     if (!/^https?:\/\//.test(url)) continue;
-    const text = decode(m[2]).slice(0, 300);
+    const text = decode(m[2] ?? "").slice(0, 300);
     const hay = `${text} ${decodeURIComponent(url)}`;
     if (!KEYWORDS.test(hay) || OTHER_ELECTIONS.test(hay)) continue;
     const mentions2026 = /2026/.test(hay);
