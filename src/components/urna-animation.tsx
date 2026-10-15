@@ -1,4 +1,4 @@
-import Lottie from "lottie-react";
+import { Lottie } from "lottie-react";
 import urna from "@/assets/urna.json";
 
 export default function UrnaAnimation({ className }: { className?: string }) {
