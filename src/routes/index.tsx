@@ -5,7 +5,7 @@ import { GameMascot } from "@/components/game-art";
 import { daysUntilElection, madridDate } from "@/lib/countdown";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ArrowRight, Gamepad2, MessageCircleQuestion, Scale, ShieldCheck } from "lucide-react";
+import { ArrowRight, Gamepad2, Search, Scale, ShieldCheck } from "lucide-react";
 import { Card, Notice, RouteError, SourceLink } from "@/components/site";
 import { ELECTION } from "@/lib/election";
 import { formatDate } from "@/lib/labels";
@@ -87,7 +87,7 @@ function Index() {
         {[
           { to: "/comparar", icon: Scale, title: "Compara", text: "Tema a tema, solo con posiciones que tienen fuente." },
           { to: "/juega", icon: Gamepad2, title: "Juega", text: "Ordena, reparte y elige cartas para descubrir tu afinidad." },
-          { to: "/asistente", icon: MessageCircleQuestion, title: "Pregunta", text: "Un asistente neutral que cita sus fuentes y no te dice a quién votar." },
+          { to: "/buscar", icon: Search, title: "Busca", text: "Encuentra propuestas, programas y fuentes oficiales al instante." },
           { to: "/fuentes", icon: ShieldCheck, title: "Verifica", text: "Todas las fuentes, la fórmula y sus límites, a la vista." },
         ].map((f) => (
           <Link key={f.to} to={f.to} className="group rounded-3xl border border-border bg-card p-6 shadow-soft transition-transform hover:-translate-y-1">

@@ -22,21 +22,19 @@ export function BannerRow() {
       return (data ?? []) as Banner[];
     },
   });
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    if (data.length < 2) return;
-    const t = setInterval(() => setI((x) => (x + 1) % data.length), 8000);
-    return () => clearInterval(t);
-  }, [data.length]);
   if (!data.length) return null;
-  const b = data[i % data.length]!;
   return (
-    <aside aria-label="Publicidad" className="border-b border-border bg-secondary/40">
-      <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-1.5">
-        <span className="shrink-0 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Publicidad</span>
-        <a href={b.target_url} target="_blank" rel="noopener noreferrer sponsored" className="block h-16 flex-1 overflow-hidden rounded-xl md:h-20">
-          <Media b={b} className="h-full w-full object-contain" />
-        </a>
+    <aside aria-label="Publicidad" className="border-b border-border bg-secondary/80 backdrop-blur">
+      <div className="mx-auto flex h-9 max-w-6xl items-center gap-2 px-4">
+        <span className="shrink-0 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">Publicidad</span>
+        <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
+          {data.map((b) => (
+            <a key={b.id} href={b.target_url} target="_blank" rel="noopener noreferrer sponsored" title={b.title}
+              className="block h-7 w-32 shrink-0 overflow-hidden rounded-md border border-border bg-card md:w-40">
+              <Media b={b} className="h-full w-full object-cover" />
+            </a>
+          ))}
+        </div>
       </div>
     </aside>
   );
@@ -85,7 +83,14 @@ export function BannerAdmin({ userId }: { userId: string }) {
     <div className="mt-6 space-y-4">
       <Card>
         <h2 className="text-xl font-semibold">Añadir banner</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Pega el enlace de la imagen, vídeo (MP4/WebM) o animación (GIF/WebP) y la página del anunciante. Se muestra en una franja fina bajo el menú; si hay varios, rotan cada 8 segundos.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Pega el enlace de la imagen, vídeo (MP4/WebM) o animación (GIF/WebP) y la página del anunciante. Todos los banners activos se muestran a la vez, uno al lado del otro, en una franja fija bajo el menú (caben 5 o más). Formato recomendado: horizontal, proporción 5:1 (p. ej. 400×80 px). El «Orden» decide la posición: 1 = primero a la izquierda.</p>
+        {data.some((b) => b.is_active) && (
+          <div className="mt-4 rounded-xl border border-border bg-secondary/80 p-2">
+            <p className="mb-1 text-xs text-muted-foreground">Vista previa de la franja</p>
+            <div className="flex gap-2 overflow-x-auto">{data.filter((b) => b.is_active).map((b) => (
+              <div key={b.id} className="h-7 w-40 shrink-0 overflow-hidden rounded-md border border-border bg-card"><Media b={b} className="h-full w-full object-cover" /></div>))}</div>
+          </div>
+        )}
         <form onSubmit={add} className="mt-4 grid gap-3 md:grid-cols-2">
           <label className="text-sm"><span className="mb-1 block font-medium">Anunciante / nombre</span><input name="title" required className={field} /></label>
           <label className="text-sm"><span className="mb-1 block font-medium">Tipo</span>
