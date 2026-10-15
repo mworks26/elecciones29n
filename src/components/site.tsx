@@ -57,7 +57,7 @@ function AccountLink() {
 export function SiteFooter() {
   return (
     <footer className="mt-20 border-t border-border">
-      <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-4 px-4 py-8 text-sm text-muted-foreground">
+      <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 pb-24 pt-8 text-center text-sm text-muted-foreground">
         <p>Herramienta informativa e independiente. No es una recomendación de voto.</p>
         <Link to="/admin" className="underline-offset-4 hover:underline">Panel editorial</Link>
       </div>
