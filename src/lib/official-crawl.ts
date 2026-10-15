@@ -5,6 +5,8 @@ export type FoundLink = { url: string; text: string };
 
 const KEYWORDS = /(programa|manifiesto|propuesta|ponencia|compromiso|bases|proyecto de pa[ií]s|elecciones generales|plan de gobierno)/i;
 const OLD_YEARS = /(19\d\d|20(0\d|1\d|2[0-5]))/;
+// Other elections (municipal, regional, European) are not the 29N general election.
+const OTHER_ELECTIONS = /(municipa|auton[oó]mic|europe|cortes de castilla|cyl|parlament de|xunta|8f|codigo-etico|c[oó]digo [eé]tico)/i;
 
 const decode = (s: string) =>
   s.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\s+/g, " ").trim();
@@ -20,7 +22,7 @@ export function extractCandidateLinks(html: string, baseUrl: string): FoundLink[
     if (!/^https?:\/\//.test(url)) continue;
     const text = decode(m[2]).slice(0, 300);
     const hay = `${text} ${decodeURIComponent(url)}`;
-    if (!KEYWORDS.test(hay)) continue;
+    if (!KEYWORDS.test(hay) || OTHER_ELECTIONS.test(hay)) continue;
     const mentions2026 = /2026/.test(hay);
     if (!mentions2026 && OLD_YEARS.test(hay)) continue;
     const isPdf = /\.pdf(\?|$)/i.test(url);
