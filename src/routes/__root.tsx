@@ -11,6 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { SiteHeader, SiteFooter } from "@/components/site";
+import { BannerRow } from "@/components/banners";
 import { SessionProvider } from "@/lib/session";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
@@ -127,6 +128,7 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <a href="#main" className="sr-only focus:not-sr-only">Saltar al contenido</a>
       <SiteHeader />
+      <BannerRow />
       <main id="main">
         <Outlet />
       </main>

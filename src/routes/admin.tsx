@@ -8,6 +8,7 @@ import { Card, PageIntro } from "@/components/site";
 import { claimsQuery, documentsQuery, partiesQuery, sourcesQuery, topicsQuery } from "@/lib/data";
 import { CANDIDATE_STATUS, DOC_KIND, EVIDENCE_TYPE, POSITION, PROGRAMME_STATUS, REVIEW_STATUS } from "@/lib/labels";
 import { cn } from "@/lib/utils";
+import { BannerAdmin } from "@/components/banners";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -100,10 +101,13 @@ function Editor({ userId }: { userId: string }) {
   return (
     <div className="mt-6">
       <div className="flex flex-wrap gap-2">
-        {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"], ["avisos", "Programas por verificar"]] as const).map(([id, l]) => (
+        {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"], ["avisos", "Programas por verificar"], ["banners", "Banners"]] as const).map(([id, l]) => (
           <button key={id} onClick={() => setTab(id)} className={cn("rounded-full border px-4 py-1.5 text-sm", tab === id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>{l}</button>
         ))}
       </div>
+
+      {tab === "banners" && <BannerAdmin userId={userId} />}
+
 
       {tab === "partidos" && (
         <div className="mt-6 space-y-4">
