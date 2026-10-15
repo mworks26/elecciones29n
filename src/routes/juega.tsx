@@ -5,8 +5,8 @@ import { RotateCcw, Save, History, ArrowRight } from "lucide-react";
 import { GameMascot } from "@/components/game-art";
 import { GameHistoryList } from "@/components/game-history-list";
 import { GAME_KEY, localGameEnvelope, hasLocalGameConsent, setLocalGameConsent, appendGameHistory, readGameEnvelope, type GameEntry, type GameState } from "@/lib/game-history";
-import { PriorityNotes, BudgetNotes, ProposalNote } from "@/components/game-notes";
-import { BallGame } from "@/components/ball-game";
+import { PriorityNotes, BudgetNotes } from "@/components/game-notes";
+import { BasketGame } from "@/components/basket-game";
 import { Button } from "@/components/ui/button";
 import { Card, Notice, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
 import { Switch } from "@/components/ui/switch";
@@ -164,10 +164,8 @@ function Juega() {
         {game === "cartas" && (
           <div className="mt-6 space-y-4">
             <Card>
-              <div className="flex items-center gap-4"><GameMascot kind={2} /><div><h2 className="text-2xl font-semibold">¡Pelota de temas!</h2><p className="text-sm text-muted-foreground">Mueve la raqueta con el ratón, el dedo o las flechas y golpea los temas. Es solo diversión: no cuenta para tu afinidad.</p></div></div>
-              <div className="mt-4"><BallGame topics={s.order.map((id) => ({ id, label: label(id) }))} /></div>
+              <div className="flex items-center gap-4"><GameMascot kind={2} /><div><h2 className="text-2xl font-semibold">¡Tiro a canasta!</h2><p className="text-sm text-muted-foreground">Lee la propuesta y lanza la pelota a la canasta que elijas. Cada tiro cuenta para tu afinidad.</p></div></div>
             </Card>
-            <h2 className="pt-4 text-2xl font-semibold">¿Quieres valorar propuestas reales?</h2>
             <label className="flex items-center gap-3 text-sm">
               <Switch checked={s.includePending} onCheckedChange={(v) => setS((p) => ({ ...p, includePending: v }))} />
               Incluir propuestas pendientes de segunda revisión
@@ -175,13 +173,13 @@ function Juega() {
             {deck.length === 0 ? (
               <Notice>Aún no hay propuestas 2026 verificadas por revisión humana para jugar. Puedes activar las pendientes de segunda revisión (proceden de webs oficiales, pero falta una segunda comprobación) o volver cuando se publiquen los programas.</Notice>
             ) : nextCard ? (
-              <ProposalNote key={nextCard.id} onAnswer={(a) => answer(nextCard.id, a)}>
+              <BasketGame key={nextCard.id} onAnswer={(a) => answer(nextCard.id, a)}>
                 <p className="text-xs font-semibold uppercase tracking-widest text-accent">{label(nextCard.topic_id)} · carta {Object.keys(s.answers).filter((k) => deck.some((d) => d.id === k)).length + 1} de {deck.length}</p>
                 <h2 className="mt-3 text-3xl font-semibold">«{nextCard.title}»</h2>
                 <p className="mt-2 text-muted-foreground">{nextCard.claim_text}</p>
                 <div className="mt-4 border-t border-border pt-3">{nextCard.source_url ? <SourceLink href={nextCard.source_url}>Fuente original · {nextCard.page_or_section ?? "Documento del partido"}</SourceLink> : <p className="text-sm text-muted-foreground">Fuente directa no disponible</p>}<p className="mt-1 text-xs text-muted-foreground">{nextCard.review_status === "verified_by_human" ? "Revisión humana verificada" : "Pendiente de segunda revisión"}</p></div>
                 <p className="mt-2 text-xs text-muted-foreground">Las siglas se muestran al final. La fuente permite comprobar la autoría antes.</p>
-              </ProposalNote>
+              </BasketGame>
             ) : (
               <Card>
                 <h2 className="text-2xl font-semibold">¡Has jugado todas las cartas!</h2>

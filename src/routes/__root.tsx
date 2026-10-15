@@ -116,6 +116,11 @@ function RootShell({ children }: { children: ReactNode }) {
         {children}
         <Scripts />
         <script
+          dangerouslySetInnerHTML={{
+            __html: `window.addEventListener("message",function(e){if(e.data&&e.data.type==="nubion-chat-state"){var w=document.getElementById("nubion-widget");if(w)w.classList.toggle("chat-expanded",!!e.data.open);}});`,
+          }}
+        />
+        <script
           src="https://centeia-sass-gsxz.onrender.com/static/embed.min.js"
           data-public-bot-id="26ae6085-882e-4e47-9e1b-6055fd089220"
           defer
