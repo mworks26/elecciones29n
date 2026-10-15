@@ -24,21 +24,20 @@ export const Route = createFileRoute("/programas")({
 });
 
 const FILTERS = [
-  { id: "all", label: "Todos" },
   { id: "full_2026", label: "Programa íntegro 2026" },
   { id: "partial_2026", label: "Manifiesto/propuestas 2026" },
-  { id: "historical_2023", label: "Histórico 2023" },
   { id: "official_statement_2026", label: "Comunicados oficiales 2026" },
+  { id: "historical_2023", label: "Histórico 2023" },
   { id: "missing", label: "No localizado" },
 ];
 
 function Programas() {
   const { data: docs } = useSuspenseQuery(documentsQuery);
   const { data: parties } = useSuspenseQuery(partiesQuery);
-  const [f, setF] = useState("all");
+  const [f, setF] = useState("full_2026");
   const name = (id: string) => parties.find((p) => p.id === id)?.short_name ?? id;
   const missing = parties.filter((p) => p.programme_2026_status === "not_located_as_of_date" || p.programme_2026_status === "historical_2023_only");
-  const list = f === "all" ? docs : docs.filter((d) => d.kind === f);
+  const list = docs.filter((d) => d.kind === f);
 
   return (
     <>
