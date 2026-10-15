@@ -238,7 +238,7 @@ function Candidates({ userId, partyOpts }: { userId: string; partyOpts: Record<s
   }
   return (
     <div className="mt-6 space-y-3">
-      <p className="text-sm text-muted-foreground">La revisión está programada cada día a las 06:00 UTC (08:00 en Madrid en verano; 07:00 en invierno) y consulta Programas en Claro. Su catálogo puede incluir referencias históricas y no garantiza recoger todos los programas o manifiestos de 2026. Abre el documento, comprueba la fuente y el año, elige el tipo y pulsa «Verificar y publicar». Nada se publica sin tu confirmación.</p>
+      <p className="text-sm text-muted-foreground">La revisión está programada cada día a las 06:00 UTC (08:00 en Madrid en verano; 07:00 en invierno). Consulta Programas en Claro y, además, la web oficial y la página de programas de cada partido registrado, buscando programas, manifiestos y propuestas de 2026. Puede detectar enlaces que no sean programas: abre el documento, comprueba la fuente y el año, elige el tipo y pulsa «Verificar y publicar», o «Descartar». Nada se publica sin tu confirmación.</p>
       {data.length === 0 && <Card>No hay avisos pendientes.</Card>}
       {data.map((c) => (
         <Card key={c.id} className="p-4">
@@ -252,7 +252,7 @@ function Candidates({ userId, partyOpts }: { userId: string; partyOpts: Record<s
               ) : (
                 <Sel name="party_id" value="" options={{ "": "Elige partido…", ...partyOpts }} />
               )}
-              <Sel name="kind" value="historical_2023" options={DOC_KIND} />
+              <Sel name="kind" value={c.origin === "web_oficial" ? "partial_2026" : "historical_2023"} options={DOC_KIND} />
               <input name="reason" required defaultValue="Verificado por la editora con fuente oficial" title="Nota para el historial interno (puedes cambiarla)" className={field} />
               <button className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Verificar y publicar</button>
             </form>
