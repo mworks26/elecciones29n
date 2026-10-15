@@ -6,7 +6,7 @@ import { GameMascot } from "@/components/game-art";
 import { GameHistoryList } from "@/components/game-history-list";
 import { GAME_KEY, localGameEnvelope, hasLocalGameConsent, setLocalGameConsent, appendGameHistory, readGameEnvelope, type GameEntry, type GameState } from "@/lib/game-history";
 import { PriorityNotes, BudgetNotes } from "@/components/game-notes";
-import { BallGame } from "@/components/ball-game";
+import { BasketGame } from "@/components/basket-game";
 import { Button } from "@/components/ui/button";
 import { Card, Notice, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
 import { Switch } from "@/components/ui/switch";
