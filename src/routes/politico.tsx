@@ -217,6 +217,7 @@ function Politico() {
                     })}
                   </ul>
                 )}
+                {new Set(usable.map((c) => c.party_id)).size === 1 && <div className="mt-3"><Notice>Por ahora solo un partido tiene propuestas cargadas en el juego, así que siempre aparecerá el mismo. Saldrán más cuando se verifiquen nuevas propuestas.</Notice></div>}
                 <div className="mt-4 space-y-1">
                   {deck.filter((c) => answers[c.id] && c.source_url).map((c) => (
                     <div key={c.id}><SourceLink href={c.source_url!} meta={parties.find((p) => p.id === c.party_id)?.name}>{c.title}</SourceLink></div>
