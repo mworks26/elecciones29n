@@ -74,8 +74,9 @@ function Index() {
       </section>
       <section className="mx-auto mt-8 max-w-6xl px-4">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-5">
-          <p className="text-sm text-muted-foreground">Hoy: {now ? formatDate(madridDate(now)) : "…"} · Votación: {formatDate(ELECTION.electionDate)}</p>
-          <p className="font-serif text-3xl font-semibold">Faltan {now ? daysUntilElection(ELECTION.electionDate, now) : "…"} días</p>
+          {/* key remounts after hydration so automatic page translation picks up the real values */}
+          <p key={now ? "d" : "p"} className="text-sm text-muted-foreground">Hoy: {now ? formatDate(madridDate(now)) : "…"} · Votación: {formatDate(ELECTION.electionDate)}</p>
+          <p key={now ? "n" : "q"} className="font-serif text-3xl font-semibold">Faltan {now ? daysUntilElection(ELECTION.electionDate, now) : "…"} días</p>
           <SourceLink href={ELECTION.source.url}>{ELECTION.source.title}</SourceLink>
         </div>
         <Notice>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/lib/session";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 const NAV = [
   { to: "/", label: "Inicio" },
@@ -38,7 +39,10 @@ export function SiteHeader() {
             </Link></Button>;
           })}
         </nav>
-        <AccountLink />
+        <div className="ml-auto flex items-center gap-2">
+          <LanguageSwitcher />
+          <AccountLink />
+        </div>
       </div>
     </header>
   );
