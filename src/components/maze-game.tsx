@@ -10,7 +10,7 @@ const MAP = ["G#.A.#R", ".#.#.#.", ".......", ".##.##.", "...S..."];
 const GOALS: Record<string, { a: Answer; label: string; tone: string }> = {
   G: { a: "agree", label: "De acuerdo", tone: "bg-go" },
   A: { a: "partial", label: "En parte", tone: "bg-wait" },
-  R: { a: "disagree", label: "En desacuerdo", tone: "bg-stop" },
+  R: { a: "disagree", label: "En contra", tone: "bg-stop" },
 };
 type P = [number, number];
 const ROWS = MAP.length, COLS = MAP[0].length;
@@ -88,7 +88,7 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
         const g = GOALS[c];
         return <button key={`${x}-${y}`} type="button" disabled={c === "#" || !!done} onClick={() => walkTo([x, y])}
           aria-label={g ? `Meta: ${g.label}` : c === "#" ? "Muro" : "Camino"}
-          className={cn("relative flex aspect-square items-center justify-center rounded-md text-[10px] font-bold leading-tight text-primary disabled:cursor-default sm:text-xs",
+          className={cn("relative flex aspect-square items-center justify-center rounded-md overflow-hidden text-[9px] font-bold leading-tight text-primary disabled:cursor-default sm:text-[11px]",
             c === "#" ? "bg-lilac" : g ? cn(g.tone, "shadow-soft") : "bg-card hover:bg-muted",
             g && done === g.a && "ring-4 ring-primary")}>
           {g && !here && <span className="px-0.5 text-center">{g.label}</span>}

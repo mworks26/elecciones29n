@@ -164,7 +164,7 @@ function Juega() {
         {game === "cartas" && (
           <div className="mt-6 space-y-4">
             <Card>
-              <div className="flex items-center gap-4"><GameMascot kind={2} /><div><h2 className="text-2xl font-semibold">Laberinto de propuestas</h2><p className="text-sm text-muted-foreground">Lleva cada tarjeta a verde (de acuerdo), ámbar (en parte) o rojo (en desacuerdo).</p></div></div>
+              <div className="flex items-center gap-4"><GameMascot kind={2} /><div><h2 className="text-2xl font-semibold">Laberinto de propuestas</h2><p className="text-sm text-muted-foreground">Lleva cada tarjeta a verde (de acuerdo), ámbar (en parte) o rojo (en contra).</p></div></div>
             </Card>
             <label className="flex items-center gap-3 text-sm">
               <Switch checked={s.includePending} onCheckedChange={(v) => setS((p) => ({ ...p, includePending: v }))} />
