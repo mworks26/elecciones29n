@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { localPartyId } from "@/lib/party-ids";
 
 // Daily watcher: detects new/changed programme documents and stores them as
 // pending candidates for human review. It never publishes or edits public data.
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/api/public/hooks/sync-programmes")({
           return {
             origin: "programasenclaro",
             external_id: String(p.id).slice(0, 200),
-            party_id: p.party_id ?? null,
+            party_id: localPartyId(p.party_id),
             party_name: p.party_name ?? null,
             title: String(p.title).slice(0, 300),
             election: p.election ?? null,
