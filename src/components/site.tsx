@@ -21,10 +21,16 @@ export function SiteHeader() {
   return (
     <header className="border-b border-border bg-background/90 backdrop-blur">
       <div className="site-nav mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
-        <Link to="/" className="shrink-0 font-serif text-xl font-semibold">
-          Elecciones <span className="text-accent">2026</span>
-          <span className="mt-1 block font-sans text-xs font-medium text-muted-foreground">Entiende. Compara. Decide por ti.</span>
-        </Link>
+        <div className="flex w-full items-start justify-between gap-3">
+          <Link to="/" className="min-w-0 font-serif text-xl font-semibold">
+            Elecciones <span className="text-accent">2026</span>
+            <span className="mt-1 block font-sans text-xs font-medium text-muted-foreground">Entiende. Compara. Decide por ti.</span>
+          </Link>
+          <div className="flex shrink-0 items-center gap-2">
+            <LanguageSwitcher />
+            <AccountLink />
+          </div>
+        </div>
         <nav aria-label="Principal" className="flex flex-wrap gap-1 text-sm">
           {NAV.map((n, index) => {
             const Icon = NAV_ICONS[index] ?? Home;
@@ -39,10 +45,6 @@ export function SiteHeader() {
             </Link></Button>;
           })}
         </nav>
-        <div className="ml-auto flex items-center gap-2">
-          <LanguageSwitcher />
-          <AccountLink />
-        </div>
       </div>
     </header>
   );
