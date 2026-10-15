@@ -1,37 +1,44 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Check, SkipForward } from "lucide-react";
 import type { Answer } from "@/lib/affinity";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const BASKETS: { a: Answer; label: string; emoji: string; tone: string }[] = [
+const CHOICES: { a: Answer; label: string; emoji: string; tone: string }[] = [
   { a: "agree", label: "De acuerdo", emoji: "👍", tone: "bg-secondary" },
   { a: "partial", label: "En parte", emoji: "🤏", tone: "bg-highlight" },
   { a: "disagree", label: "En desacuerdo", emoji: "👎", tone: "bg-muted" },
 ];
-const X: Record<string, string> = { agree: "-33%", partial: "0%", disagree: "33%", skip: "0%" };
-
-/** Throw the ball into a basket: each throw is a real answer used by the affinity score. */
-export function BasketGame({ children, onAnswer }: { children: ReactNode; onAnswer: (a: Answer) => void }) {
-  const [shot, setShot] = useState<Answer | null>(null);
-  const shoot = (a: Answer) => {
-    if (shot) return;
-    setShot(a);
-    setTimeout(() => { setShot(null); onAnswer(a); }, a === "skip" ? 250 : 650);
+/** Explicit opinion choices keep the same answers consumed by the affinity formula. */
+export function ProposalChoices({ children, onAnswer }: { children: ReactNode; onAnswer: (a: Answer) => void }) {
+  const [selected, setSelected] = useState<Answer | null>(null);
+  const locked = useRef(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+  const choose = (a: Answer) => {
+    if (locked.current) return;
+    locked.current = true;
+    setSelected(a);
+    timer.current = setTimeout(() => onAnswer(a), 450);
   };
-  return <div className="rounded-3xl border-2 border-border bg-card p-5">
+  return <section aria-label="Propuesta y tu opinión" className="rounded-lg border border-border bg-card p-4 sm:p-6">
     {children}
-    <div className="relative mt-6 h-16">
-      <span aria-hidden className={cn("absolute left-1/2 top-10 text-3xl transition-all duration-500 ease-out", shot && shot !== "skip" ? "-top-2 opacity-0 scale-75" : "")}
-        style={{ transform: `translateX(calc(-50% + ${shot ? X[shot] : "0%"} * 3))` }}>🏀</span>
-    </div>
-    <p className="text-center text-sm text-muted-foreground">Lanza la pelota a una canasta: tu tiro cuenta para tu afinidad.</p>
-    <div className="mt-3 grid grid-cols-3 gap-3">
-      {BASKETS.map((b) => (
-        <button key={b.a} type="button" onClick={() => shoot(b.a)} disabled={!!shot}
-          className={cn("flex flex-col items-center gap-1 rounded-b-[2rem] rounded-t-lg border-4 border-t-8 border-primary p-3 text-sm font-semibold transition-transform hover:-translate-y-1", b.tone, shot === b.a && "animate-bounce")}>
-          <span className="text-2xl" aria-hidden>{b.emoji}</span>{b.label}
-        </button>
+    <h3 className="mt-6 text-center text-xl font-semibold">¿Qué opinas de esta propuesta?</h3>
+    <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+      {CHOICES.map((choice) => (
+        <Button key={choice.a} type="button" variant="outline" onClick={() => choose(choice.a)} disabled={selected !== null}
+          aria-pressed={selected === choice.a}
+          className={cn("relative h-16 min-w-0 justify-start gap-4 whitespace-normal rounded-lg border-2 px-4 text-base sm:h-28 sm:flex-col sm:justify-center sm:gap-2 sm:px-2 disabled:opacity-100 motion-safe:transition-transform motion-safe:hover:-translate-y-1 hover:bg-secondary hover:text-secondary-foreground", choice.tone,
+            selected === choice.a ? "border-primary ring-2 ring-ring" : "border-transparent", selected !== null && selected !== choice.a && "opacity-50 disabled:opacity-50")}>
+          <span className="text-3xl" aria-hidden>{choice.emoji}</span>
+          <span>{choice.label}</span>
+          {selected === choice.a && <Check aria-hidden className="absolute right-2 top-2" />}
+        </Button>
       ))}
     </div>
-    <button type="button" onClick={() => shoot("skip")} disabled={!!shot} className="mx-auto mt-3 block text-sm underline">Paso de esta</button>
-  </div>;
+    <div className="mt-3 flex min-h-10 items-center justify-center">
+      {selected !== null ? <p role="status" className="text-sm font-medium">{selected === "skip" ? "Sin responder" : "Respuesta elegida"}</p> :
+        <Button type="button" variant="ghost" onClick={() => choose("skip")}><SkipForward /> Paso de esta</Button>}
+    </div>
+  </section>;
 }
