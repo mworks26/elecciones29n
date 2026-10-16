@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { claimsQuery, partiesQuery, topicsQuery } from "@/lib/data";
 import { computeAffinity, type Answer } from "@/lib/affinity";
 import { cn } from "@/lib/utils";
+import { BUDGET } from "@/lib/game-budget";
 import { saveUserField, useSession, useUserData } from "@/lib/session";
 
 
@@ -42,7 +43,7 @@ const ROUND_SIZE = 5;
 type Saved = GameState;
 const GAMES = [
   { id: "ordena", n: 1, label: "Ordena tus prioridades" },
-  { id: "reparte", n: 2, label: "Reparte 100 fichas" },
+  { id: "reparte", n: 2, label: "Reparte 50 fichas" },
   { id: "cartas", n: 3, label: "Laberinto" },
   { id: "resultado", n: 4, label: "Tu resultado" },
 ] as const;
@@ -159,9 +160,9 @@ function Juega() {
 
         {game === "reparte" && (
           <Card className="mt-6">
-            <div className="flex items-center gap-4"><GameMascot kind={1} /><h2 className="text-2xl font-semibold">Tienes 100 fichas. ¿Dónde las pones?</h2></div>
-            <p className="mt-1 text-sm text-muted-foreground">Imagina que repartes el esfuerzo del próximo Gobierno. Quedan <strong className="text-foreground">{100 - usedChips}</strong> fichas.</p>
-            <div className="mt-3 h-3 overflow-hidden rounded-full bg-muted"><div className="h-full bg-accent transition-all" style={{ width: `${usedChips}%` }} /></div>
+            <div className="flex items-center gap-4"><GameMascot kind={1} /><h2 className="text-2xl font-semibold">Tienes {BUDGET} fichas. ¿Dónde las pones?</h2></div>
+            <p className="mt-1 text-sm text-muted-foreground">Imagina que repartes el esfuerzo del próximo Gobierno. Quedan <strong className="text-foreground">{BUDGET - usedChips}</strong> fichas.</p>
+            <div className="mt-3 h-3 overflow-hidden rounded-full bg-muted"><div className="h-full bg-accent transition-all" style={{ width: `${(usedChips / BUDGET) * 100}%` }} /></div>
             <BudgetNotes order={s.order} chips={s.chips} label={label} onChange={(chips) => setS((p) => ({ ...p, chips }))} />
             <Button onClick={() => setGame("cartas")} className="mt-6 rounded-full" size="lg">Siguiente juego</Button>
           </Card>
@@ -234,7 +235,7 @@ function Juega() {
                 </ul>
               )}
             </Card>
-            <div className="flex flex-wrap gap-3"><Button onClick={saveResult} className="rounded-full"><Save /> Guardar esta partida</Button><Button variant="outline" onClick={() => { setS({ order: topics.map((t) => t.id), chips: {}, answers: {}, includePending: false }); setGame("ordena"); setSavedMessage(""); }} className="rounded-full"><RotateCcw /> Nueva partida</Button></div>
+            <div className="flex flex-wrap gap-3"><Button onClick={saveResult} className="rounded-full"><Save /> Guardar esta partida</Button><Button variant="outline" onClick={() => { setS({ order: topics.map((t) => t.id), chips: {}, answers: {}, includePending: false }); setGame(answeredInDeck > 0 ? "cartas" : "ordena"); setSavedMessage(""); }} className="rounded-full"><RotateCcw /> Nueva partida</Button></div>
             <Button variant="outline" onClick={() => { setLocalGameConsent(false); setLocalConsent(false); setHistory([]); setS({ order: topics.map((t) => t.id), chips: {}, answers: {}, includePending: false }); if (syncOn && session) void saveUserField(session.user.id, "game", null).catch(() => setSavedMessage("No se pudo borrar en tu cuenta. Inténtalo de nuevo.")); setGame("ordena"); }}
               className="inline-flex items-center gap-2 rounded-full border border-input bg-card px-5 py-2.5 text-sm font-medium">
               <RotateCcw className="size-4" /> Borrar mis respuestas e historial
