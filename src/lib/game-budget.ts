@@ -9,4 +9,10 @@ export function transferBudgetNote(chips: Record<string, number>, origin: string
   if (origin !== "pool") next[origin] = (next[origin] ?? 0) - 5;
   if (target !== "pool") next[target] = (next[target] ?? 0) + 5;
   return next;
+}/** Piggy-bank level for a topic's chip total: ≤5 Básico, 6–10 Medio, >10 Óptimo. */
+export function budgetLevel(chips: number): "vacio" | "basico" | "medio" | "optimo" {
+  if (chips <= 0) return "vacio";
+  if (chips <= 5) return "basico";
+  if (chips <= 10) return "medio";
+  return "optimo";
 }
