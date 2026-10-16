@@ -6,7 +6,7 @@ import { GameMascot } from "@/components/game-art";
 import { cn } from "@/lib/utils";
 
 // G/A/R = goals (De acuerdo / En parte / En desacuerdo), S = start, # = wall.
-const MAP = ["G###A###R", ".#....#..", ".#.###.#.", "...#.....", "##.#.#.##", "...#.#...", ".###.###.", "....S...."];
+const MAP = ["G##A##R", ".#...#.", ".#.#.#.", "...#...", "##...##", "...S..."];
 const GOALS: Record<string, { a: Answer; label: string; tone: string }> = {
   G: { a: "agree", label: "De acuerdo", tone: "bg-go" },
   A: { a: "partial", label: "En parte", tone: "bg-wait" },
@@ -111,7 +111,7 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
           {c === "S" && !here && <span>Inicio</span>}
           {walked && !here && !g && c !== "S" && <span aria-hidden className="size-2 rounded-full bg-accent" />}
           {here && <span className="absolute inset-0 flex items-center justify-center overflow-hidden">
-            <span className="mascot-hop flex size-[110px] shrink-0 scale-[0.26] items-center justify-center sm:scale-[0.32]"><GameMascot kind={2} /></span>
+            <span className="mascot-hop flex size-[110px] shrink-0 scale-[0.4] items-center justify-center sm:scale-[0.52]"><GameMascot kind={2} /></span>
           </span>}
         </button>;
       }))}
