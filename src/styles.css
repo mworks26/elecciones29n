@@ -172,3 +172,10 @@
 .goog-te-banner-frame, iframe.skiptranslate, #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
 body { top: 0 !important; }
 .goog-text-highlight { background: none !important; box-shadow: none !important; }
+
+/* Suave rebote del muñeco del laberinto, contenido en su casilla. */
+@keyframes mascot-hop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.mascot-hop { animation: mascot-hop 1.1s ease-in-out infinite; }
