@@ -17,6 +17,7 @@ const ROWS = MAP.length, COLS = MAP[0]!.length;
 const cell = ([x, y]: P) => MAP[y]?.[x];
 const open = (p: P) => { const c = cell(p); return c !== undefined && c !== "#"; };
 const START: P = [MAP[ROWS - 1]!.indexOf("S"), ROWS - 1];
+const k2e = (k: string) => (k === "G" ? "👍" : k === "A" ? "✋" : "👎");
 
 function path(from: P, to: P): P[] {
   const key = (p: P) => `${p[0]},${p[1]}`;
