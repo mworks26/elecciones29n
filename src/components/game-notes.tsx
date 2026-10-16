@@ -57,7 +57,7 @@ function PiggyBank({ id, title, count, index, onAdd, onRemove, canAdd }: { id: s
   const level = LEVELS[budgetLevel(total)];
   return <div ref={setNodeRef} aria-label={title} className={cn("min-w-0 rounded-xl border-2 border-dashed border-border px-2 py-1.5 transition-transform", tones[index % tones.length], isOver && "scale-105 border-ring ring-2 ring-ring")}>
     <div className="flex items-center gap-1.5">
-      <span aria-hidden className="text-lg leading-none">🐷</span><TopicDrawing label={title} />
+      <TopicDrawing label={title} />
       <h3 className="min-w-0 flex-1 truncate text-xs font-semibold sm:text-sm">{title}</h3>
       <span className="text-sm font-bold tabular-nums">{total}</span>
     </div>
