@@ -6,7 +6,7 @@ import { GameMascot } from "@/components/game-art";
 import { cn } from "@/lib/utils";
 
 // G/A/R = goals (De acuerdo / En parte / En desacuerdo), S = start, # = wall.
-const MAP = ["G#.A.#R", ".#.#.#.", ".......", ".##.##.", "...S..."];
+const MAP = ["G###A###R", ".#....#..", ".#.###.#.", "...#.....", "##.#.#.##", "...#.#...", ".###.###.", "....S...."];
 const GOALS: Record<string, { a: Answer; label: string; tone: string }> = {
   G: { a: "agree", label: "De acuerdo", tone: "bg-go" },
   A: { a: "partial", label: "En parte", tone: "bg-wait" },
@@ -38,21 +38,23 @@ function path(from: P, to: P): P[] {
 /** Maze where the mascot carries the proposal card to a traffic-light goal; answers feed the affinity formula. */
 export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer: (a: Answer) => void }) {
   const [pos, setPos] = useState<P>(START);
+  const [trail, setTrail] = useState<Set<string>>(() => new Set([`${START[0]},${START[1]}`]));
   const [done, setDone] = useState<Answer | null>(null);
   const walking = useRef<ReturnType<typeof setInterval> | null>(null);
   const finished = useRef(false);
+  const mark = (p: P) => setTrail((t) => new Set(t).add(`${p[0]},${p[1]}`));
 
   const arrive = useCallback((p: P) => {
     const g = GOALS[cell(p) ?? ""];
     if (!g || finished.current) return;
     finished.current = true;
     setDone(g.a);
-    setTimeout(() => onAnswer(g.a), 700);
+    setTimeout(() => onAnswer(g.a), 1100);
   }, [onAnswer]);
 
   const step = useCallback((dx: number, dy: number) => {
     if (finished.current || walking.current) return;
-    setPos((p) => { const n: P = [p[0] + dx, p[1] + dy]; if (!open(n)) return p; arrive(n); return n; });
+    setPos((p) => { const n: P = [p[0] + dx, p[1] + dy]; if (!open(n)) return p; mark(n); arrive(n); return n; });
   }, [arrive]);
 
   const walkTo = (to: P) => {
@@ -61,9 +63,9 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
     walking.current = setInterval(() => {
       const n = steps.shift();
       if (!n) { clearInterval(walking.current!); walking.current = null; return; }
-      setPos(n);
+      setPos(n); mark(n);
       if (!steps.length) { clearInterval(walking.current!); walking.current = null; arrive(n); }
-    }, 140);
+    }, 240);
   };
 
   useEffect(() => () => { if (walking.current) clearInterval(walking.current); }, []);
@@ -78,22 +80,27 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
 
   return <section aria-label="Laberinto de propuestas" className="rounded-lg border border-border bg-card p-4 sm:p-6">
     {children}
-    <h3 className="mt-5 text-center text-xl font-semibold">Lleva la tarjeta a la meta que elijas</h3>
-    <p className="text-center text-sm text-muted-foreground">Toca una meta y el muñeco va solo, o muévelo con las flechas.</p>
+    <h3 className="mt-5 text-center text-xl font-semibold">Lleva la tarjeta por el laberinto hasta la salida que elijas</h3>
+    <p className="mx-auto mt-3 max-w-md rounded-lg border-2 border-primary bg-highlight px-4 py-3 text-center text-base font-bold text-primary shadow-soft sm:text-lg">
+      👉 Toca una salida de color y el muñeco recorrerá el camino, o guíalo tú con las flechas.
+    </p>
     <div data-maze tabIndex={0} aria-label="Laberinto. Usa las flechas del teclado para mover el muñeco."
-      className="mx-auto mt-4 grid w-full max-w-md gap-1 rounded-lg bg-secondary p-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="mx-auto mt-4 grid w-full max-w-md gap-0.5 rounded-lg bg-primary p-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring"
       style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}>
       {MAP.flatMap((row, y) => [...row].map((c, x) => {
         const here = pos[0] === x && pos[1] === y;
         const g = GOALS[c];
+        const walked = trail.has(`${x},${y}`);
         return <button key={`${x}-${y}`} type="button" disabled={c === "#" || !!done} onClick={() => walkTo([x, y])}
-          aria-label={g ? `Meta: ${g.label}` : c === "#" ? "Muro" : "Camino"}
-          className={cn("relative flex aspect-square items-center justify-center rounded-md overflow-hidden text-[9px] font-bold leading-tight text-primary disabled:cursor-default sm:text-[11px]",
-            c === "#" ? "bg-lilac" : g ? cn(g.tone, "shadow-soft") : "bg-card hover:bg-muted",
-            g && done === g.a && "ring-4 ring-primary")}>
+          aria-label={g ? `Salida: ${g.label}` : c === "#" ? "Muro" : c === "S" ? "Inicio" : "Camino"}
+          className={cn("relative flex aspect-square items-center justify-center overflow-hidden rounded-sm text-[8px] font-bold leading-tight text-primary disabled:cursor-default sm:text-[10px]",
+            c === "#" ? "bg-lilac" : g ? g.tone : walked ? "bg-highlight" : "bg-card hover:bg-muted",
+            g && done === g.a && "ring-4 ring-accent")}>
           {g && !here && <span className="px-0.5 text-center">{g.label}</span>}
+          {c === "S" && !here && <span>Inicio</span>}
+          {walked && !here && !g && c !== "S" && <span aria-hidden className="text-[10px] opacity-60">👣</span>}
           {here && <span className="absolute inset-0 flex items-center justify-center motion-safe:animate-bounce">
-            <GameMascot kind={2} className="size-full scale-90" />
+            <span className="block scale-[0.34] sm:scale-[0.4]"><GameMascot kind={2} /></span>
           </span>}
         </button>;
       }))}
