@@ -110,8 +110,8 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
           {g && !here && <span className="px-0.5 text-center">{k2e(c)}</span>}
           {c === "S" && !here && <span>Inicio</span>}
           {walked && !here && !g && c !== "S" && <span aria-hidden className="size-2 rounded-full bg-accent" />}
-          {here && <span className="absolute inset-x-0 bottom-0 flex h-full items-end justify-center">
-            <span className="block origin-bottom translate-y-[30%] scale-[0.34] motion-safe:animate-[bounce_1s_ease-in-out_infinite] sm:scale-[0.4]"><GameMascot kind={2} /></span>
+          {here && <span className="absolute inset-x-0 bottom-0 flex h-full items-end justify-center motion-safe:animate-bounce">
+            <span className="block origin-bottom translate-y-[30%] scale-[0.34] sm:scale-[0.4]"><GameMascot kind={2} /></span>
           </span>}
         </button>;
       }))}
