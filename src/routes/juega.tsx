@@ -13,7 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { claimsQuery, partiesQuery, topicsQuery } from "@/lib/data";
 import { computeAffinity, type Answer } from "@/lib/affinity";
 import { cn } from "@/lib/utils";
-import { BUDGET } from "@/lib/game-budget";
+import { BUDGET, budgetLevel } from "@/lib/game-budget";
 import { saveUserField, useSession, useUserData } from "@/lib/session";
 
 
@@ -43,7 +43,7 @@ const ROUND_SIZE = 5;
 type Saved = GameState;
 const GAMES = [
   { id: "ordena", n: 1, label: "Ordena tus prioridades" },
-  { id: "reparte", n: 2, label: "Reparte 50 fichas" },
+  { id: "reparte", n: 2, label: "Reparte 25 fichas" },
   { id: "cartas", n: 3, label: "Laberinto" },
   { id: "resultado", n: 4, label: "Tu resultado" },
 ] as const;
@@ -154,7 +154,7 @@ function Juega() {
           <Card className="mt-6">
             <div className="flex items-center gap-4"><GameMascot /><h2 className="text-2xl font-semibold">¿Qué asuntos tienes más presentes?</h2></div>
             <PriorityNotes order={s.order} label={label} onChange={(order) => setS((p) => ({ ...p, order }))} />
-            <Button onClick={() => setGame("reparte")} className="mt-6 rounded-full" size="lg">Siguiente juego</Button>
+            <div className="mt-6 flex flex-wrap gap-3"><Button onClick={() => setGame("resultado")} className="rounded-full" size="lg">Ver mi resultado</Button><Button variant="outline" onClick={() => setGame("reparte")} className="rounded-full" size="lg">Siguiente juego</Button></div>
           </Card>
         )}
 
@@ -164,7 +164,7 @@ function Juega() {
             <p className="mt-1 text-sm text-muted-foreground">Imagina que repartes el esfuerzo del próximo Gobierno. Quedan <strong className="text-foreground">{BUDGET - usedChips}</strong> fichas.</p>
             <div className="mt-3 h-3 overflow-hidden rounded-full bg-muted"><div className="h-full bg-accent transition-all" style={{ width: `${(usedChips / BUDGET) * 100}%` }} /></div>
             <BudgetNotes order={s.order} chips={s.chips} label={label} onChange={(chips) => setS((p) => ({ ...p, chips }))} />
-            <Button onClick={() => setGame("cartas")} className="mt-6 rounded-full" size="lg">Siguiente juego</Button>
+            <div className="mt-6 flex flex-wrap gap-3"><Button onClick={() => setGame("resultado")} disabled={usedChips === 0} className="rounded-full" size="lg">Ver mi resultado</Button><Button variant="outline" onClick={() => setGame("cartas")} className="rounded-full" size="lg">Siguiente juego</Button></div>
           </Card>
         )}
 
@@ -220,9 +220,18 @@ function Juega() {
                 {Object.entries(weights).sort((a, b) => b[1] - a[1]).filter(([, w]) => w > 0).slice(0, 5).map(([id], i) => <li key={id}><Tag tone={i === 0 ? "ok" : "partial"}>{i + 1}. {label(id)}</Tag></li>)}
               </ol>
             </Card>
+            {usedChips > 0 && (
+              <Card>
+                <h2 className="text-2xl font-semibold">Tu reparto de fichas</h2>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {Object.entries(s.chips).filter(([, c]) => c > 0).sort((a, b) => b[1] - a[1]).map(([id, c]) => <li key={id}><Tag tone="partial">{label(id)}: {c} · {({ vacio: "", basico: "Básico", medio: "Medio", optimo: "Óptimo ⭐" } as const)[budgetLevel(c)]}</Tag></li>)}
+                </ul>
+                <p className="mt-2 text-sm text-muted-foreground">Has usado {usedChips} de {BUDGET} fichas.</p>
+              </Card>
+            )}
             <Card>
               <h2 className="text-2xl font-semibold">Afinidad con propuestas documentadas</h2>
-              {results.length === 0 ? <p className="mt-2 text-muted-foreground">Juega al «Laberinto» para calcularla.</p> : (
+              {results.length === 0 ? <div className="mt-2"><p className="text-muted-foreground">Esta parte sale del «Laberinto». Tus otros resultados ya están arriba.</p><Button variant="outline" className="mt-3 rounded-full" onClick={() => setGame("cartas")}>Jugar al laberinto</Button></div> : (
                 <ul className="mt-4 space-y-4">
                   {results.sort((a, b) => (b.sufficient ? b.score ?? 0 : -1) - (a.sufficient ? a.score ?? 0 : -1)).map((r) => (
                     <li key={r.partyId}>
