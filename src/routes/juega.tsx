@@ -37,6 +37,8 @@ export const Route = createFileRoute("/juega")({
 });
 
 const KEY = GAME_KEY;
+/** Maze round length: short rounds so the game has a clear end. */
+const ROUND_SIZE = 5;
 type Saved = GameState;
 const GAMES = [
   { id: "ordena", n: 1, label: "Ordena tus prioridades" },
