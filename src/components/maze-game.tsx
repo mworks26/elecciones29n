@@ -98,7 +98,7 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
             g && done === g.a && "ring-4 ring-accent")}>
           {g && !here && <span className="px-0.5 text-center">{g.label}</span>}
           {c === "S" && !here && <span>Inicio</span>}
-          {walked && !here && !g && c !== "S" && <span aria-hidden className="text-[10px] opacity-60">👣</span>}
+          {walked && !here && !g && c !== "S" && <span aria-hidden className="size-2 rounded-full bg-accent" />}
           {here && <span className="absolute inset-0 flex items-center justify-center motion-safe:animate-bounce">
             <span className="block scale-[0.34] sm:scale-[0.4]"><GameMascot kind={2} /></span>
           </span>}
