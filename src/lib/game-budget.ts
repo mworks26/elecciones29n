@@ -1,5 +1,5 @@
 /** Total chips a player can distribute. */
-export const BUDGET = 50;
+export const BUDGET = 25;
 /** Transfer one five-chip note without changing the chip budget. */
 export function transferBudgetNote(chips: Record<string, number>, origin: string, target: string): Record<string, number> {
   if (origin === target) return chips;

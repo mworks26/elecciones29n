@@ -59,13 +59,13 @@ function PiggyBank({ id, title, count, index, onAdd, onRemove, canAdd }: { id: s
     <div className="flex items-center gap-1.5">
       <TopicDrawing label={title} />
       <h3 className="min-w-0 flex-1 truncate text-xs font-semibold sm:text-sm">{title}</h3>
-      <span className="text-sm font-bold tabular-nums">{total}</span>
+      <span className="min-w-9 rounded-full bg-card px-2 py-0.5 text-center text-lg font-extrabold tabular-nums shadow-soft">{total}</span>
     </div>
     <div className="mt-1 flex items-center gap-1">
       <span key={level.label} className={cn("animate-in zoom-in rounded-full px-2 py-0.5 text-[10px] font-bold", level.cls)}>{level.label}</span>
       <div className="flex min-w-0 flex-1 flex-wrap gap-0.5">{Array.from({ length: count }, (_, n) => <ChipNote key={`${id}-${n}`} id={`${id}-${n}`} origin={id} />)}</div>
-      <Button size="sm" variant="outline" className="h-6 w-7 rounded-full p-0 text-xs" disabled={count === 0} onClick={onRemove} aria-label={`Quitar 5 fichas de ${title}`}>−</Button>
-      <Button size="sm" className="h-6 w-7 rounded-full p-0 text-xs" disabled={!canAdd} onClick={onAdd} aria-label={`Añadir 5 fichas a ${title}`}>+</Button>
+      <Button size="sm" variant="outline" className="h-9 w-9 rounded-full border-2 p-0 text-xl font-extrabold" disabled={count === 0} onClick={onRemove} aria-label={`Quitar 5 fichas de ${title}`}>−</Button>
+      <Button size="sm" className="h-9 w-9 rounded-full p-0 text-xl font-extrabold" disabled={!canAdd} onClick={onAdd} aria-label={`Añadir 5 fichas a ${title}`}>+</Button>
     </div>
   </div>;
 }
@@ -73,7 +73,7 @@ function PiggyBank({ id, title, count, index, onAdd, onRemove, canAdd }: { id: s
 function Pool({ count }: { count: number }) {
   const { setNodeRef, isOver } = useDroppable({ id: "pool" });
   return <div ref={setNodeRef} aria-label="Monedas disponibles" className={cn("rounded-xl border-2 border-dashed border-border bg-muted px-3 py-2", isOver && "border-ring ring-2 ring-ring")}>
-    <div className="flex items-center justify-between gap-2"><h3 className="text-sm font-semibold">🪙 Monedas disponibles</h3><span className="text-sm font-bold tabular-nums">{count * 5}</span></div>
+    <div className="flex items-center justify-between gap-2"><h3 className="text-sm font-semibold">🪙 Monedas disponibles</h3><span className="rounded-full bg-card px-3 py-0.5 text-2xl font-extrabold tabular-nums shadow-soft">{count * 5}</span></div>
     <div className="mt-1 flex min-h-6 flex-wrap gap-1">{Array.from({ length: count }, (_, n) => <ChipNote key={`pool-${n}`} id={`pool-${n}`} origin="pool" />)}</div>
   </div>;
 }

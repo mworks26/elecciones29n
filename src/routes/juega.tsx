@@ -43,7 +43,7 @@ const ROUND_SIZE = 5;
 type Saved = GameState;
 const GAMES = [
   { id: "ordena", n: 1, label: "Ordena tus prioridades" },
-  { id: "reparte", n: 2, label: "Reparte 50 fichas" },
+  { id: "reparte", n: 2, label: "Reparte 25 fichas" },
   { id: "cartas", n: 3, label: "Laberinto" },
   { id: "resultado", n: 4, label: "Tu resultado" },
 ] as const;
