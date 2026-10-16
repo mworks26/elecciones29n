@@ -228,7 +228,7 @@ function Juega() {
                       <div className="flex justify-between gap-4"><span className="font-semibold">{parties.find((p) => p.id === r.partyId)?.name}</span>
                         <span className="tabular-nums">{r.sufficient && r.score !== null ? `${Math.round(r.score * 100)}%` : "Datos insuficientes"}</span></div>
                       {r.sufficient && r.score !== null && <div className="mt-1 h-2 overflow-hidden rounded-full bg-muted"><div className="h-full bg-lilac" style={{ width: `${r.score * 100}%` }} /></div>}
-                      <p className="mt-1 text-xs text-muted-foreground">Cobertura: {r.comparableTopics} de {r.answeredTopics} temas valorados ({Math.round(r.coverage * 100)}%){s.includePending && " · incluye propuestas pendientes de segunda revisión"}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">Cobertura: {r.comparableTopics} de {r.answeredTopics} temas valorados ({Math.round(r.coverage * 100)}%){usePending && " · incluye propuestas oficiales pendientes de segunda revisión"}</p>
                     </li>
                   ))}
                 </ul>
