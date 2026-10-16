@@ -180,8 +180,7 @@ function Juega() {
                 <p className="text-xs font-semibold uppercase tracking-widest text-accent">{label(nextCard.topic_id)} · carta {Object.keys(s.answers).filter((k) => deck.some((d) => d.id === k)).length + 1} de {deck.length}</p>
                 <h2 className="mt-3 text-3xl font-semibold">«{nextCard.title}»</h2>
                 <p className="mt-2 text-muted-foreground">{nextCard.claim_text}</p>
-                <div className="mt-4 border-t border-border pt-3">{nextCard.source_url ? <SourceLink href={nextCard.source_url}>Fuente original · {nextCard.page_or_section ?? "Documento del partido"}</SourceLink> : <p className="text-sm text-muted-foreground">Fuente directa no disponible</p>}<p className="mt-1 text-xs text-muted-foreground">{nextCard.review_status === "verified_by_human" ? "Revisión humana verificada" : "Pendiente de segunda revisión"}</p></div>
-                <p className="mt-2 text-xs text-muted-foreground">Las siglas se muestran al final. La fuente permite comprobar la autoría antes.</p>
+                <div className="mt-3">{nextCard.source_url ? <SourceLink href={nextCard.source_url}>Ver fuente</SourceLink> : <p className="text-sm text-muted-foreground">Fuente directa no disponible</p>}</div>
               </MazeGame>
             ) : (
               <Card>
