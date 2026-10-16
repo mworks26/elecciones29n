@@ -6,7 +6,7 @@ import { GameMascot, TopicDrawing } from "@/components/game-art";
 import { Grip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { transferBudgetNote } from "@/lib/game-budget";
+import { BUDGET, transferBudgetNote } from "@/lib/game-budget";
 import type { Answer } from "@/lib/affinity";
 
 const tones = ["bg-highlight text-highlight-foreground", "bg-secondary text-secondary-foreground", "bg-accent/20 text-foreground"];
@@ -41,14 +41,14 @@ export function PriorityNotes({ order, label, onChange }: { order: string[]; lab
 
 function ChipNote({ id, origin }: { id: string; origin: string }) {
   const { setNodeRef, attributes, listeners, isDragging } = useDraggable({ id, data: { origin } });
-  return <Button ref={setNodeRef} {...attributes} {...listeners} variant="secondary" aria-label={`Mover nota de 5 fichas${origin === "pool" ? " disponibles" : " asignadas"}`} className={cn("size-9 touch-none rounded-md bg-highlight p-0 text-highlight-foreground shadow-sm", isDragging && "opacity-25")}>5</Button>;
+  return <Button ref={setNodeRef} {...attributes} {...listeners} variant="secondary" aria-label={`Mover nota de 5 fichas${origin === "pool" ? " disponibles" : " asignadas"}`} className={cn("size-7 touch-none rounded-md text-xs bg-highlight p-0 text-highlight-foreground shadow-sm", isDragging && "opacity-25")}>5</Button>;
 }
 
 function ChipZone({ id, title, count, pool = false, index = 0 }: { id: string; title: string; count: number; pool?: boolean; index?: number }) {
   const { setNodeRef, isOver } = useDroppable({ id });
-  return <div ref={setNodeRef} aria-label={title} className={cn("min-w-0 rounded-lg border-2 border-dashed border-border p-4", pool ? "bg-muted" : tones[index % tones.length], isOver && "border-ring ring-2 ring-ring")}>
-    <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-2">{!pool && <TopicDrawing label={title} />}<h3 className="text-base font-semibold">{title}</h3></div><span className="font-semibold tabular-nums">{count * 5}</span></div>
-    <div className="mt-3 flex min-h-10 flex-wrap gap-2">{Array.from({ length: count }, (_, n) => <ChipNote key={`${id}-${n}`} id={`${id}-${n}`} origin={id} />)}</div>
+  return <div ref={setNodeRef} aria-label={title} className={cn("min-w-0 rounded-lg border-2 border-dashed border-border px-3 py-2", pool ? "bg-muted" : tones[index % tones.length], isOver && "border-ring ring-2 ring-ring")}>
+    <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-2">{!pool && <TopicDrawing label={title} />}<h3 className="text-sm font-semibold leading-tight">{title}</h3></div><span className="font-semibold tabular-nums">{count * 5}</span></div>
+    <div className="mt-1.5 flex min-h-7 flex-wrap gap-1">{Array.from({ length: count }, (_, n) => <ChipNote key={`${id}-${n}`} id={`${id}-${n}`} origin={id} />)}</div>
   </div>;
 }
 
@@ -65,9 +65,9 @@ export function BudgetNotes({ order, chips, label, onChange }: { order: string[]
     onChange(transferBudgetNote(chips, origin, target));
   }
   return <DndContext sensors={sensors} onDragStart={() => setDragging(true)} onDragEnd={finish} onDragCancel={() => setDragging(false)}>
-    <div className="mt-5"><ChipZone id="pool" title="Fichas disponibles" count={Math.max(0, Math.floor((100 - used) / 5))} pool /></div>
-    <div className="mt-4 grid gap-3 sm:grid-cols-2">{order.map((id, index) => <ChipZone key={id} id={id} title={label(id)} count={Math.floor((chips[id] ?? 0) / 5)} index={index} />)}</div>
-    <DragOverlay>{dragging ? <div className="flex size-9 items-center justify-center rounded-md bg-highlight font-semibold text-highlight-foreground shadow-soft">5</div> : null}</DragOverlay>
+    <div className="mt-5"><ChipZone id="pool" title="Fichas disponibles" count={Math.max(0, Math.floor((BUDGET - used) / 5))} pool /></div>
+    <div className="mt-3 grid grid-cols-2 gap-2 lg:grid-cols-3">{order.map((id, index) => <ChipZone key={id} id={id} title={label(id)} count={Math.floor((chips[id] ?? 0) / 5)} index={index} />)}</div>
+    <DragOverlay>{dragging ? <div className="flex size-7 items-center text-xs justify-center rounded-md bg-highlight font-semibold text-highlight-foreground shadow-soft">5</div> : null}</DragOverlay>
   </DndContext>;
 }
 
