@@ -37,6 +37,8 @@ export const Route = createFileRoute("/juega")({
 });
 
 const KEY = GAME_KEY;
+/** Maze round length: short rounds so the game has a clear end. */
+const ROUND_SIZE = 5;
 type Saved = GameState;
 const GAMES = [
   { id: "ordena", n: 1, label: "Ordena tus prioridades" },
@@ -106,8 +108,9 @@ function Juega() {
   }, [s.chips, s.order, usedChips]);
 
   const playable = claims.filter((c) => s.includePending || c.review_status === "verified_by_human");
-  const deck = useMemo(() => [...playable].sort((a, b) => (a.id < b.id ? -1 : 1)), [playable]);
+  const deck = useMemo(() => [...playable].sort((a, b) => (a.id < b.id ? -1 : 1)).slice(0, ROUND_SIZE), [playable]);
   const nextCard = deck.find((c) => !s.answers[c.id]);
+  const answeredInDeck = deck.filter((d) => s.answers[d.id]).length;
   const results = computeAffinity(claims, s.answers, weights, { includePending: s.includePending });
 
   const answer = (id: string, a: Answer) => setS((p) => ({ ...p, answers: { ...p.answers, [id]: a } }));
@@ -177,7 +180,16 @@ function Juega() {
               </Card>
             ) : nextCard ? (
               <MazeGame key={nextCard.id} onAnswer={(a) => answer(nextCard.id, a)}>
-                <p className="text-xs font-semibold uppercase tracking-widest text-accent">{label(nextCard.topic_id)} · carta {Object.keys(s.answers).filter((k) => deck.some((d) => d.id === k)).length + 1} de {deck.length}</p>
+                <div className="mb-4">
+                  <div className="flex items-center justify-between gap-3 text-base font-bold text-primary">
+                    <span>Propuesta {answeredInDeck + 1} de {deck.length}</span>
+                    {answeredInDeck > 0 && <Button size="sm" variant="outline" className="rounded-full" onClick={() => setGame("resultado")}>Terminar y ver mi resultado ya</Button>}
+                  </div>
+                  <div className="mt-2 h-4 overflow-hidden rounded-full border-2 border-primary bg-muted" role="progressbar" aria-valuemin={0} aria-valuemax={deck.length} aria-valuenow={answeredInDeck}>
+                    <div className="h-full bg-accent transition-all" style={{ width: `${(answeredInDeck / deck.length) * 100}%` }} />
+                  </div>
+                </div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-accent">{label(nextCard.topic_id)}</p>
                 <h2 className="mt-3 text-3xl font-semibold">«{nextCard.title}»</h2>
                 <p className="mt-2 text-muted-foreground">{nextCard.claim_text}</p>
                 <div className="mt-3">{nextCard.source_url ? <SourceLink href={nextCard.source_url}>Ver fuente</SourceLink> : <p className="text-sm text-muted-foreground">Fuente directa no disponible</p>}</div>
