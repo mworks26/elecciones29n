@@ -107,11 +107,14 @@ function Juega() {
     return Object.fromEntries(s.order.map((id, i) => [id, n - i]));
   }, [s.chips, s.order, usedChips]);
 
-  const playable = claims.filter((c) => s.includePending || c.review_status === "verified_by_human");
+  // When no double-reviewed proposals exist yet, play with officially sourced pending ones automatically.
+  const hasVerified = claims.some((c) => c.review_status === "verified_by_human");
+  const usePending = s.includePending || !hasVerified;
+  const playable = claims.filter((c) => usePending || c.review_status === "verified_by_human");
   const deck = useMemo(() => [...playable].sort((a, b) => (a.id < b.id ? -1 : 1)).slice(0, ROUND_SIZE), [playable]);
   const nextCard = deck.find((c) => !s.answers[c.id]);
   const answeredInDeck = deck.filter((d) => s.answers[d.id]).length;
-  const results = computeAffinity(claims, s.answers, weights, { includePending: s.includePending });
+  const results = computeAffinity(claims, s.answers, weights, { includePending: usePending });
 
   const answer = (id: string, a: Answer) => setS((p) => ({ ...p, answers: { ...p.answers, [id]: a } }));
   const saveResult = async () => {
@@ -169,14 +172,9 @@ function Juega() {
             <Card>
               <div className="flex items-center gap-4"><GameMascot kind={2} /><div><h2 className="text-2xl font-semibold">Laberinto de propuestas</h2><p className="text-sm text-muted-foreground">Lleva cada tarjeta a verde (de acuerdo), ámbar (en parte) o rojo (en contra).</p></div></div>
             </Card>
-            <label className="flex items-center gap-3 text-sm">
-              <Switch checked={s.includePending} onCheckedChange={(v) => setS((p) => ({ ...p, includePending: v }))} />
-              Incluir propuestas pendientes de segunda revisión
-            </label>
             {deck.length === 0 ? (
               <Card className="text-center">
-                <p className="text-muted-foreground">Aún no hay propuestas con doble revisión. Puedes jugar con propuestas de webs oficiales pendientes de segunda comprobación.</p>
-                <Button size="lg" className="mt-4 rounded-full" onClick={() => setS((p) => ({ ...p, includePending: true }))}>Abrir el laberinto con estas propuestas</Button>
+                <p className="text-muted-foreground">Todavía no hay propuestas oficiales para jugar. Vuelve pronto.</p>
               </Card>
             ) : nextCard ? (
               <MazeGame key={nextCard.id} onAnswer={(a) => answer(nextCard.id, a)}>
@@ -230,7 +228,7 @@ function Juega() {
                       <div className="flex justify-between gap-4"><span className="font-semibold">{parties.find((p) => p.id === r.partyId)?.name}</span>
                         <span className="tabular-nums">{r.sufficient && r.score !== null ? `${Math.round(r.score * 100)}%` : "Datos insuficientes"}</span></div>
                       {r.sufficient && r.score !== null && <div className="mt-1 h-2 overflow-hidden rounded-full bg-muted"><div className="h-full bg-lilac" style={{ width: `${r.score * 100}%` }} /></div>}
-                      <p className="mt-1 text-xs text-muted-foreground">Cobertura: {r.comparableTopics} de {r.answeredTopics} temas valorados ({Math.round(r.coverage * 100)}%){s.includePending && " · incluye propuestas pendientes de segunda revisión"}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">Cobertura: {r.comparableTopics} de {r.answeredTopics} temas valorados ({Math.round(r.coverage * 100)}%){usePending && " · incluye propuestas oficiales pendientes de segunda revisión"}</p>
                     </li>
                   ))}
                 </ul>
