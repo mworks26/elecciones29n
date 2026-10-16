@@ -16,3 +16,5 @@
 - [x] Replace the campaign advisor with a polished female cartoon holding a clearly visible ballot with both hands.
 - [x] Inspect the daily schedule, source coverage and duplicate candidates; correct the panel's timing and coverage description.
 - [ ] Confirm a successful real daily execution. Blocker: legacy schedule execution logs are unavailable through the supported tools; needs Cloud Jobs delivery history.
+- [x] Maze card shows only «Ver fuente».
+- [ ] More contested 2026 proposals. Blocker: parties have published few concrete official 2026 proposals; add as they appear.
