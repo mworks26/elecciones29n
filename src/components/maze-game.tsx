@@ -103,7 +103,7 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
         const walked = trail.has(`${x},${y}`);
         return <button key={`${x}-${y}`} type="button" disabled={c === "#" || !!done} onClick={() => walkTo([x, y])}
           aria-label={g ? `Salida: ${g.label}` : c === "#" ? "Muro" : c === "S" ? "Inicio" : "Camino"}
-          className={cn("relative flex aspect-square items-center justify-center rounded-sm text-[9px] font-extrabold leading-tight text-primary disabled:cursor-default sm:text-xs",
+          className={cn("relative flex aspect-square items-center justify-center rounded-md text-xl font-extrabold leading-tight text-primary disabled:cursor-default sm:text-2xl",
             here ? "z-10 overflow-visible" : "overflow-hidden",
             c === "#" ? "bg-lilac" : g ? cn(g.tone, "ring-2 ring-primary") : walked ? "bg-highlight" : "bg-card hover:bg-muted",
             g && done === g.a && "ring-4 ring-accent")}>
