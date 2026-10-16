@@ -111,7 +111,9 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
           {c === "S" && !here && <span>Inicio</span>}
           {walked && !here && !g && c !== "S" && <span aria-hidden className="size-2 rounded-full bg-accent" />}
           {here && <span className="absolute inset-0 flex items-center justify-center overflow-hidden">
-            <span className="mascot-hop flex size-[110px] shrink-0 scale-[0.4] items-center justify-center sm:scale-[0.52]"><GameMascot kind={2} /></span>
+            <span className="mascot-hop flex items-center justify-center">
+              <span className="flex size-[110px] shrink-0 scale-[0.34] items-center justify-center sm:scale-[0.42]"><GameMascot kind={2} /></span>
+            </span>
           </span>}
         </button>;
       }))}
