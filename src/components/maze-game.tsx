@@ -84,8 +84,17 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
     <p className="mx-auto mt-3 max-w-md rounded-lg border-2 border-primary bg-highlight px-4 py-3 text-center text-base font-bold text-primary shadow-soft sm:text-lg">
       👉 Toca una salida de color y el muñeco recorrerá el camino, o guíalo tú con las flechas.
     </p>
+    <div className="mx-auto mt-4 grid w-full max-w-md grid-cols-3 gap-2">
+      {(["G", "A", "R"] as const).map((k) => {
+        const g = GOALS[k]!; const x = MAP[0]!.indexOf(k);
+        return <button key={k} type="button" disabled={!!done} onClick={() => walkTo([x, 0])}
+          className={cn("rounded-lg border-2 border-primary px-2 py-2 text-center text-sm font-extrabold text-primary shadow-soft sm:text-lg", g.tone, done === g.a && "ring-4 ring-accent")}>
+          {k === "G" ? "👍" : k === "A" ? "✋" : "👎"} {g.label}
+        </button>;
+      })}
+    </div>
     <div data-maze tabIndex={0} aria-label="Laberinto. Usa las flechas del teclado para mover el muñeco."
-      className="mx-auto mt-4 grid w-full max-w-md gap-0.5 rounded-lg bg-primary p-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="mx-auto mt-3 grid w-full max-w-md gap-0.5 rounded-lg bg-primary p-1.5 outline-none focus-visible:ring-2 focus-visible:ring-ring"
       style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}>
       {MAP.flatMap((row, y) => [...row].map((c, x) => {
         const here = pos[0] === x && pos[1] === y;
@@ -93,14 +102,15 @@ export function MazeGame({ children, onAnswer }: { children: ReactNode; onAnswer
         const walked = trail.has(`${x},${y}`);
         return <button key={`${x}-${y}`} type="button" disabled={c === "#" || !!done} onClick={() => walkTo([x, y])}
           aria-label={g ? `Salida: ${g.label}` : c === "#" ? "Muro" : c === "S" ? "Inicio" : "Camino"}
-          className={cn("relative flex aspect-square items-center justify-center overflow-hidden rounded-sm text-[8px] font-bold leading-tight text-primary disabled:cursor-default sm:text-[10px]",
-            c === "#" ? "bg-lilac" : g ? g.tone : walked ? "bg-highlight" : "bg-card hover:bg-muted",
+          className={cn("relative flex aspect-square items-center justify-center rounded-sm text-[9px] font-extrabold leading-tight text-primary disabled:cursor-default sm:text-xs",
+            here ? "z-10 overflow-visible" : "overflow-hidden",
+            c === "#" ? "bg-lilac" : g ? cn(g.tone, "ring-2 ring-primary") : walked ? "bg-highlight" : "bg-card hover:bg-muted",
             g && done === g.a && "ring-4 ring-accent")}>
-          {g && !here && <span className="px-0.5 text-center">{g.label}</span>}
+          {g && !here && <span className="px-0.5 text-center">{k2e(c)}</span>}
           {c === "S" && !here && <span>Inicio</span>}
           {walked && !here && !g && c !== "S" && <span aria-hidden className="size-2 rounded-full bg-accent" />}
-          {here && <span className="absolute inset-0 flex items-center justify-center motion-safe:animate-bounce">
-            <span className="block scale-[0.34] sm:scale-[0.4]"><GameMascot kind={2} /></span>
+          {here && <span className="absolute inset-x-0 bottom-0 flex h-full items-end justify-center">
+            <span className="block origin-bottom translate-y-[30%] scale-[0.34] motion-safe:animate-[bounce_1s_ease-in-out_infinite] sm:scale-[0.4]"><GameMascot kind={2} /></span>
           </span>}
         </button>;
       }))}
