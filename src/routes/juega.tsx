@@ -171,7 +171,10 @@ function Juega() {
               Incluir propuestas pendientes de segunda revisión
             </label>
             {deck.length === 0 ? (
-              <Notice>Aún no hay propuestas 2026 verificadas por revisión humana para jugar. Puedes activar las pendientes de segunda revisión (proceden de webs oficiales, pero falta una segunda comprobación) o volver cuando se publiquen los programas.</Notice>
+              <Card className="text-center">
+                <p className="text-muted-foreground">Aún no hay propuestas con doble revisión. Puedes jugar con propuestas de webs oficiales pendientes de segunda comprobación.</p>
+                <Button size="lg" className="mt-4 rounded-full" onClick={() => setS((p) => ({ ...p, includePending: true }))}>Abrir el laberinto con estas propuestas</Button>
+              </Card>
             ) : nextCard ? (
               <MazeGame key={nextCard.id} onAnswer={(a) => answer(nextCard.id, a)}>
                 <p className="text-xs font-semibold uppercase tracking-widest text-accent">{label(nextCard.topic_id)} · carta {Object.keys(s.answers).filter((k) => deck.some((d) => d.id === k)).length + 1} de {deck.length}</p>
