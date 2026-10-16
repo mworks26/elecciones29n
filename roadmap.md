@@ -18,3 +18,4 @@
 - [ ] Confirm a successful real daily execution. Blocker: legacy schedule execution logs are unavailable through the supported tools; needs Cloud Jobs delivery history.
 - [x] Maze card shows only «Ver fuente».
 - [ ] More contested 2026 proposals. Blocker: parties have published few concrete official 2026 proposals; add as they appear.
+- [x] Reparte 50 fichas como huchas con niveles Básico/Medio/Óptimo

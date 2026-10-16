@@ -9,3 +9,10 @@ describe("50-chip allocation", () => {
     expect(transferBudgetNote({ vivienda: 0 }, "vivienda", "pool")).toEqual({ vivienda: 0 });
   });
 });
+import { budgetLevel } from "./game-budget";
+describe("budgetLevel", () => {
+  it("5 or fewer chips is Básico", () => { expect(budgetLevel(5)).toBe("basico"); });
+  it("10 chips is Medio", () => { expect(budgetLevel(10)).toBe("medio"); });
+  it("more than 10 chips is Óptimo", () => { expect(budgetLevel(15)).toBe("optimo"); });
+  it("0 chips is empty", () => { expect(budgetLevel(0)).toBe("vacio"); });
+});
