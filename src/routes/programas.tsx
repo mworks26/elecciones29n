@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Card, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
-import { documentsQuery, partiesQuery, sourcesQuery } from "@/lib/data";
+import { claimsQuery, documentsQuery, partiesQuery, sourcesQuery } from "@/lib/data";
 
 const SUMMARY_SOURCE_IDS = ["congreso_votaciones", "tracker_tupapeleta_programas"];
 import { DOC_KIND, formatDate } from "@/lib/labels";
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/programas")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(documentsQuery), context.queryClient.ensureQueryData(partiesQuery), context.queryClient.ensureQueryData(sourcesQuery)]),
+  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(documentsQuery), context.queryClient.ensureQueryData(partiesQuery), context.queryClient.ensureQueryData(sourcesQuery), context.queryClient.ensureQueryData(claimsQuery)]),
   component: Programas,
   errorComponent: RouteError,
 });
@@ -38,7 +38,10 @@ function Programas() {
   const { data: docs } = useSuspenseQuery(documentsQuery);
   const { data: parties } = useSuspenseQuery(partiesQuery);
   const { data: sources } = useSuspenseQuery(sourcesQuery);
+  const { data: claims } = useSuspenseQuery(claimsQuery);
   const summarySources = sources.filter((s) => SUMMARY_SOURCE_IDS.includes(s.id));
+  const votes = claims.filter((c) => c.evidence_type === "congress_vote" || c.evidence_type === "official_statement");
+  const summaryParties = [...parties].filter((p) => votes.some((c) => c.party_id === p.id)).sort((a, b) => (a.short_name ?? a.name).localeCompare(b.short_name ?? b.name, "es"));
   const [f, setF] = useState("full_2026");
   const name = (id: string) => parties.find((p) => p.id === id)?.short_name ?? id;
   const missing = parties.filter((p) => p.programme_2026_status === "not_located_as_of_date" || p.programme_2026_status === "historical_2023_only");
@@ -62,14 +65,23 @@ function Programas() {
           <div className="mt-6">
             <p className="text-muted-foreground">Resumen de las votaciones de los partidos en el Congreso, declaraciones y manifestaciones de los partidos.</p>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {summarySources.map((s) => (
-                <li key={s.id}><Card className="h-full p-5">
-                  <Tag tone={s.reliability === "secondary" ? "none" : "ok"}>{s.reliability === "secondary" ? "Fuente secundaria independiente" : "Fuente oficial"}</Tag>
-                  <div className="mt-3"><SourceLink href={s.url} meta={s.publisher ?? undefined}>{s.title}</SourceLink></div>
-                  <p className="mt-1 text-xs text-muted-foreground">Última comprobación: {formatDate(s.last_checked)}</p>
+              {summaryParties.map((p) => (
+                <li key={p.id}><Card className="h-full p-5">
+                  <p className="font-serif text-xl font-semibold">{p.short_name ?? p.name}</p>
+                  <ul className="mt-3 space-y-3">
+                    {votes.filter((c) => c.party_id === p.id).map((c) => (
+                      <li key={c.id} className="border-t border-border pt-3">
+                        <p className="text-sm font-semibold">{c.title}</p>
+                        <p className="mt-1 text-sm"><Tag tone={c.position === "supports" ? "ok" : "none"}>{c.position === "supports" ? "Apoyó" : "Rechazó"}</Tag> {c.claim_text}</p>
+                        {c.source_url && <div className="mt-1"><SourceLink href={c.source_url} meta={c.page_or_section ?? undefined}>Fuente: Congreso de los Diputados · votaciones</SourceLink></div>}
+                      </li>
+                    ))}
+                  </ul>
                 </Card></li>
               ))}
             </ul>
+            <p className="mt-6 text-sm text-muted-foreground">Más contexto y declaraciones:</p>
+            <ul className="mt-2 space-y-1">{summarySources.map((s) => <li key={s.id}><SourceLink href={s.url} meta={s.publisher ?? undefined}>{s.title}</SourceLink></li>)}</ul>
           </div>
         ) : f === "missing" ? (
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
