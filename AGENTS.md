@@ -9,21 +9,14 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-## Project rules
-- Political content lives in the database (parties, sources, programme_documents, claims, change_log); the UI never hardcodes party positions. Why: every claim must stay traceable to a source.
-- Claims with review_status `auto_extracted_unverified`/`rejected` are hidden by RLS; affinity scoring uses only `verified_by_human` unless the user opts in. Why: never publish unverified positions.
-- Affinity formula lives in src/lib/affinity.ts with tests; missing data never adds or subtracts. Why: neutrality.
-- Site search (/buscar) is a plain client-side text filter over database content; the AI chat is retired and /asistente redirects there. Why: no invented information and no AI credit usage.
-- Game answers/history use consent-gated localStorage and a cookie containing only saving consent, never political answers; cloud game data uses a backward-compatible versioned current/history envelope and syncs only after explicit opt-in on /cuenta. Revocation wipes saved data. Why: political preferences are sensitive and cookies are transmitted to servers.
-- The election countdown uses the current Europe/Madrid calendar date, independently of documentary last-checked dates. Why: daily changes and daylight saving must not miscount days or imply a new source review.
-- The original uploaded cover is extracted as a source-controlled SVG and game artwork is shared by visual game components without changing scoring. Why: preserve the provided drawing and keep game behavior independent of illustrations.
-- The campaign advisor uses one bundled transparent illustration through AdvisorMascot, independent of simulator logic. Why: consistent artwork must not change political scoring.
-- Admin role is granted by a DB trigger only to an allow-listed email once confirmed; admin edits write a change_log row. Why: public signup is open, so first-signup admin would be unsafe.
-- Code uses only the standard Supabase client and SQL migrations in drizzle/migrations, so the app can be moved to a self-hosted Supabase by replaying migrations and swapping env keys. Why: user plans external hosting.
-- Game drag interactions use dnd-kit in a shared game-notes module, preserving the existing saved order and chip allocation shape. Why: mouse, touch and keyboard interaction must not alter affinity rules or consent.
-- Proposal opinion choices use a maze (maze-game.tsx) with labelled traffic-light goals plus tap-to-walk, arrows and a skip button, mapped to the existing affinity answer values. Why: playful but unambiguous, and still counts toward affinity.
-- Data-only editorial updates are replayable SQL in sql/data, applied after schema migrations on export. Why: the managed schema migrator excludes data-only operations while official-source updates must remain portable.
-- A daily scheduled job calls /api/public/hooks/sync-programmes, which only records detected programme changes in update_candidates for admin review. Why: the public callback token is not authentication, so it must never publish data.
-- Preserve unmanaged HTTP schedule authentication until a compatible migration is supported; report schedule timing separately from successful execution evidence. Why: an active legacy schedule does not establish delivery, and blind auth changes can break it.
-- Page translation uses the free Google Translate widget driven by our own selector (googtrans cookie holds only the language); Spanish stays the authoritative original and a notice says so. Why: multilingual voters without AI credit usage or hand-maintained translations of sourced content.
-- The daily programme watcher also scans each party official_site/programme_archive for 2026 programme links, storing them only as update_candidates (origin web_oficial). Why: aggregators lag official publications, and detection must never publish.
+## Project rules (keep terse)
+- Political data only from DB (parties, sources, programme_documents, claims, change_log), always with source. Never hardcode positions.
+- RLS hides `auto_extracted_unverified`/`rejected` claims; affinity (src/lib/affinity.ts, tested) uses verified claims unless opt-in; missing data is neutral.
+- /buscar is a client-side text filter; AI chat retired (/asistente redirects). External Nubion widget loaded in __root.
+- Game data: consent-gated localStorage; cookie stores only consent; cloud sync only after opt-in on /cuenta (versioned envelope); revocation wipes.
+- Countdown uses Europe/Madrid current date.
+- Artwork (cover SVG, game-art, AdvisorMascot) never affects scoring. Drag uses dnd-kit in game-notes; maze-game maps traffic-light goals to affinity answers.
+- Admin role: DB trigger for allow-listed confirmed email; admin edits write change_log.
+- Portability: standard Supabase client, schema in drizzle/migrations, data-only updates as replayable SQL in sql/data.
+- Daily job -> /api/public/hooks/sync-programmes (aggregator + party official sites) only inserts update_candidates; never publishes. Keep legacy schedule auth.
+- Translation: Google Translate widget via own selector; Spanish authoritative.

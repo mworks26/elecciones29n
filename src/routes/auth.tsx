@@ -31,7 +31,21 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
-  useEffect(() => { if (session) navigate({ to: "/cuenta", replace: true }); }, [session, navigate]);
+  const [justSignedIn, setJustSignedIn] = useState(false);
+  useEffect(() => { if (session && justSignedIn) navigate({ to: "/cuenta", replace: true }); }, [session, justSignedIn, navigate]);
+
+  if (session && !justSignedIn) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-14">
+        <Card>
+          <h1 className="text-3xl font-semibold">Ya tienes una sesión abierta</h1>
+          <p className="mt-2 text-sm text-muted-foreground">Has entrado como {session.user.email}. Para crear o usar otra cuenta, cierra antes esta sesión.</p>
+          <button onClick={() => supabase.auth.signOut()} className="mt-5 w-full rounded-full bg-primary py-2.5 font-semibold text-primary-foreground">Cerrar sesión</button>
+          <button onClick={() => navigate({ to: "/cuenta" })} className="mt-2 w-full rounded-full border border-input bg-card py-2.5 text-sm font-semibold">Ir a mi cuenta</button>
+        </Card>
+      </div>
+    );
+  }
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -46,8 +60,9 @@ function AuthPage() {
         if (error) throw error;
         toast.success("Revisa tu correo para confirmar la cuenta.");
       } else {
+        setJustSignedIn(true);
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) { setJustSignedIn(false); throw error; }
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "No se ha podido completar.");

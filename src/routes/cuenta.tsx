@@ -72,7 +72,8 @@ function Cuenta() {
   return (
     <>
       <PageIntro eyebrow="Mi cuenta" title="Tus datos, bajo tu control.">
-        Sesión iniciada como {session.user.email}. <button onClick={signOut} className="underline">Cerrar sesión</button>
+        Sesión iniciada como {session.user.email}.
+        <div><button onClick={signOut} className="mt-3 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Cerrar sesión</button></div>
       </PageIntro>
       <div className="mx-auto grid max-w-5xl gap-6 px-4 md:grid-cols-2">
         <Card>
