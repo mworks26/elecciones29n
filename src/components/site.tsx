@@ -32,7 +32,7 @@ export function SiteHeader() {
             <AccountLink />
           </div>
         </div>
-        <nav aria-label="Principal" className="flex flex-wrap gap-1 text-sm">
+        <nav aria-label="Principal" className="flex min-w-0 max-w-full flex-wrap gap-1 text-sm">
           {NAV.map((n, index) => {
             const Icon = NAV_ICONS[index] ?? Home;
             return <Button asChild variant="ghost" key={n.to} className="h-auto rounded-full p-0"><Link

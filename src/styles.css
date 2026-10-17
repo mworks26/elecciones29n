@@ -182,3 +182,5 @@ body { top: 0 !important; }
 /* Burbuja de chat más grande y siempre visible (no expandida). */
 #nubion-widget:not(.chat-expanded) { transform: scale(1.35); transform-origin: bottom right; }
 @media (max-width: 640px) { #nubion-widget:not(.chat-expanded) { transform: scale(1.5); bottom: calc(28px + env(safe-area-inset-bottom, 16px)) !important; right: 16px !important; } }
+/* Evita que la página se ensanche en móvil (dejaba el chatbot fuera de pantalla). */
+html, body { max-width: 100%; overflow-x: clip; }

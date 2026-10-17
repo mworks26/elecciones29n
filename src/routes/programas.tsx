@@ -110,7 +110,7 @@ function Programas() {
   );
 }
 
-type Vote = { id: string; party_id: string; title: string; position: string; source_url: string | null };
+type Vote = { id: string; party_id: string; title: string; position: string; source_url: string | null; quote_or_paraphrase?: string | null };
 /** Party-level vote split per Congress vote, built only from stored claims (no invented seat counts). */
 function VoteCharts({ votes, name }: { votes: Vote[]; name: (id: string) => string }) {
   const groups = Object.entries(votes.reduce<Record<string, Vote[]>>((a, v) => ((a[v.title] ??= []).push(v), a), {}));
@@ -121,6 +121,9 @@ function VoteCharts({ votes, name }: { votes: Vote[]; name: (id: string) => stri
         const yes = vs.filter((v) => v.position === "supports");
         const no = vs.filter((v) => v.position !== "supports");
         const pct = Math.round((yes.length / vs.length) * 100);
+        const tallyText = vs.find((v) => parseTally(v.quote_or_paraphrase))?.quote_or_paraphrase ?? null;
+        const t = parseTally(tallyText);
+        const total = t ? t.yes + t.no + t.abstain : 0;
         return (
           <Card key={title} className="p-5">
             <p className="font-semibold">{title}</p>
@@ -133,6 +136,22 @@ function VoteCharts({ votes, name }: { votes: Vote[]; name: (id: string) => stri
               <div><p className="font-semibold">En contra ({no.length})</p><p className="text-muted-foreground">{no.map((v) => name(v.party_id)).join(", ") || "—"}</p></div>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">Recuento por partidos, no por escaños.</p>
+            {t && total > 0 && (
+              <div className="mt-4 border-t border-border pt-3">
+                <p className="text-sm font-semibold">Barómetro de votos (diputados)</p>
+                <div className="mt-2 flex h-5 overflow-hidden rounded-full border border-border" role="img" aria-label={`${t.yes} sí, ${t.no} no, ${t.abstain} abstenciones`}>
+                  <div className="bg-go" style={{ width: `${(t.yes / total) * 100}%` }} />
+                  <div className="bg-wait" style={{ width: `${(t.abstain / total) * 100}%` }} />
+                  <div className="bg-stop" style={{ width: `${(t.no / total) * 100}%` }} />
+                </div>
+                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                  <span className="inline-flex items-center gap-1.5"><span className="size-3 rounded-full bg-go" />Sí: <b>{t.yes}</b></span>
+                  <span className="inline-flex items-center gap-1.5"><span className="size-3 rounded-full bg-wait" />Abstención: <b>{t.abstain}</b></span>
+                  <span className="inline-flex items-center gap-1.5"><span className="size-3 rounded-full bg-stop" />No: <b>{t.no}</b></span>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">{tallyText}</p>
+              </div>
+            )}
             {vs[0]?.source_url && <div className="mt-1"><SourceLink href={vs[0]!.source_url!}>Fuente: Congreso de los Diputados</SourceLink></div>}
           </Card>
         );

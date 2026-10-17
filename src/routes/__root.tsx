@@ -139,10 +139,10 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <a href="#main" className="sr-only focus:not-sr-only">Saltar al contenido</a>
       <div className="sticky top-0 z-30">
-        <SiteHeader />
-        <TranslationNotice />
         <BannerRow />
       </div>
+      <SiteHeader />
+      <TranslationNotice />
       <main id="main">
         <Outlet />
       </main>
