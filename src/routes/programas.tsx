@@ -29,7 +29,7 @@ const FILTERS = [
   { id: "full_2026", label: "Programa íntegro 2026" },
   { id: "partial_2026", label: "Manifiesto/propuestas 2026" },
   { id: "official_statement_2026", label: "Comunicados oficiales 2026" },
-  { id: "summaries", label: "Resúmenes partidos" },
+  { id: "summaries", label: "Noticias" },
   { id: "historical_2023", label: "Histórico 2023" },
   { id: "missing", label: "No localizado" },
 ];
@@ -64,7 +64,9 @@ function Programas() {
         {f === "summaries" ? (
           <div className="mt-6">
             <p className="text-muted-foreground">Resumen de las votaciones de los partidos en el Congreso, declaraciones y manifestaciones de los partidos.</p>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-2"><SourceLink href="https://www.congreso.es/es/notas-de-prensa" meta="Congreso de los Diputados">Notas de prensa oficiales del Congreso</SourceLink></div>
+            <VoteCharts votes={votes.filter((c) => c.evidence_type === "congress_vote")} name={name} />
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {summaryParties.map((p) => (
                 <li key={p.id}><Card className="h-full p-5">
                   <p className="font-serif text-xl font-semibold">{p.short_name ?? p.name}</p>

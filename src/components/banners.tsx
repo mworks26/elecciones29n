@@ -26,7 +26,6 @@ export function BannerRow() {
   return (
     <aside aria-label="Publicidad" className="border-b border-border bg-secondary/80 backdrop-blur">
       <div className="mx-auto flex h-10 max-w-6xl items-center gap-2 px-4">
-        <span className="shrink-0 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">Banner</span>
         <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
           {data.map((b) => (
             <a key={b.id} href={b.target_url} target="_blank" rel="noopener noreferrer sponsored" title={b.title}
