@@ -125,12 +125,12 @@ function VoteCharts({ votes, name }: { votes: Vote[]; name: (id: string) => stri
           <Card key={title} className="p-5">
             <p className="font-semibold">{title}</p>
             <div className="mt-3 flex h-6 overflow-hidden rounded-full border border-border" role="img" aria-label={`${yes.length} partidos a favor y ${no.length} en contra`}>
-              <div className="bg-success" style={{ width: `${pct}%` }} />
-              <div className="flex-1 bg-destructive" />
+              <div className="bg-primary" style={{ width: `${pct}%` }} />
+              <div className="flex-1 bg-accent" />
             </div>
             <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
-              <div><p className="font-semibold">🟢 A favor ({yes.length})</p><p className="text-muted-foreground">{yes.map((v) => name(v.party_id)).join(", ") || "—"}</p></div>
-              <div><p className="font-semibold">🔴 En contra ({no.length})</p><p className="text-muted-foreground">{no.map((v) => name(v.party_id)).join(", ") || "—"}</p></div>
+              <div><p className="font-semibold">A favor ({yes.length})</p><p className="text-muted-foreground">{yes.map((v) => name(v.party_id)).join(", ") || "—"}</p></div>
+              <div><p className="font-semibold">En contra ({no.length})</p><p className="text-muted-foreground">{no.map((v) => name(v.party_id)).join(", ") || "—"}</p></div>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">Recuento por partidos, no por escaños.</p>
             {vs[0].source_url && <div className="mt-1"><SourceLink href={vs[0].source_url}>Fuente: Congreso de los Diputados</SourceLink></div>}
