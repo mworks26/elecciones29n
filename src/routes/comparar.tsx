@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FavoriteButton } from "@/components/favorite-button";
 import { Card, Notice, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
 import { claimsQuery, partiesQuery, topicsQuery } from "@/lib/data";
-import { POSITION, REVIEW_STATUS, formatDate } from "@/lib/labels";
+import { POSITION, formatDate } from "@/lib/labels";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/comparar")({

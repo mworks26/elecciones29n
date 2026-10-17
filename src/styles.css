@@ -141,7 +141,7 @@
 .nav-pill-5 { background: oklch(0.93 0.045 55); }
 .nav-pill-6 { background: oklch(0.94 0.04 185); }
 .nav-pill-active { background: var(--primary) !important; color: var(--primary-foreground) !important; }
-#nubion-widget { right: 8px !important; left: auto !important; bottom: 8px !important; top: auto !important; max-width: calc(100vw - 8px) !important; outline: none !important; box-shadow: none !important; border: 0 !important; background: transparent !important; color-scheme: normal; }
+#nubion-widget { position: fixed !important; z-index: 2147483000 !important; right: 8px !important; left: auto !important; bottom: 8px !important; top: auto !important; max-width: calc(100vw - 8px) !important; outline: none !important; box-shadow: none !important; border: 0 !important; background: transparent !important; color-scheme: normal; }
 #nubion-widget:focus, #nubion-widget:focus-visible { outline: none !important; }
 #nubion-widget.chat-expanded { right: 0 !important; bottom: -72px !important; transform-origin: bottom right; }
 @media (max-height: 700px) { #nubion-widget.chat-expanded { transform: scale(0.85); bottom: -62px !important; } }
@@ -179,3 +179,6 @@ body { top: 0 !important; }
   50% { transform: translateY(-4px); }
 }
 .mascot-hop { animation: mascot-hop 0.8s ease-in-out infinite; }
+/* Burbuja de chat más grande y siempre visible (no expandida). */
+#nubion-widget:not(.chat-expanded) { transform: scale(1.35); transform-origin: bottom right; }
+@media (max-width: 640px) { #nubion-widget:not(.chat-expanded) { transform: scale(1.5); bottom: 12px !important; right: 12px !important; } }
