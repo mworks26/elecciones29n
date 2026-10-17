@@ -62,6 +62,14 @@ function Index() {
           <span className="cover-voice rounded-full bg-highlight px-4 py-3 font-serif text-lg text-highlight-foreground">Tu voz</span>
         </div>
       </section>
+      <div className="mx-auto max-w-6xl px-4 pb-6">
+        <Link to="/politico" className="flex items-center justify-between gap-4 rounded-3xl bg-highlight p-5 text-highlight-foreground shadow-soft transition-transform hover:-translate-y-0.5">
+          <span><span className="block font-serif text-2xl font-semibold">🗳️ Conviértete en político/a por un día</span><span className="text-sm">Crea tu programa con una asesora y descubre a qué partido se parece.</span></span>
+          <ArrowRight aria-hidden />
+        </Link>
+      </div>
+
+
 
       <section className="bg-secondary">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-4 py-7">

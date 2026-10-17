@@ -19,3 +19,6 @@
 - [x] Maze card shows only «Ver fuente».
 - [ ] More contested 2026 proposals. Blocker: parties have published few concrete official 2026 proposals; add as they appear.
 - [x] Reparte 50 fichas como huchas con niveles Básico/Medio/Óptimo
+
+- [x] Portada: tarjeta Político/a; Noticias + gráfico votaciones; franja sin rótulo
+- [ ] AdSense: falta código ca-pub del usuario

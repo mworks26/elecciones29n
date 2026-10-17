@@ -29,7 +29,7 @@ const FILTERS = [
   { id: "full_2026", label: "Programa íntegro 2026" },
   { id: "partial_2026", label: "Manifiesto/propuestas 2026" },
   { id: "official_statement_2026", label: "Comunicados oficiales 2026" },
-  { id: "summaries", label: "Resúmenes partidos" },
+  { id: "summaries", label: "Noticias" },
   { id: "historical_2023", label: "Histórico 2023" },
   { id: "missing", label: "No localizado" },
 ];
@@ -64,7 +64,9 @@ function Programas() {
         {f === "summaries" ? (
           <div className="mt-6">
             <p className="text-muted-foreground">Resumen de las votaciones de los partidos en el Congreso, declaraciones y manifestaciones de los partidos.</p>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-2"><SourceLink href="https://www.congreso.es/es/notas-de-prensa" meta="Congreso de los Diputados">Notas de prensa oficiales del Congreso</SourceLink></div>
+            <VoteCharts votes={votes.filter((c) => c.evidence_type === "congress_vote")} name={name} />
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {summaryParties.map((p) => (
                 <li key={p.id}><Card className="h-full p-5">
                   <p className="font-serif text-xl font-semibold">{p.short_name ?? p.name}</p>
@@ -105,5 +107,36 @@ function Programas() {
         )}
       </div>
     </>
+  );
+}
+
+type Vote = { id: string; party_id: string; title: string; position: string; source_url: string | null };
+/** Party-level vote split per Congress vote, built only from stored claims (no invented seat counts). */
+function VoteCharts({ votes, name }: { votes: Vote[]; name: (id: string) => string }) {
+  const groups = Object.entries(votes.reduce<Record<string, Vote[]>>((a, v) => ((a[v.title] ??= []).push(v), a), {}));
+  if (!groups.length) return null;
+  return (
+    <div className="mt-6 grid gap-4 md:grid-cols-2">
+      {groups.map(([title, vs]) => {
+        const yes = vs.filter((v) => v.position === "supports");
+        const no = vs.filter((v) => v.position !== "supports");
+        const pct = Math.round((yes.length / vs.length) * 100);
+        return (
+          <Card key={title} className="p-5">
+            <p className="font-semibold">{title}</p>
+            <div className="mt-3 flex h-6 overflow-hidden rounded-full border border-border" role="img" aria-label={`${yes.length} partidos a favor y ${no.length} en contra`}>
+              <div className="bg-primary" style={{ width: `${pct}%` }} />
+              <div className="flex-1 bg-accent" />
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+              <div><p className="font-semibold">A favor ({yes.length})</p><p className="text-muted-foreground">{yes.map((v) => name(v.party_id)).join(", ") || "—"}</p></div>
+              <div><p className="font-semibold">En contra ({no.length})</p><p className="text-muted-foreground">{no.map((v) => name(v.party_id)).join(", ") || "—"}</p></div>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">Recuento por partidos, no por escaños.</p>
+            {vs[0]?.source_url && <div className="mt-1"><SourceLink href={vs[0]!.source_url!}>Fuente: Congreso de los Diputados</SourceLink></div>}
+          </Card>
+        );
+      })}
+    </div>
   );
 }
