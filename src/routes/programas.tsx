@@ -7,6 +7,7 @@ import { claimsQuery, documentsQuery, partiesQuery, sourcesQuery } from "@/lib/d
 const SUMMARY_SOURCE_IDS = ["congreso_votaciones", "tracker_tupapeleta_programas"];
 import { DOC_KIND, formatDate } from "@/lib/labels";
 import { cn } from "@/lib/utils";
+import { parseTally } from "@/lib/vote-tally";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/programas")({
