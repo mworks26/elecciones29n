@@ -49,6 +49,7 @@ export const SOURCE_TYPE: Record<string, string> = {
   official_electoral_information: "Información electoral oficial",
   independent_secondary_tracker: "Seguimiento independiente (secundaria)",
   official_party_source: "Web oficial del partido",
+  official_institution: "Institución oficial",
 };
 
 export const formatDate = (d: string | null | undefined) =>

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 type Ctx = { session: Session | null; ready: boolean };
 const SessionCtx = createContext<Ctx>({ session: null, ready: false });
@@ -13,6 +14,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     const { data } = supabase.auth.onAuthStateChange((event, s) => {
       setState({ session: s, ready: true });
       if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "USER_UPDATED") qc.invalidateQueries({ queryKey: ["me"] });
+      if (event === "SIGNED_OUT") toast.success("Has cerrado la sesión correctamente.");
     });
     supabase.auth.getSession().then(({ data: d }) => setState({ session: d.session, ready: true }));
     return () => data.subscription.unsubscribe();

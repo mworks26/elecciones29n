@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Card, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
-import { documentsQuery, partiesQuery } from "@/lib/data";
+import { documentsQuery, partiesQuery, sourcesQuery } from "@/lib/data";
+
+const SUMMARY_SOURCE_IDS = ["congreso_votaciones", "tracker_tupapeleta_programas"];
 import { DOC_KIND, formatDate } from "@/lib/labels";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,7 +20,7 @@ export const Route = createFileRoute("/programas")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(documentsQuery), context.queryClient.ensureQueryData(partiesQuery)]),
+  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(documentsQuery), context.queryClient.ensureQueryData(partiesQuery), context.queryClient.ensureQueryData(sourcesQuery)]),
   component: Programas,
   errorComponent: RouteError,
 });
@@ -27,6 +29,7 @@ const FILTERS = [
   { id: "full_2026", label: "Programa íntegro 2026" },
   { id: "partial_2026", label: "Manifiesto/propuestas 2026" },
   { id: "official_statement_2026", label: "Comunicados oficiales 2026" },
+  { id: "summaries", label: "Resúmenes partidos" },
   { id: "historical_2023", label: "Histórico 2023" },
   { id: "missing", label: "No localizado" },
 ];
@@ -34,6 +37,8 @@ const FILTERS = [
 function Programas() {
   const { data: docs } = useSuspenseQuery(documentsQuery);
   const { data: parties } = useSuspenseQuery(partiesQuery);
+  const { data: sources } = useSuspenseQuery(sourcesQuery);
+  const summarySources = sources.filter((s) => SUMMARY_SOURCE_IDS.includes(s.id));
   const [f, setF] = useState("full_2026");
   const name = (id: string) => parties.find((p) => p.id === id)?.short_name ?? id;
   const missing = parties.filter((p) => p.programme_2026_status === "not_located_as_of_date" || p.programme_2026_status === "historical_2023_only");
@@ -53,7 +58,20 @@ function Programas() {
             </Button>
           ))}
         </div>
-        {f === "missing" ? (
+        {f === "summaries" ? (
+          <div className="mt-6">
+            <p className="text-muted-foreground">Resumen de las votaciones de los partidos en el Congreso, declaraciones y manifestaciones de los partidos.</p>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {summarySources.map((s) => (
+                <li key={s.id}><Card className="h-full p-5">
+                  <Tag tone={s.reliability === "secondary" ? "none" : "ok"}>{s.reliability === "secondary" ? "Fuente secundaria independiente" : "Fuente oficial"}</Tag>
+                  <div className="mt-3"><SourceLink href={s.url} meta={s.publisher ?? undefined}>{s.title}</SourceLink></div>
+                  <p className="mt-1 text-xs text-muted-foreground">Última comprobación: {formatDate(s.last_checked)}</p>
+                </Card></li>
+              ))}
+            </ul>
+          </div>
+        ) : f === "missing" ? (
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {missing.map((p) => (
               <li key={p.id}><Card className="p-5"><p className="font-semibold">{p.short_name}</p><p className="text-sm text-muted-foreground">Programa 2026 sin localizar a fecha {formatDate(p.last_checked)}</p></Card></li>
