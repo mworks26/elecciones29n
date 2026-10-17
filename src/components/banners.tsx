@@ -25,12 +25,12 @@ export function BannerRow() {
   if (!data.length) return null;
   return (
     <aside aria-label="Publicidad" className="border-b border-border bg-secondary/80 backdrop-blur">
-      <div className="mx-auto flex h-9 max-w-6xl items-center gap-2 px-4">
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-4">
         <span className="shrink-0 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">Publicidad</span>
         <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
           {data.map((b) => (
             <a key={b.id} href={b.target_url} target="_blank" rel="noopener noreferrer sponsored" title={b.title}
-              className="block h-7 w-32 shrink-0 overflow-hidden rounded-md border border-border bg-card md:w-40">
+              className="block h-12 w-44 shrink-0 overflow-hidden rounded-md border border-border bg-card md:w-56">
               <Media b={b} className="h-full w-full object-cover" />
             </a>
           ))}
