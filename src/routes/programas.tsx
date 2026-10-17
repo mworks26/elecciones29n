@@ -133,7 +133,7 @@ function VoteCharts({ votes, name }: { votes: Vote[]; name: (id: string) => stri
               <div><p className="font-semibold">En contra ({no.length})</p><p className="text-muted-foreground">{no.map((v) => name(v.party_id)).join(", ") || "—"}</p></div>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">Recuento por partidos, no por escaños.</p>
-            {vs[0].source_url && <div className="mt-1"><SourceLink href={vs[0].source_url}>Fuente: Congreso de los Diputados</SourceLink></div>}
+            {vs[0]?.source_url && <div className="mt-1"><SourceLink href={vs[0]?.source_url}>Fuente: Congreso de los Diputados</SourceLink></div>}
           </Card>
         );
       })}
