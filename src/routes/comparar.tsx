@@ -66,7 +66,10 @@ function Comparar() {
                         <li key={c.id}>
                           <p className="font-medium">{c.title}</p>
                           <p className="text-sm text-muted-foreground">{c.claim_text}</p>
-                          <div className="mt-2 flex flex-wrap gap-2"><Tag tone="partial">{POSITION[c.position]}</Tag><Tag>{REVIEW_STATUS[c.review_status]}</Tag></div>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            <Tag tone="partial">Postura: {c.position === "supports" ? "lo propone" : POSITION[c.position]}</Tag>
+                            <Tag>{c.review_status === "verified_by_human" ? "✔ Comprobado por la redacción" : "Fuente oficial · comprobación en curso"}</Tag>
+                          </div>
                           <div className="mt-2"><FavoriteButton claimId={c.id} /></div>
                           {c.source_url && <div className="mt-2"><SourceLink href={c.source_url} meta={`${c.page_or_section ?? ""} · ${formatDate(c.checked_at)}`}>Fuente</SourceLink></div>}
                         </li>
