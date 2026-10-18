@@ -22,7 +22,7 @@ export const Route = createFileRoute("/contacto")({
 });
 
 function Contacto() {
-  const formEmbedUrl = "https://docs.google.com/forms/d/e/1FAIpQLSce7LiawTbjetTKsPT0p3g24_buB0u-_k0CX7GhVPInSJiEVg/viewform?embedded=true";
+  const formEmbedUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe44CcVju99qxR4-3-9OC-XroIURpoXm_KaTqD02IIKZQAwOA/viewform?embedded=true";
   const privacyNoticeUrl = "/privacidad";
   const contactReady = true;
 
@@ -74,7 +74,7 @@ function Contacto() {
                 src={formEmbedUrl}
                 title="Formulario de contacto de Elecciones 29N"
                 className="w-full rounded-2xl border border-border bg-background"
-                style={{ minHeight: "760px" }}
+                style={{ minHeight: "990px" }}
                 loading="lazy"
                 referrerPolicy="strict-origin-when-cross-origin"
               />
