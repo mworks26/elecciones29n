@@ -14,6 +14,8 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AsistenteRouteImport } from './routes/asistente'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BuscarRouteImport } from './routes/buscar'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as ApiContactRouteImport } from './routes/api/contact'
 import { Route as CompararRouteImport } from './routes/comparar'
 import { Route as CuentaRouteImport } from './routes/cuenta'
 import { Route as FuentesRouteImport } from './routes/fuentes'
@@ -51,6 +53,16 @@ const AuthRoute = AuthRouteImport.update({
 const BuscarRoute = BuscarRouteImport.update({
   id: '/buscar',
   path: '/buscar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiContactRoute = ApiContactRouteImport.update({
+  id: '/api/contact',
+  path: '/api/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompararRoute = CompararRouteImport.update({
@@ -126,6 +138,8 @@ export interface FileRoutesByFullPath {
   '/asistente': typeof AsistenteRoute
   '/auth': typeof AuthRoute
   '/buscar': typeof BuscarRoute
+  '/contacto': typeof ContactoRoute
+  '/api/contact': typeof ApiContactRoute
   '/comparar': typeof CompararRoute
   '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
@@ -146,6 +160,8 @@ export interface FileRoutesByTo {
   '/asistente': typeof AsistenteRoute
   '/auth': typeof AuthRoute
   '/buscar': typeof BuscarRoute
+  '/contacto': typeof ContactoRoute
+  '/api/contact': typeof ApiContactRoute
   '/comparar': typeof CompararRoute
   '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
@@ -167,6 +183,8 @@ export interface FileRoutesById {
   '/asistente': typeof AsistenteRoute
   '/auth': typeof AuthRoute
   '/buscar': typeof BuscarRoute
+  '/contacto': typeof ContactoRoute
+  '/api/contact': typeof ApiContactRoute
   '/comparar': typeof CompararRoute
   '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
@@ -189,6 +207,8 @@ export interface FileRouteTypes {
     | '/asistente'
     | '/auth'
     | '/buscar'
+    | '/contacto'
+    | '/api/contact'
     | '/comparar'
     | '/cuenta'
     | '/fuentes'
@@ -209,6 +229,8 @@ export interface FileRouteTypes {
     | '/asistente'
     | '/auth'
     | '/buscar'
+    | '/contacto'
+    | '/api/contact'
     | '/comparar'
     | '/cuenta'
     | '/fuentes'
@@ -229,6 +251,8 @@ export interface FileRouteTypes {
     | '/asistente'
     | '/auth'
     | '/buscar'
+    | '/contacto'
+    | '/api/contact'
     | '/comparar'
     | '/cuenta'
     | '/fuentes'
@@ -300,6 +324,20 @@ declare module '@tanstack/react-router' {
       path: '/buscar'
       fullPath: '/buscar'
       preLoaderRoute: typeof BuscarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/contact': {
+      id: '/api/contact'
+      path: '/api/contact'
+      fullPath: '/api/contact'
+      preLoaderRoute: typeof ApiContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comparar': {
@@ -402,6 +440,8 @@ const rootRouteChildren: RootRouteChildren = {
   AsistenteRoute: AsistenteRoute,
   AuthRoute: AuthRoute,
   BuscarRoute: BuscarRoute,
+  ContactoRoute: ContactoRoute,
+  ApiContactRoute: ApiContactRoute,
   CompararRoute: CompararRoute,
   CuentaRoute: CuentaRoute,
   FuentesRoute: FuentesRoute,

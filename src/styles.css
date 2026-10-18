@@ -140,6 +140,8 @@
 .nav-pill-4 { background: var(--highlight); }
 .nav-pill-5 { background: oklch(0.93 0.045 55); }
 .nav-pill-6 { background: oklch(0.94 0.04 185); }
+.nav-pill-7 { background: oklch(0.91 0.07 305); }
+.nav-pill-contacto { background: oklch(0.48 0.16 305) !important; color: white !important; }
 .nav-pill-active { background: var(--primary) !important; color: var(--primary-foreground) !important; }
 #nubion-widget { position: fixed !important; z-index: 2147483000 !important; right: 8px !important; left: auto !important; bottom: 8px !important; top: auto !important; max-width: calc(100vw - 8px) !important; outline: none !important; box-shadow: none !important; border: 0 !important; background: transparent !important; color-scheme: normal; }
 #nubion-widget:focus, #nubion-widget:focus-visible { outline: none !important; }

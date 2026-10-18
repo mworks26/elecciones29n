@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ExternalLink, Home, Users, BookOpen, Scale, Gamepad2, Search, ShieldCheck } from "lucide-react";
+import { ExternalLink, Home, Users, BookOpen, Scale, Gamepad2, Search, ShieldCheck, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -15,8 +15,9 @@ const NAV = [
   { to: "/juega", label: "Juega" },
   { to: "/fuentes", label: "Fuentes" },
   { to: "/buscar", label: "Buscador" },
+  { to: "/contacto", label: "Contacto" },
 ] as const;
-const NAV_ICONS = [Home, Users, BookOpen, Scale, Gamepad2, ShieldCheck, Search];
+const NAV_ICONS = [Home, Users, BookOpen, Scale, Gamepad2, ShieldCheck, Search, Mail];
 
 export function SiteHeader() {
   return (
@@ -39,8 +40,8 @@ export function SiteHeader() {
               key={n.to}
               to={n.to}
               activeOptions={{ exact: n.to === "/" }}
-              className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-2 font-medium text-foreground transition-transform hover:-translate-y-0.5", `nav-pill-${index % 7}`)}
-              activeProps={{ className: "nav-pill-active" }}
+              className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-2 font-medium text-foreground transition-transform hover:-translate-y-0.5", `nav-pill-${index % 8}`)}
+              activeProps={{ className: n.to === "/contacto" ? "nav-pill-active nav-pill-contacto" : "nav-pill-active" }}
             >
               <Icon className="size-4" aria-hidden />{n.label}
             </Link></Button>;
