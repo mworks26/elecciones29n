@@ -74,7 +74,7 @@ function Contacto() {
                 src={formEmbedUrl}
                 title="Formulario de contacto de Elecciones 29N"
                 className="block w-full max-w-full rounded-xl border border-border bg-background"
-                style={{ height: "1600px", minHeight: "1600px" }}
+                style={{ height: "1400px", minHeight: "1400px" }}
                 loading="lazy"
                 referrerPolicy="strict-origin-when-cross-origin"
               />
