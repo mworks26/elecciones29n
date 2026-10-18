@@ -25,12 +25,12 @@ export function BannerRow() {
   if (!data.length) return null;
   return (
     <aside aria-label="Publicidad" className="border-b border-border bg-secondary/80 backdrop-blur">
-      <div className="mx-auto flex h-10 max-w-6xl items-center gap-2 px-4">
+      <div className="mx-auto flex h-12 max-w-6xl items-center gap-2 px-4">
         <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
           {data.map((b) => (
             <a key={b.id} href={b.target_url} target="_blank" rel="noopener noreferrer sponsored" title={b.title}
-              className="block h-8 w-40 shrink-0 overflow-hidden rounded-md border border-border bg-card md:w-48">
-              <Media b={b} className="h-full w-full object-cover" />
+              className="block h-10 w-40 shrink-0 overflow-hidden rounded-md border border-border bg-card md:w-48">
+              <Media b={b} className="h-full w-full object-contain" />
             </a>
           ))}
         </div>
@@ -87,7 +87,7 @@ export function BannerAdmin({ userId }: { userId: string }) {
           <div className="mt-4 rounded-xl border border-border bg-secondary/80 p-2">
             <p className="mb-1 text-xs text-muted-foreground">Vista previa de la franja</p>
             <div className="flex gap-2 overflow-x-auto">{data.filter((b) => b.is_active).map((b) => (
-              <div key={b.id} className="h-7 w-40 shrink-0 overflow-hidden rounded-md border border-border bg-card"><Media b={b} className="h-full w-full object-cover" /></div>))}</div>
+              <div key={b.id} className="h-7 w-40 shrink-0 overflow-hidden rounded-md border border-border bg-card"><Media b={b} className="h-full w-full object-contain" /></div>))}</div>
           </div>
         )}
         <form onSubmit={add} className="mt-4 grid gap-3 md:grid-cols-2">
