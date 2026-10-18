@@ -32,13 +32,13 @@ function Contacto() {
         ¿Tienes alguna pregunta, sugerencia o comentario sobre Elecciones 29N? Envíanos tu mensaje mediante el formulario de contacto.
       </PageIntro>
 
-      <section className="mx-auto grid max-w-6xl gap-6 px-4 pb-16 lg:grid-cols-[0.8fr_1.2fr]">
-        <div className="space-y-5">
+      <section className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-4 px-4 pb-16 sm:gap-5 lg:grid-cols-[0.65fr_1.65fr] lg:gap-6">
+        <div className="order-2 min-w-0 space-y-4 lg:order-1 lg:space-y-5">
           <Card className="relative overflow-hidden bg-secondary">
             <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-card text-accent shadow-soft">
               <MessageCircle className="size-6" aria-hidden />
             </div>
-            <h2 className="text-2xl font-semibold">Cuéntanos qué necesitas</h2>
+            <h2 className="text-xl font-semibold sm:text-2xl">Cuéntanos qué necesitas</h2>
             <p className="mt-2 text-muted-foreground">
               Este espacio está pensado para preguntas, sugerencias y comentarios sobre el funcionamiento y el contenido de la web.
             </p>
@@ -61,9 +61,9 @@ function Contacto() {
           </Card>
         </div>
 
-        <Card className="min-w-0">
+        <Card className="order-1 min-w-0 lg:order-2">
           <p className="text-sm font-semibold uppercase tracking-widest text-accent">Formulario de contacto</p>
-          <h2 className="mt-2 text-2xl font-semibold">Contacto — Tu voto empieza aquí</h2>
+          <h2 className="mt-2 text-xl font-semibold sm:text-2xl">Contacto — Tu voto empieza aquí</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             El formulario solicita nombre, correo electrónico y mensaje.
           </p>
@@ -73,8 +73,8 @@ function Contacto() {
               <iframe
                 src={formEmbedUrl}
                 title="Formulario de contacto de Elecciones 29N"
-                className="w-full rounded-2xl border border-border bg-background"
-                style={{ minHeight: "990px" }}
+                className="block w-full max-w-full rounded-xl border border-border bg-background"
+                style={{ height: "1150px", minHeight: "1150px" }}
                 loading="lazy"
                 referrerPolicy="strict-origin-when-cross-origin"
               />
