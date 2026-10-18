@@ -17,6 +17,8 @@ import { Route as BuscarRouteImport } from './routes/buscar'
 import { Route as CompararRouteImport } from './routes/comparar'
 import { Route as CuentaRouteImport } from './routes/cuenta'
 import { Route as FuentesRouteImport } from './routes/fuentes'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as JuegaRouteImport } from './routes/juega'
 import { Route as PoliticoRouteImport } from './routes/politico'
 import { Route as ProgramasRouteImport } from './routes/programas'
@@ -66,6 +68,16 @@ const CuentaRoute = CuentaRouteImport.update({
 const FuentesRoute = FuentesRouteImport.update({
   id: '/fuentes',
   path: '/fuentes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadRoute = PrivacidadRouteImport.update({
+  id: '/privacidad',
+  path: '/privacidad',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JuegaRoute = JuegaRouteImport.update({
@@ -128,6 +140,8 @@ export interface FileRoutesByFullPath {
   '/buscar': typeof BuscarRoute
   '/comparar': typeof CompararRoute
   '/cuenta': typeof CuentaRoute
+  '/contacto': typeof ContactoRoute
+  '/privacidad': typeof PrivacidadRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
   '/politico': typeof PoliticoRoute
@@ -148,6 +162,8 @@ export interface FileRoutesByTo {
   '/buscar': typeof BuscarRoute
   '/comparar': typeof CompararRoute
   '/cuenta': typeof CuentaRoute
+  '/contacto': typeof ContactoRoute
+  '/privacidad': typeof PrivacidadRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
   '/politico': typeof PoliticoRoute
@@ -169,6 +185,8 @@ export interface FileRoutesById {
   '/buscar': typeof BuscarRoute
   '/comparar': typeof CompararRoute
   '/cuenta': typeof CuentaRoute
+  '/contacto': typeof ContactoRoute
+  '/privacidad': typeof PrivacidadRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
   '/politico': typeof PoliticoRoute
@@ -191,6 +209,8 @@ export interface FileRouteTypes {
     | '/buscar'
     | '/comparar'
     | '/cuenta'
+    | '/contacto'
+    | '/privacidad'
     | '/fuentes'
     | '/juega'
     | '/politico'
@@ -211,6 +231,8 @@ export interface FileRouteTypes {
     | '/buscar'
     | '/comparar'
     | '/cuenta'
+    | '/contacto'
+    | '/privacidad'
     | '/fuentes'
     | '/juega'
     | '/politico'
@@ -231,6 +253,8 @@ export interface FileRouteTypes {
     | '/buscar'
     | '/comparar'
     | '/cuenta'
+    | '/contacto'
+    | '/privacidad'
     | '/fuentes'
     | '/juega'
     | '/politico'
@@ -252,6 +276,8 @@ export interface RootRouteChildren {
   BuscarRoute: typeof BuscarRoute
   CompararRoute: typeof CompararRoute
   CuentaRoute: typeof CuentaRoute
+  ContactoRoute: typeof ContactoRoute
+  PrivacidadRoute: typeof PrivacidadRoute
   FuentesRoute: typeof FuentesRoute
   JuegaRoute: typeof JuegaRoute
   PoliticoRoute: typeof PoliticoRoute
@@ -307,6 +333,20 @@ declare module '@tanstack/react-router' {
       path: '/comparar'
       fullPath: '/comparar'
       preLoaderRoute: typeof CompararRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidad': {
+      id: '/privacidad'
+      path: '/privacidad'
+      fullPath: '/privacidad'
+      preLoaderRoute: typeof PrivacidadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cuenta': {
@@ -404,6 +444,8 @@ const rootRouteChildren: RootRouteChildren = {
   BuscarRoute: BuscarRoute,
   CompararRoute: CompararRoute,
   CuentaRoute: CuentaRoute,
+  ContactoRoute: ContactoRoute,
+  PrivacidadRoute: PrivacidadRoute,
   FuentesRoute: FuentesRoute,
   JuegaRoute: JuegaRoute,
   PoliticoRoute: PoliticoRoute,
