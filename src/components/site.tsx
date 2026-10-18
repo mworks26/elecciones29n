@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ExternalLink, Home, Users, BookOpen, Scale, Gamepad2, Search, ShieldCheck } from "lucide-react";
+import { ExternalLink, Home, Users, BookOpen, Scale, Gamepad2, Search, ShieldCheck, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -15,8 +15,9 @@ const NAV = [
   { to: "/juega", label: "Juega" },
   { to: "/fuentes", label: "Fuentes" },
   { to: "/buscar", label: "Buscador" },
+  { to: "/contacto", label: "Contacto" },
 ] as const;
-const NAV_ICONS = [Home, Users, BookOpen, Scale, Gamepad2, ShieldCheck, Search];
+const NAV_ICONS = [Home, Users, BookOpen, Scale, Gamepad2, ShieldCheck, Search, Mail];
 
 export function SiteHeader() {
   return (
@@ -69,7 +70,7 @@ export function SiteFooter() {
     <footer className="mt-20 border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 pb-24 pt-8 text-center text-sm text-muted-foreground">
         <p>Herramienta informativa e independiente. No es una recomendación de voto.</p>
-        <Link to="/admin" className="underline-offset-4 hover:underline">Panel editorial</Link>
+        <div className="flex flex-wrap justify-center gap-4"><Link to="/contacto" className="underline-offset-4 hover:underline">Contacto</Link><Link to="/admin" className="underline-offset-4 hover:underline">Panel editorial</Link></div>
       </div>
     </footer>
   );
