@@ -70,7 +70,7 @@ export function SiteFooter() {
     <footer className="mt-20 border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 pb-24 pt-8 text-center text-sm text-muted-foreground">
         <p>Herramienta informativa e independiente. No es una recomendación de voto.</p>
-        <div className="flex flex-wrap justify-center gap-4"><Link to="/contacto" className="underline-offset-4 hover:underline">Contacto</Link><Link to="/admin" className="underline-offset-4 hover:underline">Panel editorial</Link></div>
+        <div className="flex flex-wrap justify-center gap-4"><Link to="/contacto" className="underline-offset-4 hover:underline">Contacto</Link><Link to="/admin" className="font-bold underline-offset-4 hover:underline">Panel editorial</Link></div>
       </div>
     </footer>
   );
