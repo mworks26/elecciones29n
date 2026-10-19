@@ -33,7 +33,7 @@ export function PriorityNotes({ order, label, onChange }: { order: string[]; lab
   }
   return <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={({ active: item }) => setActive(String(item.id))} onDragEnd={finish} onDragCancel={() => setActive(null)}>
     <SortableContext items={order} strategy={rectSortingStrategy}>
-      <ol aria-label="Notas de prioridades" className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">{order.map((id, index) => <PriorityNote key={id} id={id} label={label(id)} index={index} />)}</ol>
+      <ol aria-label="Notas de prioridades" className="mt-5 grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">{order.map((id, index) => <PriorityNote key={id} id={id} label={label(id)} index={index} />)}</ol>
     </SortableContext>
     <DragOverlay>{active ? <div className="flex h-16 items-center gap-2 rounded-lg border border-ring bg-highlight px-3 text-sm font-semibold text-highlight-foreground shadow-soft"><TopicDrawing label={label(active)} />{label(active)}</div> : null}</DragOverlay>
   </DndContext>;

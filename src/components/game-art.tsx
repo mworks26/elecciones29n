@@ -19,7 +19,7 @@ export function TopicDrawing({ label }: { label: string }) {
   const map: [RegExp, string][] = [
     [/pensi/, "👴👵"], [/salud|sanidad/, "🏥"], [/dependen|cuidad/, "🤝"], [/educa/, "📚"], [/ciencia|innova|digital/, "🔬"],
     [/vivienda/, "🏡"], [/clima|medio ambiente/, "🌍"], [/energ/, "⚡"], [/rural|agri|campo/, "🌾"], [/empleo|trabajo/, "💼"],
-    [/impuesto|fiscal/, "🧾"], [/econom/, "📊"], [/transporte|movilidad/, "🚆"], [/igualdad|género|derechos civiles/, "🟰📄"], [/justicia|tribunal|juzgado/, "⚖️"], [/segur|defensa/, "🛡️"],
+    [/impuesto|fiscal/, "🧾"], [/econom/, "📊"], [/transporte|movilidad/, "🚆"], [/igualdad|género|derechos civiles/, "🟰"], [/justicia|tribunal|juzgado/, "⚖️"], [/segur|defensa/, "🛡️"],
     [/migra|asilo/, "🫂"], [/europa|exterior/, "🇪🇺"], [/territori|autonom/, "🗺️"], [/cultura/, "🎭"], [/democr|corrup|transpar/, "🗳️"],
   ];
   const symbol = map.find(([r]) => r.test(l))?.[1] ?? "💬";
