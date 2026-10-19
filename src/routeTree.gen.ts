@@ -15,12 +15,12 @@ import { Route as AsistenteRouteImport } from './routes/asistente'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BuscarRouteImport } from './routes/buscar'
 import { Route as CompararRouteImport } from './routes/comparar'
+import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as CuentaRouteImport } from './routes/cuenta'
 import { Route as FuentesRouteImport } from './routes/fuentes'
-import { Route as ContactoRouteImport } from './routes/contacto'
-import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as JuegaRouteImport } from './routes/juega'
 import { Route as PoliticoRouteImport } from './routes/politico'
+import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as ProgramasRouteImport } from './routes/programas'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
@@ -60,6 +60,11 @@ const CompararRoute = CompararRouteImport.update({
   path: '/comparar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CuentaRoute = CuentaRouteImport.update({
   id: '/cuenta',
   path: '/cuenta',
@@ -70,16 +75,6 @@ const FuentesRoute = FuentesRouteImport.update({
   path: '/fuentes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactoRoute = ContactoRouteImport.update({
-  id: '/contacto',
-  path: '/contacto',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacidadRoute = PrivacidadRouteImport.update({
-  id: '/privacidad',
-  path: '/privacidad',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const JuegaRoute = JuegaRouteImport.update({
   id: '/juega',
   path: '/juega',
@@ -88,6 +83,11 @@ const JuegaRoute = JuegaRouteImport.update({
 const PoliticoRoute = PoliticoRouteImport.update({
   id: '/politico',
   path: '/politico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadRoute = PrivacidadRouteImport.update({
+  id: '/privacidad',
+  path: '/privacidad',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProgramasRoute = ProgramasRouteImport.update({
@@ -139,12 +139,12 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/buscar': typeof BuscarRoute
   '/comparar': typeof CompararRoute
-  '/cuenta': typeof CuentaRoute
   '/contacto': typeof ContactoRoute
-  '/privacidad': typeof PrivacidadRoute
+  '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
   '/politico': typeof PoliticoRoute
+  '/privacidad': typeof PrivacidadRoute
   '/programas': typeof ProgramasRoute
   '/reset-password': typeof ResetPasswordRoute
   '/api/chat': typeof ApiChatRoute
@@ -161,12 +161,12 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/buscar': typeof BuscarRoute
   '/comparar': typeof CompararRoute
-  '/cuenta': typeof CuentaRoute
   '/contacto': typeof ContactoRoute
-  '/privacidad': typeof PrivacidadRoute
+  '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
   '/politico': typeof PoliticoRoute
+  '/privacidad': typeof PrivacidadRoute
   '/programas': typeof ProgramasRoute
   '/reset-password': typeof ResetPasswordRoute
   '/api/chat': typeof ApiChatRoute
@@ -184,12 +184,12 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/buscar': typeof BuscarRoute
   '/comparar': typeof CompararRoute
-  '/cuenta': typeof CuentaRoute
   '/contacto': typeof ContactoRoute
-  '/privacidad': typeof PrivacidadRoute
+  '/cuenta': typeof CuentaRoute
   '/fuentes': typeof FuentesRoute
   '/juega': typeof JuegaRoute
   '/politico': typeof PoliticoRoute
+  '/privacidad': typeof PrivacidadRoute
   '/programas': typeof ProgramasRoute
   '/reset-password': typeof ResetPasswordRoute
   '/api/chat': typeof ApiChatRoute
@@ -208,12 +208,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/buscar'
     | '/comparar'
-    | '/cuenta'
     | '/contacto'
-    | '/privacidad'
+    | '/cuenta'
     | '/fuentes'
     | '/juega'
     | '/politico'
+    | '/privacidad'
     | '/programas'
     | '/reset-password'
     | '/api/chat'
@@ -230,12 +230,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/buscar'
     | '/comparar'
-    | '/cuenta'
     | '/contacto'
-    | '/privacidad'
+    | '/cuenta'
     | '/fuentes'
     | '/juega'
     | '/politico'
+    | '/privacidad'
     | '/programas'
     | '/reset-password'
     | '/api/chat'
@@ -252,12 +252,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/buscar'
     | '/comparar'
-    | '/cuenta'
     | '/contacto'
-    | '/privacidad'
+    | '/cuenta'
     | '/fuentes'
     | '/juega'
     | '/politico'
+    | '/privacidad'
     | '/programas'
     | '/reset-password'
     | '/api/chat'
@@ -275,12 +275,12 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BuscarRoute: typeof BuscarRoute
   CompararRoute: typeof CompararRoute
-  CuentaRoute: typeof CuentaRoute
   ContactoRoute: typeof ContactoRoute
-  PrivacidadRoute: typeof PrivacidadRoute
+  CuentaRoute: typeof CuentaRoute
   FuentesRoute: typeof FuentesRoute
   JuegaRoute: typeof JuegaRoute
   PoliticoRoute: typeof PoliticoRoute
+  PrivacidadRoute: typeof PrivacidadRoute
   ProgramasRoute: typeof ProgramasRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -342,13 +342,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/privacidad': {
-      id: '/privacidad'
-      path: '/privacidad'
-      fullPath: '/privacidad'
-      preLoaderRoute: typeof PrivacidadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/cuenta': {
       id: '/cuenta'
       path: '/cuenta'
@@ -375,6 +368,13 @@ declare module '@tanstack/react-router' {
       path: '/politico'
       fullPath: '/politico'
       preLoaderRoute: typeof PoliticoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidad': {
+      id: '/privacidad'
+      path: '/privacidad'
+      fullPath: '/privacidad'
+      preLoaderRoute: typeof PrivacidadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/programas': {
@@ -443,12 +443,12 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BuscarRoute: BuscarRoute,
   CompararRoute: CompararRoute,
-  CuentaRoute: CuentaRoute,
   ContactoRoute: ContactoRoute,
-  PrivacidadRoute: PrivacidadRoute,
+  CuentaRoute: CuentaRoute,
   FuentesRoute: FuentesRoute,
   JuegaRoute: JuegaRoute,
   PoliticoRoute: PoliticoRoute,
+  PrivacidadRoute: PrivacidadRoute,
   ProgramasRoute: ProgramasRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiChatRoute: ApiChatRoute,
