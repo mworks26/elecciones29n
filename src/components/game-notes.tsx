@@ -13,8 +13,8 @@ const tones = ["bg-highlight text-highlight-foreground", "bg-secondary text-seco
 
 function priorityLabelSize(label: string) {
   if (label.length >= 34) return "text-[10px] min-[420px]:text-[11px] sm:text-xs";
-  if (label.length >= 28) return "text-[11px] min-[420px]:text-xs sm:text-sm";
-  if (label.length >= 22) return "text-xs sm:text-sm";
+  if (label.length >= 28) return "text-[11px] min-[420px]:text-xs sm:text-[13px]";
+  if (label.length >= 22) return "text-xs sm:text-[13px]";
   return "text-sm";
 }
 
