@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Card, PageIntro, RouteError, SourceLink, Tag } from "@/components/site";
-import { changeLogQuery, sourcesQuery } from "@/lib/data";
+import { sourcesQuery } from "@/lib/data";
 import { SOURCE_TYPE, formatDate } from "@/lib/labels";
 import { MIN_COVERAGE } from "@/lib/affinity";
 
@@ -9,21 +9,20 @@ export const Route = createFileRoute("/fuentes")({
   head: () => ({
     meta: [
       { title: "Fuentes y metodología — Elecciones 2026" },
-      { name: "description", content: "Registro de fuentes, fórmula de afinidad, límites conocidos e historial de cambios." },
+      { name: "description", content: "Registro de fuentes, fórmula de afinidad y límites conocidos." },
       { property: "og:title", content: "Fuentes y metodología — Elecciones 2026" },
       { property: "og:description", content: "Todo dato necesita un origen. Aquí están todos." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(sourcesQuery), context.queryClient.ensureQueryData(changeLogQuery)]),
+  loader: ({ context }) => context.queryClient.ensureQueryData(sourcesQuery),
   component: Fuentes,
   errorComponent: RouteError,
 });
 
 function Fuentes() {
   const { data: sources } = useSuspenseQuery(sourcesQuery);
-  const { data: log } = useSuspenseQuery(changeLogQuery);
   return (
     <>
       <PageIntro eyebrow="Fuentes" title="Todo dato necesita un origen." />
@@ -60,14 +59,6 @@ function Fuentes() {
               <li>No confundimos programa 2023 y 2026, ni manifiesto con programa íntegro.</li>
               <li>Tus respuestas de los juegos se quedan en tu navegador.</li>
             </ul>
-          </Card>
-          <Card>
-            <h2 className="text-2xl font-semibold">Historial de cambios</h2>
-            {log.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">Carga inicial del {formatDate("2026-10-13")} desde el paquete de datos verificado. Sin cambios posteriores.</p> : (
-              <ul className="mt-3 space-y-2 text-sm">
-                {log.map((l) => <li key={l.id}><span className="text-muted-foreground">{new Date(l.created_at).toLocaleString("es-ES")}</span> · {l.action} {l.entity} «{l.entity_id}»{l.reason && ` — ${l.reason}`}</li>)}
-              </ul>
-            )}
           </Card>
         </section>
       </div>
