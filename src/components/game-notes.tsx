@@ -12,18 +12,24 @@ import type { Answer } from "@/lib/affinity";
 const tones = ["bg-highlight text-highlight-foreground", "bg-secondary text-secondary-foreground", "bg-accent/20 text-foreground"];
 
 function priorityLabelSize(label: string) {
-  if (label.length >= 34) return "text-[10px] min-[420px]:text-[11px] sm:text-xs";
-  if (label.length >= 28) return "text-[11px] min-[420px]:text-xs sm:text-[13px]";
-  if (label.length >= 22) return "text-xs sm:text-[13px]";
-  return "text-sm";
+  if (label.length >= 34) return "text-[9px] min-[420px]:text-[10px] sm:text-[11px]";
+  if (label.length >= 28) return "text-[10px] min-[420px]:text-[11px] sm:text-xs";
+  if (label.length >= 22) return "text-[11px] sm:text-xs";
+  return "text-xs sm:text-sm";
+}
+
+function budgetTitleSize(title: string) {
+  if (title.length >= 28) return "text-[10px] sm:text-xs";
+  if (title.length >= 22) return "text-[11px] sm:text-xs";
+  return "text-xs sm:text-sm";
 }
 
 function PriorityNote({ id, label, index }: { id: string; label: string; index: number }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
-  return <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={cn("min-w-0", isDragging && "opacity-30")}>
-    <Button {...attributes} {...listeners} variant="ghost" aria-label={`Mover ${label}`} className={cn("min-h-16 h-auto w-full touch-none items-center justify-start gap-2 whitespace-normal cartoon-note rounded-lg border border-border px-3 py-2 text-left shadow-soft hover:ring-2 hover:ring-ring", tones[index % tones.length])}>
-      <span className="shrink-0 font-serif text-lg tabular-nums">{index + 1}</span>
-      <span className="shrink-0"><TopicDrawing label={label} /></span>
+  return <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={cn("min-w-0 max-w-full", isDragging && "opacity-30")}>
+    <Button {...attributes} {...listeners} variant="ghost" aria-label={`Mover ${label}`} className={cn("min-h-16 h-auto min-w-0 max-w-full w-full overflow-hidden touch-none items-center justify-start gap-1 whitespace-normal cartoon-note rounded-lg border border-border px-2 py-2 text-left shadow-soft hover:ring-2 hover:ring-ring", tones[index % tones.length])}>
+      <span className="shrink-0 font-serif text-base tabular-nums">{index + 1}</span>
+      <span className="shrink-0"><TopicDrawing label={label} className="!text-lg" /></span>
       <span className={cn("min-w-0 flex-1 whitespace-normal break-normal hyphens-none font-semibold leading-tight [overflow-wrap:normal]", priorityLabelSize(label))} lang="es">{label}</span>
       <Grip aria-hidden className="size-4 shrink-0 opacity-50" />
     </Button>
@@ -42,7 +48,7 @@ export function PriorityNotes({ order, label, onChange }: { order: string[]; lab
   }
   return <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={({ active: item }) => setActive(String(item.id))} onDragEnd={finish} onDragCancel={() => setActive(null)}>
     <SortableContext items={order} strategy={rectSortingStrategy}>
-      <ol aria-label="Notas de prioridades" className="mt-5 grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">{order.map((id, index) => <PriorityNote key={id} id={id} label={label(id)} index={index} />)}</ol>
+      <ol aria-label="Notas de prioridades" className="mt-5 grid grid-cols-1 gap-2 min-[540px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">{order.map((id, index) => <PriorityNote key={id} id={id} label={label(id)} index={index} />)}</ol>
     </SortableContext>
     <DragOverlay>{active ? <div className="flex h-16 items-center gap-2 rounded-lg border border-ring bg-highlight px-3 text-sm font-semibold text-highlight-foreground shadow-soft"><TopicDrawing label={label(active)} />{label(active)}</div> : null}</DragOverlay>
   </DndContext>;
@@ -65,10 +71,10 @@ function PiggyBank({ id, title, count, index, onAdd, onRemove, canAdd }: { id: s
   const total = count * 5;
   const level = LEVELS[budgetLevel(total)];
   return <div ref={setNodeRef} aria-label={title} className={cn("min-w-0 rounded-xl border-2 border-dashed border-border px-2 py-1.5 transition-transform", tones[index % tones.length], isOver && "scale-105 border-ring ring-2 ring-ring")}>
-    <div className="flex items-center gap-1.5">
-      <TopicDrawing label={title} />
-      <h3 className="min-w-0 flex-1 hyphens-auto text-xs font-semibold leading-tight [overflow-wrap:normal] sm:text-sm" lang="es">{title}</h3>
-      <span className="min-w-9 rounded-full bg-card px-2 py-0.5 text-center text-lg font-extrabold tabular-nums shadow-soft">{total}</span>
+    <div className="flex min-w-0 items-center gap-1">
+      <TopicDrawing label={title} className="!text-lg" />
+      <h3 className={cn("min-w-0 flex-1 whitespace-normal break-normal hyphens-none font-semibold leading-tight [overflow-wrap:normal]", budgetTitleSize(title))} lang="es">{title}</h3>
+      <span className="min-w-9 shrink-0 rounded-full bg-card px-2 py-0.5 text-center text-lg font-extrabold tabular-nums shadow-soft">{total}</span>
     </div>
     <div className="mt-1 flex items-center gap-1">
       <span key={level.label} className={cn("animate-in zoom-in rounded-full px-2 py-0.5 text-[10px] font-bold", level.cls)}>{level.label}</span>
