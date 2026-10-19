@@ -14,7 +14,7 @@ export function GameMascot({ kind = 0, className }: { kind?: number; className?:
   </span>;
 }
 
-export function TopicDrawing({ label }: { label: string }) {
+export function TopicDrawing({ label, className }: { label: string; className?: string }) {
   const l = label.toLowerCase();
   const map: [RegExp, string][] = [
     [/pensi/, "👴👵"], [/salud|sanidad/, "🏥"], [/dependen|cuidad/, "🤝"], [/educa/, "📚"], [/ciencia|innova|digital/, "🔬"],
@@ -23,5 +23,5 @@ export function TopicDrawing({ label }: { label: string }) {
     [/migra|asilo/, "🌐"], [/europa|exterior/, "🇪🇺"], [/territori|autonom/, "🗺️"], [/cultura/, "🎭"], [/democr|corrup|transpar/, "🗳️"],
   ];
   const symbol = map.find(([r]) => r.test(l))?.[1] ?? "💬";
-  return <span aria-hidden className={symbol === "=" ? "text-3xl font-bold leading-none text-primary" : "text-2xl leading-none"}>{symbol}</span>;
+  return <span aria-hidden className={cn(symbol === "=" ? "text-3xl font-bold leading-none text-primary" : "text-2xl leading-none", className)}>{symbol}</span>;
 }
