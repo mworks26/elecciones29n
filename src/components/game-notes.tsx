@@ -11,12 +11,21 @@ import type { Answer } from "@/lib/affinity";
 
 const tones = ["bg-highlight text-highlight-foreground", "bg-secondary text-secondary-foreground", "bg-accent/20 text-foreground"];
 
+function priorityLabelSize(label: string) {
+  if (label.length >= 34) return "text-[10px] min-[420px]:text-[11px] sm:text-xs";
+  if (label.length >= 28) return "text-[11px] min-[420px]:text-xs sm:text-sm";
+  if (label.length >= 22) return "text-xs sm:text-sm";
+  return "text-sm";
+}
+
 function PriorityNote({ id, label, index }: { id: string; label: string; index: number }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   return <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={cn("min-w-0", isDragging && "opacity-30")}>
-    <Button {...attributes} {...listeners} variant="ghost" aria-label={`Mover ${label}`} className={cn("h-16 w-full touch-none items-center justify-start gap-2 whitespace-normal cartoon-note rounded-lg border border-border px-3 py-2 text-left shadow-soft hover:ring-2 hover:ring-ring", tones[index % tones.length])}>
-      <span className="font-serif text-lg tabular-nums">{index + 1}</span>
-      <TopicDrawing label={label} /><span className="min-w-0 flex-1 hyphens-auto break-normal text-sm font-semibold leading-tight [overflow-wrap:normal]" lang="es">{label}</span><Grip aria-hidden className="size-4 shrink-0 opacity-50" />
+    <Button {...attributes} {...listeners} variant="ghost" aria-label={`Mover ${label}`} className={cn("min-h-16 h-auto w-full touch-none items-center justify-start gap-2 whitespace-normal cartoon-note rounded-lg border border-border px-3 py-2 text-left shadow-soft hover:ring-2 hover:ring-ring", tones[index % tones.length])}>
+      <span className="shrink-0 font-serif text-lg tabular-nums">{index + 1}</span>
+      <span className="shrink-0"><TopicDrawing label={label} /></span>
+      <span className={cn("min-w-0 flex-1 whitespace-normal break-normal hyphens-none font-semibold leading-tight [overflow-wrap:normal]", priorityLabelSize(label))} lang="es">{label}</span>
+      <Grip aria-hidden className="size-4 shrink-0 opacity-50" />
     </Button>
   </li>;
 }
