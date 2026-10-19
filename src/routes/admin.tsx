@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useSession } from "@/lib/session";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, PageIntro } from "@/components/site";
-import { claimsQuery, documentsQuery, partiesQuery, sourcesQuery, topicsQuery } from "@/lib/data";
+import { changeLogQuery, claimsQuery, documentsQuery, partiesQuery, sourcesQuery, topicsQuery } from "@/lib/data";
 import { CANDIDATE_STATUS, DOC_KIND, EVIDENCE_TYPE, POSITION, PROGRAMME_STATUS, REVIEW_STATUS } from "@/lib/labels";
 import { cn } from "@/lib/utils";
 import { BannerAdmin } from "@/components/banners";
@@ -102,12 +102,13 @@ function Editor({ userId }: { userId: string }) {
   return (
     <div className="mt-6">
       <div className="flex flex-wrap gap-2">
-        {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"], ["avisos", "Programas por verificar"], ["banners", "Banners"]] as const).map(([id, l]) => (
+        {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"], ["avisos", "Programas por verificar"], ["banners", "Banners"], ["historial", "Historial"]] as const).map(([id, l]) => (
           <button key={id} onClick={() => setTab(id)} className={cn("rounded-full border px-4 py-1.5 text-sm", tab === id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>{l}</button>
         ))}
       </div>
 
       {tab === "banners" && <BannerAdmin userId={userId} />}
+      {tab === "historial" && <ChangeLog />}
 
 
       {tab === "partidos" && (
@@ -264,5 +265,19 @@ function Candidates({ userId, partyOpts }: { userId: string; partyOpts: Record<s
         </Card>
       ))}
     </div>
+  );
+}
+
+function ChangeLog() {
+  const { data = [] } = useQuery(changeLogQuery);
+  return (
+    <Card className="mt-6">
+      <h2 className="text-xl font-semibold">Historial de cambios</h2>
+      {data.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">Sin cambios registrados.</p> : (
+        <ul className="mt-3 space-y-2 text-sm">
+          {data.map((l) => <li key={l.id}><span className="text-muted-foreground">{new Date(l.created_at).toLocaleString("es-ES")}</span> · {l.action} {l.entity} «{l.entity_id}»{l.reason && ` — ${l.reason}`}</li>)}
+        </ul>
+      )}
+    </Card>
   );
 }
