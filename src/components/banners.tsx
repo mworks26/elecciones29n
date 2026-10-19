@@ -29,7 +29,7 @@ export function BannerRow() {
         <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto">
           {data.map((b) => (
             <a key={b.id} href={b.target_url} target="_blank" rel="noopener noreferrer sponsored" title={b.title}
-              className="block h-10 w-40 shrink-0 overflow-hidden rounded-md bg-secondary md:w-48">
+              className="block h-10 w-40 shrink-0 overflow-hidden rounded-md bg-secondary/80 md:w-48">
               <Media b={b} className="h-full w-full object-contain" />
             </a>
           ))}
@@ -87,7 +87,7 @@ export function BannerAdmin({ userId }: { userId: string }) {
           <div className="mt-4 rounded-xl border border-border bg-secondary/80 p-2">
             <p className="mb-1 text-xs text-muted-foreground">Vista previa de la franja</p>
             <div className="flex gap-2 overflow-x-auto">{data.filter((b) => b.is_active).map((b) => (
-              <div key={b.id} className="h-7 w-40 shrink-0 overflow-hidden rounded-md bg-secondary"><Media b={b} className="h-full w-full object-contain" /></div>))}</div>
+              <div key={b.id} className="h-7 w-40 shrink-0 overflow-hidden rounded-md bg-secondary/80"><Media b={b} className="h-full w-full object-contain" /></div>))}</div>
           </div>
         )}
         <form onSubmit={add} className="mt-4 grid gap-3 md:grid-cols-2">
