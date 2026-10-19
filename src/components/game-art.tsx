@@ -23,5 +23,5 @@ export function TopicDrawing({ label }: { label: string }) {
     [/migra|asilo/, "🌐"], [/europa|exterior/, "🇪🇺"], [/territori|autonom/, "🗺️"], [/cultura/, "🎭"], [/democr|corrup|transpar/, "🗳️"],
   ];
   const symbol = map.find(([r]) => r.test(l))?.[1] ?? "💬";
-  return <span aria-hidden className="text-2xl leading-none">{symbol}</span>;
+  return <span aria-hidden className={symbol === "=" ? "text-3xl font-bold leading-none text-primary" : "text-2xl leading-none"}>{symbol}</span>;
 }
