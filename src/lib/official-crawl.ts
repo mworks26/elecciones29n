@@ -31,3 +31,11 @@ export function extractCandidateLinks(html: string, baseUrl: string): FoundLink[
   }
   return [...out.values()].slice(0, 20);
 }
+
+/** Suggests the document type for a detected link; the editor can change it. */
+export function suggestKind(text: string, url: string): "full_2026" | "partial_2026" {
+  const hay = `${text} ${decodeURIComponent(url)}`.toLowerCase();
+  if (/manifiesto|propuesta|ponencia|compromiso|bases/.test(hay)) return "partial_2026";
+  if (/programa|plan de gobierno|proyecto de pa[ií]s/.test(hay)) return "full_2026";
+  return "partial_2026";
+}

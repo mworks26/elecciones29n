@@ -10,6 +10,7 @@ import { CANDIDATE_STATUS, DOC_KIND, EVIDENCE_TYPE, POSITION, PROGRAMME_STATUS, 
 import { cn } from "@/lib/utils";
 import { BannerAdmin } from "@/components/banners";
 import { localPartyId } from "@/lib/party-ids";
+import { suggestKind } from "@/lib/official-crawl";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -99,11 +100,16 @@ function Editor({ userId }: { userId: string }) {
   const fd = (e: FormEvent<HTMLFormElement>) => { const f = new FormData(e.currentTarget); return (k: string) => String(f.get(k) ?? ""); };
   const nul = (v?: string) => (v && v.trim() ? v.trim() : null);
 
+  const { data: pendingCount = 0 } = useQuery({
+    queryKey: ["update_candidates", "count"],
+    queryFn: async () => (await supabase.from("update_candidates").select("id", { count: "exact", head: true }).eq("review_status", "pending")).count ?? 0,
+  });
+
   return (
     <div className="mt-6">
       <div className="flex flex-wrap gap-2">
         {([["partidos", "Partidos"], ["documentos", "Documentos"], ["propuestas", "Propuestas"], ["fuentes", "Fuentes"], ["avisos", "Programas por verificar"], ["banners", "Banners"], ["historial", "Historial"]] as const).map(([id, l]) => (
-          <button key={id} onClick={() => setTab(id)} className={cn("rounded-full border px-4 py-1.5 text-sm", tab === id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>{l}</button>
+          <button key={id} onClick={() => setTab(id)} className={cn("rounded-full border px-4 py-1.5 text-sm", tab === id ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card")}>{l}{id === "avisos" && pendingCount > 0 ? ` (${pendingCount})` : ""}</button>
         ))}
       </div>
 
@@ -233,13 +239,14 @@ function Candidates({ userId, partyOpts }: { userId: string; partyOpts: Record<s
     const { error } = await supabase.from("programme_documents").insert(row);
     if (error) { toast.error(error.message); return; }
     await supabase.from("update_candidates").update({ review_status: "reviewed" }).eq("id", c.id);
+    if (kind === "full_2026") await supabase.from("parties").update({ programme_2026_status: "published_full_2026", last_checked: today() }).eq("id", partyId);
     await supabase.from("change_log").insert({ entity: "document", entity_id: c.title, action: "verify_candidate", reason, changed_by: userId, changes: row as never });
     toast.success("Programa verificado y publicado.");
     qc.invalidateQueries();
   }
   return (
     <div className="mt-6 space-y-3">
-      <p className="text-sm text-muted-foreground">La revisión está programada cada día a las 06:00 UTC (08:00 en Madrid en verano; 07:00 en invierno). Consulta Programas en Claro y, además, la web oficial y la página de programas de cada partido registrado, buscando programas, manifiestos y propuestas de 2026. Puede detectar enlaces que no sean programas: abre el documento, comprueba la fuente y el año, elige el tipo y pulsa «Verificar y publicar», o «Descartar». Nada se publica sin tu confirmación.</p>
+      <p className="text-sm text-muted-foreground">La revisión está programada cada día a las 06:00 UTC (07:00 en Madrid en invierno). Omite documentos ya publicados. Consulta Programas en Claro y, además, la web oficial y la página de programas de cada partido registrado, buscando programas, manifiestos y propuestas de 2026. Puede detectar enlaces que no sean programas: abre el documento, comprueba la fuente y el año, elige el tipo y pulsa «Publicar», o «Descartar». Nada se publica sin tu confirmación.</p>
       {data.length === 0 && <Card>No hay avisos pendientes.</Card>}
       {data.map((c) => (
         <Card key={c.id} className="p-4">
@@ -253,9 +260,9 @@ function Candidates({ userId, partyOpts }: { userId: string; partyOpts: Record<s
               ) : (
                 <Sel name="party_id" value="" options={{ "": "Elige partido…", ...partyOpts }} />
               )}
-              <Sel name="kind" value={c.origin === "web_oficial" ? "partial_2026" : "historical_2023"} options={DOC_KIND} />
+              <Sel name="kind" value={c.origin === "web_oficial" ? suggestKind(c.title, c.document_url) : "historical_2023"} options={DOC_KIND} />
               <input name="reason" required defaultValue="Verificado por la editora con fuente oficial" title="Nota para el historial interno (puedes cambiarla)" className={field} />
-              <button className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Verificar y publicar</button>
+              <button className="rounded-full bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground">Publicar</button>
             </form>
           ) : <p className="mt-2 text-sm text-muted-foreground">Sin enlace reconocido: añádelo a mano en «Documentos».</p>}
           <div className="mt-3 flex gap-2">

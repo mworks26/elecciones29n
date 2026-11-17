@@ -57,9 +57,13 @@ export const Route = createFileRoute("/api/public/hooks/sync-programmes")({
           } catch { return []; }
         }))).flat();
 
+        // Skip documents already published in the library.
+        const { data: published } = await supabaseAdmin.from("programme_documents").select("url");
+        const known = new Set((published ?? []).map((d) => d.url));
+        const fresh = [...rows, ...webRows].filter((r) => !r.document_url || !known.has(r.document_url));
         const { data, error } = await supabaseAdmin
           .from("update_candidates")
-          .upsert([...rows, ...webRows], { onConflict: "origin,external_id,fingerprint", ignoreDuplicates: true })
+          .upsert(fresh, { onConflict: "origin,external_id,fingerprint", ignoreDuplicates: true })
           .select("id");
         if (error) { console.error(error); return Response.json({ error: "Error al guardar" }, { status: 500 }); }
         return Response.json({ checked: rows.length, official_pages: pages.length, official_pages_ok: pagesOk, official_links: webRows.length, new: data?.length ?? 0 });

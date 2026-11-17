@@ -19,3 +19,9 @@ describe("extractCandidateLinks", () => {
   it("skips links without programme keywords", () => expect(urls).not.toContain("https://partido.es/contacto"));
   it("skips undated non-PDF pages", () => expect(urls).not.toContain("https://partido.es/noticias/propuestas"));
 });
+
+import { suggestKind } from "./official-crawl";
+describe("suggestKind", () => {
+  it("programa → full", () => expect(suggestKind("Programa electoral 2026", "https://a.es/p.pdf")).toBe("full_2026"));
+  it("manifiesto → partial", () => expect(suggestKind("Manifiesto 2026", "https://a.es/m")).toBe("partial_2026"));
+});
