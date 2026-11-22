@@ -187,6 +187,19 @@ function Editor({ userId }: { userId: string }) {
                 const changes = { review_status: v("review_status"), position: v("position"), checked_at: today() };
                 save("claim", c.id, "update", v("reason"), () => supabase.from("claims").update(changes).eq("id", c.id), changes); }}>
                 <p className="w-full font-medium">{partyOpts[c.party_id]} · {c.title}</p>
+                <div className="w-full rounded-xl bg-secondary/60 p-3 text-sm">
+                  <p>{c.claim_text}</p>
+                  <p className="mt-1 text-muted-foreground">Posición registrada: <strong>{POSITION[c.position] ?? c.position}</strong>{c.page_or_section && ` · ${c.page_or_section}`}</p>
+                  {c.source_url && <a href={c.source_url} target="_blank" rel="noreferrer" className="mt-1 inline-block underline">Ver fuente oficial</a>}
+                </div>
+                {c.review_status !== "verified_by_human" && (
+                  <button type="button" className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground"
+                    onClick={() => { const changes = { review_status: "verified_by_human", checked_at: today() };
+                      save("claim", c.id, "verify", "Comprobada con la fuente oficial (aprobación rápida)", () => supabase.from("claims").update(changes).eq("id", c.id), changes); }}>
+                    Aprobar propuesta
+                  </button>
+                )}
+                <p className="w-full text-xs text-muted-foreground">O cámbiala a mano:</p>
                 <div className="min-w-40 flex-1"><L label="Revisión"><Sel name="review_status" value={c.review_status} options={REVIEW_STATUS} /></L></div>
                 <div className="min-w-40 flex-1"><L label="Posición"><Sel name="position" value={c.position} options={POSITION} /></L></div>
                 <div className="min-w-40 flex-1"><L label="Motivo"><input name="reason" required className={field} /></L></div>
