@@ -1,4 +1,6 @@
 # Tasks
+- [ ] Simplify claim review, add bulk selection/approval with confirmation, and verify editorial controls without approving real claims.
+- [ ] Check current official election programmes and add only directly verified documents with replayable SQL.
 - [x] Replace the confusing basket interaction with clear illustrated opinion choices and verify answers reach affinity results.
 - [x] Inspect available Cloud Jobs evidence and report gaps: schedule is active, Jobs requires editor login, and the source currently returns only 2023 documents.
 - [x] Add the attached cover drawing, brand tagline and playful navigation; make games prominent on home.

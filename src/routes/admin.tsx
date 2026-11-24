@@ -11,6 +11,9 @@ import { cn } from "@/lib/utils";
 import { BannerAdmin } from "@/components/banners";
 import { localPartyId } from "@/lib/party-ids";
 import { suggestKind } from "@/lib/official-crawl";
+import { approveClaims, canApproveClaim } from "@/lib/claim-approval";
+import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel } from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -37,7 +40,8 @@ function Admin() {
     queryKey: ["is_admin", session?.user.id],
     enabled: !!session,
     queryFn: async () => {
-      const { data } = await supabase.from("user_roles").select("role").eq("user_id", session!.user.id).eq("role", "admin").maybeSingle();
+      if (!session) return false;
+      const { data } = await supabase.from("user_roles").select("role").eq("user_id", session.user.id).eq("role", "admin").maybeSingle();
       return !!data;
     },
   });
@@ -79,6 +83,9 @@ const L = ({ label, children }: { label: string; children: ReactNode }) => <labe
 function Editor({ userId }: { userId: string }) {
   const qc = useQueryClient();
   const [tab, setTab] = useState("partidos");
+  const [selected, setSelected] = useState<string[]>([]);
+  const [approvalIds, setApprovalIds] = useState<string[]>([]);
+  const [approving, setApproving] = useState(false);
   const parties = useQuery(partiesQuery).data ?? [];
   const topics = useQuery(topicsQuery).data ?? [];
   const sources = useQuery(sourcesQuery).data ?? [];
@@ -87,6 +94,30 @@ function Editor({ userId }: { userId: string }) {
   const partyOpts = Object.fromEntries(parties.map((p) => [p.id, p.short_name ?? p.name]));
   const topicOpts = Object.fromEntries(topics.map((t) => [t.id, t.label]));
   const sourceOpts = { "": "—", ...Object.fromEntries(sources.map((s) => [s.id, s.title])) };
+  const eligible = claims.filter(canApproveClaim);
+  const selectedIds = eligible.filter((c) => selected.includes(c.id)).map((c) => c.id);
+
+  async function confirmApproval() {
+    if (approving) return;
+    setApproving(true);
+    try {
+      const changes = { review_status: "verified_by_human", checked_at: today() };
+      const result = await approveClaims(claims, approvalIds, async (claim) => {
+        const { data, error } = await supabase.from("claims").update(changes).eq("id", claim.id).eq("review_status", claim.review_status).select("id");
+        if (error) throw error;
+        if (!data?.length) return "skipped";
+        const { error: logError } = await supabase.from("change_log").insert({ entity: "claim", entity_id: claim.id, action: "verify", reason: "Aprobación conjunta confirmada por la editora; se conserva la posición registrada", changed_by: userId, changes });
+        return logError ? "unlogged" : "approved";
+      });
+      if (result.approved) toast.success(`${result.approved} propuestas aprobadas y registradas en Historial.`);
+      if (result.failed) toast.error(`${result.failed} propuestas no se pudieron aprobar. Puedes volver a intentarlo.`);
+      if (result.unlogged) toast.error(`${result.unlogged} propuestas aprobadas, pero no se pudo guardar su historial.`);
+      if (result.skipped) toast.info(`${result.skipped} propuestas ya habían cambiado; no se modificaron.`);
+      setSelected([]);
+      setApprovalIds([]);
+      await qc.invalidateQueries();
+    } finally { setApproving(false); }
+  }
 
   async function save(entity: string, entityId: string, action: string, reason: string, op: () => PromiseLike<{ error: { message: string } | null }>, changes: unknown) {
     if (!reason.trim()) { toast.error("Indica el motivo del cambio."); return; }
@@ -161,6 +192,27 @@ function Editor({ userId }: { userId: string }) {
 
       {tab === "propuestas" && (
         <div className="mt-6 space-y-4">
+          <div className="space-y-3 border-b border-border pb-4" aria-busy={approving}>
+            <p className="text-sm"><strong>{eligible.length} pendientes de aprobación</strong> · <span aria-live="polite">{selectedIds.length} seleccionadas</span></p>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" disabled={approving || !eligible.length} onClick={() => setSelected(eligible.map((c) => c.id))}>Seleccionar todas</Button>
+              <Button variant="outline" disabled={approving || !selectedIds.length} onClick={() => setSelected([])}>Deseleccionar todas</Button>
+              <Button disabled={approving || !selectedIds.length} onClick={() => setApprovalIds(selectedIds)}>Aprobar seleccionadas ({selectedIds.length})</Button>
+              <Button disabled={approving || !eligible.length} onClick={() => setApprovalIds(eligible.map((c) => c.id))}>Aprobar todas las pendientes ({eligible.length})</Button>
+            </div>
+          </div>
+          <AlertDialog open={approvalIds.length > 0} onOpenChange={(open) => { if (!open && !approving) setApprovalIds([]); }}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Aprobar {approvalIds.length} propuestas?</AlertDialogTitle>
+                <AlertDialogDescription>Confirma solo si has comprobado sus fuentes. Se conservará la postura registrada de cada partido y las propuestas pasarán a verificadas, disponibles para los juegos. Cada aprobación quedará en el Historial privado. Este botón no comprueba por sí mismo si la información es correcta.</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={approving}>Cancelar</AlertDialogCancel>
+                <Button disabled={approving} onClick={() => void confirmApproval()}>{approving ? "Aprobando…" : "Confirmar aprobación"}</Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <Card>
             <h2 className="text-xl font-semibold">Añadir propuesta con evidencia</h2>
             <form className="mt-4 grid gap-3 md:grid-cols-2" onSubmit={(e) => { e.preventDefault(); const v = fd(e); const form = e.currentTarget;
@@ -186,24 +238,29 @@ function Editor({ userId }: { userId: string }) {
               <form className="flex flex-wrap items-end gap-3" onSubmit={(e) => { e.preventDefault(); const v = fd(e);
                 const changes = { review_status: v("review_status"), position: v("position"), checked_at: today() };
                 save("claim", c.id, "update", v("reason"), () => supabase.from("claims").update(changes).eq("id", c.id), changes); }}>
-                <p className="w-full font-medium">{partyOpts[c.party_id]} · {c.title}</p>
+                <div className="flex w-full items-start gap-3">
+                  <input type="checkbox" className="mt-1 size-4 shrink-0 accent-primary" aria-label={`Seleccionar ${partyOpts[c.party_id]} · ${c.title}`} checked={selectedIds.includes(c.id)} disabled={approving || !canApproveClaim(c)} onChange={(e) => setSelected((ids) => e.target.checked ? [...ids, c.id] : ids.filter((id) => id !== c.id))} />
+                  <div><p className="font-medium">{partyOpts[c.party_id]} · {c.title}</p><p className="text-xs text-muted-foreground">{REVIEW_STATUS[c.review_status] ?? c.review_status}{!c.source_url && " · Falta fuente: no se puede aprobar en grupo"}</p></div>
+                </div>
                 <div className="w-full rounded-xl bg-secondary/60 p-3 text-sm">
                   <p>{c.claim_text}</p>
                   <p className="mt-1 text-muted-foreground">Posición registrada: <strong>{POSITION[c.position] ?? c.position}</strong>{c.page_or_section && ` · ${c.page_or_section}`}</p>
                   {c.source_url && <a href={c.source_url} target="_blank" rel="noreferrer" className="mt-1 inline-block underline">Ver fuente oficial</a>}
                 </div>
-                {c.review_status !== "verified_by_human" && (
-                  <button type="button" className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground"
-                    onClick={() => { const changes = { review_status: "verified_by_human", checked_at: today() };
-                      save("claim", c.id, "verify", "Comprobada con la fuente oficial (aprobación rápida)", () => supabase.from("claims").update(changes).eq("id", c.id), changes); }}>
+                {canApproveClaim(c) && (
+                  <Button type="button" disabled={approving} onClick={() => setApprovalIds([c.id])}>
                     Aprobar propuesta
-                  </button>
+                  </Button>
                 )}
-                <p className="w-full text-xs text-muted-foreground">O cámbiala a mano:</p>
+                <details className="w-full">
+                <summary className="cursor-pointer text-sm text-muted-foreground">Editar revisión, postura o nota del cambio</summary>
+                <div className="mt-3 flex flex-wrap items-end gap-3">
                 <div className="min-w-40 flex-1"><L label="Revisión"><Sel name="review_status" value={c.review_status} options={REVIEW_STATUS} /></L></div>
-                <div className="min-w-40 flex-1"><L label="Posición"><Sel name="position" value={c.position} options={POSITION} /></L></div>
-                <div className="min-w-40 flex-1"><L label="Motivo"><input name="reason" required className={field} /></L></div>
-                <button className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Guardar</button>
+                <div className="min-w-40 flex-1"><L label="Postura del partido"><Sel name="position" value={c.position} options={POSITION} /></L></div>
+                <div className="min-w-40 flex-1"><L label="Nota del cambio (Historial privado)"><input name="reason" required className={field} /></L></div>
+                <Button disabled={approving}>Guardar</Button>
+                </div>
+                </details>
               </form>
             </Card>
           ))}
