@@ -1,6 +1,7 @@
 # Tasks
-- [ ] Simplify claim review, add bulk selection/approval with confirmation, and verify editorial controls without approving real claims.
-- [ ] Check current official election programmes and add only directly verified documents with replayable SQL.
+- [x] Simplify claim review, add bulk selection/approval with confirmation, and verify editorial controls without approving real claims.
+- [x] Check current official election programmes and add 14 directly verified document records with replayable SQL (13 full and CC's partial manifesto; Sumar explicitly links to the coalition programme).
+- [ ] Verify remaining parties' current programmes. Blocker: several official sites block access or do not expose a document clearly attributable to this election; do not infer unpublished programmes.
 - [x] Replace the confusing basket interaction with clear illustrated opinion choices and verify answers reach affinity results.
 - [x] Inspect available Cloud Jobs evidence and report gaps: schedule is active, Jobs requires editor login, and the source currently returns only 2023 documents.
 - [x] Add the attached cover drawing, brand tagline and playful navigation; make games prominent on home.
