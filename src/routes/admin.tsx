@@ -316,7 +316,7 @@ function Candidates({ userId, partyOpts }: { userId: string; partyOpts: Record<s
   }
   return (
     <div className="mt-6 space-y-3">
-      <p className="text-sm text-muted-foreground">La revisión está programada cada día a las 06:00 UTC (07:00 en Madrid en invierno). Omite documentos ya publicados. Consulta Programas en Claro y, además, la web oficial y la página de programas de cada partido registrado, buscando programas, manifiestos y propuestas de 2026. Puede detectar enlaces que no sean programas: abre el documento, comprueba la fuente y el año, elige el tipo y pulsa «Publicar», o «Descartar». Nada se publica sin tu confirmación.</p>
+      <p className="text-sm text-muted-foreground">La revisión está programada cada día a las 06:00 UTC (07:00 en Madrid en invierno). Los programas y manifiestos que se pueden comprobar en dominios oficiales de los partidos para las generales de 2026 se publican automáticamente, con su fuente e historial privado. Los enlaces de terceros, documentos inaccesibles o de elección dudosa quedan aquí para tu revisión. Las propuestas de los juegos mantienen su revisión independiente.</p>
       {data.length === 0 && <Card>No hay avisos pendientes.</Card>}
       {data.map((c) => (
         <Card key={c.id} className="p-4">

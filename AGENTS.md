@@ -19,5 +19,6 @@
 - Admin role: DB trigger for allow-listed confirmed email; admin edits write change_log.
 - Bulk claim approval uses sourced pending selections, confirmation and per-claim RLS writes/audit results; it preserves positions and reports partial failures rather than implying all writes succeeded.
 - Portability: standard Supabase client, schema in drizzle/migrations, data-only updates as replayable SQL in sql/data.
-- Daily job -> /api/public/hooks/sync-programmes (aggregator + party official sites) only inserts update_candidates; never publishes. Keep legacy schedule auth.
+- Daily job uses managed cron authentication before privileged writes; replace the legacy public-key callback because a public key cannot authorise automatic publication.
+- Daily document sync verifies current general-election content and official HTTPS hosts (including redirects), publishes sourced documents with per-row audit, keeps third-party/uncertain discoveries pending, and never changes claims. Pure policy and publication helpers live in automatic-documents.ts for regression tests.
 - Translation: Google Translate widget via own selector; Spanish authoritative.
