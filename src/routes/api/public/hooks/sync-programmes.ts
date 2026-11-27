@@ -99,7 +99,7 @@ export const Route = createFileRoute("/api/public/hooks/sync-programmes")({
           const party = parties.find((p) => p.id === document.party_id);
           const full = document.kind === "full_2026" || party?.programme_2026_status === "published_full_2026";
           const { error: statusError } = await supabaseAdmin.from("parties").update({
-            programme_2026_status: full ? "published_full_2026" : "published_partial_2026", last_checked: document.checked_at,
+            programme_2026_status: full ? "published_full_2026" : "published_partial_2026", last_checked: document.checked_at ?? null,
           }).eq("id", document.party_id);
           const { error: candidateError } = await supabaseAdmin.from("update_candidates").update({ review_status: "reviewed" })
             .eq("party_id", document.party_id).eq("document_url", document.url).eq("review_status", "pending");
