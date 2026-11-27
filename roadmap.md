@@ -1,5 +1,5 @@
 # Tasks
-- [ ] Enable safe daily automatic publication of current-election documents from official party domains, with audit and tests.
+- [x] Enable safe daily automatic publication of current-election documents from official party domains, with audit and tests.
 - [x] Simplify claim review, add bulk selection/approval with confirmation, and verify editorial controls without approving real claims.
 - [x] Check current official election programmes and add 14 directly verified document records with replayable SQL (13 full and CC's partial manifesto; Sumar explicitly links to the coalition programme).
 - [ ] Verify remaining parties' current programmes. Blocker: several official sites block access or do not expose a document clearly attributable to this election; do not infer unpublished programmes.
@@ -26,3 +26,4 @@
 
 - [x] Portada: tarjeta Político/a; Noticias + gráfico votaciones; franja sin rótulo
 - [ ] AdSense: falta código ca-pub del usuario
+- [x] Add Democracia 21's official 2026 programme.
